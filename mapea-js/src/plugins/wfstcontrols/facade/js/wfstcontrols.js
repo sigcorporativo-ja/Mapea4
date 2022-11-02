@@ -105,6 +105,20 @@ export default class WFSTControls extends M.Plugin {
      * @type {Object}
      */
     this.metadata_ = api.metadata;
+
+    /**
+     * Number controls
+     * @private
+     * @type {Object}
+     */
+    this.numControls_ = 0;
+
+    /**
+     * Number load controls
+     * @private
+     * @type {Object}
+     */
+    this.numLoadControls_ = 0;
   }
 
   /**
@@ -141,31 +155,56 @@ export default class WFSTControls extends M.Plugin {
           this.controls_.push(this.drawfeature_);
           addSave = true;
           addClear = true;
+          this.numControls_ += 1;
+          this.drawfeature_.on(M.evt.ADDED_TO_MAP, () => {
+            this.checkAddControlsToMap();
+          });
         } else if (this.controls[i] === 'modifyfeature') {
           this.modifyfeature_ = new ModifyFeature(wfslayer);
           this.controls_.push(this.modifyfeature_);
           addSave = true;
           addClear = true;
+          this.numControls_ += 1;
+          this.modifyfeature_.on(M.evt.ADDED_TO_MAP, () => {
+            this.checkAddControlsToMap();
+          });
         } else if (this.controls[i] === 'deletefeature') {
           this.deletefeature_ = new DeleteFeature(wfslayer);
           this.controls_.push(this.deletefeature_);
           addSave = true;
           addClear = true;
+          this.numControls_ += 1;
+          this.deletefeature_.on(M.evt.ADDED_TO_MAP, () => {
+            this.checkAddControlsToMap();
+          });
         } else if (this.controls[i] === 'editattribute') {
           this.editattibute_ = new EditAttribute(wfslayer);
           this.controls_.push(this.editattibute_);
           addClear = true;
+          this.numControls_ += 1;
+          this.editattibute_.on(M.evt.ADDED_TO_MAP, () => {
+            this.checkAddControlsToMap();
+          });
         }
       }
 
       if (addSave) {
         this.savefeature_ = new SaveFeature(wfslayer);
         this.controls_.push(this.savefeature_);
+        this.numControls_ += 1;
+        this.savefeature_.on(M.evt.ADDED_TO_MAP, () => {
+          this.checkAddControlsToMap();
+        });
       }
       if (addClear) {
         this.clearfeature_ = new ClearFeature(wfslayer);
         this.controls_.push(this.clearfeature_);
+        this.numControls_ += 1;
+        this.clearfeature_.on(M.evt.ADDED_TO_MAP, () => {
+          this.checkAddControlsToMap();
+        });
       }
+
       this.panel_.addControls(this.controls_);
       this.map_.addPanels(this.panel_);
       this.map_.panel.EDITION = this.panel_;
@@ -278,6 +317,20 @@ export default class WFSTControls extends M.Plugin {
    */
   getMetadata() {
     return this.metadata_;
+  }
+
+  /**
+   * This function return the control of plugin
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  checkAddControlsToMap() {
+    this.numLoadControls_ += 1;
+    if (this.numLoadControls_ === this.numControls_) {
+      this.fire(M.evt.ADDED_TO_MAP);
+    }
   }
 }
 

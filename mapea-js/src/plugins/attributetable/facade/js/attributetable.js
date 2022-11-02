@@ -43,6 +43,16 @@ export default class AttributeTable extends M.Plugin {
      * @type {string}
      */
     this.idAddedLayer = '';
+
+    /**
+     * Control event ADDED_TO_MAP
+     *
+     * @public
+     * @type {Boolean}
+     */
+    this.added_to_map = true;
+
+    this.userSelectedStyle = parameters.selectedStyle;
   }
 
   /**
@@ -70,7 +80,13 @@ export default class AttributeTable extends M.Plugin {
    */
   add(map) {
     this.facadeMap_ = map;
-    this.control_ = new AttributeTableControl(this.numPages_);
+    this.control_ = new AttributeTableControl(this.numPages_, this.userSelectedStyle);
+    this.control_.on(M.evt.ADDED_TO_MAP, () => {
+      if (this.added_to_map) {
+        this.fire(M.evt.ADDED_TO_MAP);
+        this.added_to_map = false;
+      }
+    });
     this.panel_ = new M.ui.Panel(AttributeTable.NAME, {
       collapsible: true,
       className: 'm-attributetable',

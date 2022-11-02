@@ -13,7 +13,7 @@ export default class AttributeTableControl extends M.Control {
    * @extends {M.Control}
    * @api stable
    */
-  constructor(numPages) {
+  constructor(numPages, userSelectedStyle) {
     const impl = new AttributeTableControlImpl();
 
     super(impl, 'attributetableControl');
@@ -33,6 +33,47 @@ export default class AttributeTableControl extends M.Control {
       sortBy: null,
       sortType: null,
     };
+
+    this.featuresSeleccionados = [];
+    this.originalStyles = [];
+    if (!M.utils.isNullOrEmpty(userSelectedStyle)) {
+      this.selectedStyle = userSelectedStyle;
+    } else {
+      this.selectedStyle = new M.style.Generic({
+        point: {
+          radius: 5,
+          fill: {
+            color: 'yellow',
+            opacity: 1,
+          },
+          stroke: {
+            color: 'red',
+            width: 2,
+          },
+        },
+        polygon: {
+          fill: {
+            color: 'yellow',
+            opacity: 0.6,
+          },
+          stroke: {
+            color: 'red',
+            width: 1,
+          },
+        },
+        line: {
+          stroke: {
+            color: 'red',
+            width: 1,
+          },
+          fill: {
+            color: 'yellow',
+            width: 2,
+            opacity: 0.8,
+          },
+        },
+      });
+    }
 
     if (M.utils.isUndefined(AttributeTableControlImpl)) {
       M.exception('La implementación usada no puede crear controles AttributeTableControl');
@@ -80,6 +121,7 @@ export default class AttributeTableControl extends M.Control {
       this.template_ = html;
       this.areaTable_ = html.querySelector('div#m-attributetable-datas');
       html.querySelector('#m-attributetable-layer').addEventListener('click', this.openPanel_.bind(this));
+      html.querySelector('#m-zoom-selected').addEventListener('click', this.zoomToSelected.bind(this));
       html.querySelector('#m-attributetable-select').addEventListener('change', (evt) => {
         this.pages_ = {
           total: 0,
@@ -91,10 +133,34 @@ export default class AttributeTableControl extends M.Control {
           sortBy: null,
           sortType: null,
         };
+        if (this.layer_) {
+          const feats = this.layer_.getFeatures()
+            .filter(f => this.featuresSeleccionados.includes(f.getId()));
+          feats.forEach((f) => {
+            f.setStyle(this.originalStyles[f.getId()]);
+          });
+        }
+        this.featuresSeleccionados = [];
+        this.originalStyles = [];
+        this.selectAllActive_ = false;
         this.renderPanel_(evt.target[evt.target.selectedIndex].getAttribute('name'));
       });
     }
     return html;
+  }
+
+  zoomToSelected(evt) {
+    const zoomTo = [];
+    this.layer_.getFeatures().forEach((feature) => {
+      if (this.featuresSeleccionados.includes(feature.getId())) {
+        zoomTo.push(feature);
+      }
+    });
+    const pcode = this.facadeMap_.getProjection().code;
+    const extent = M.impl.utils.getFeaturesExtent(zoomTo, pcode);
+    if (!M.utils.isNullOrEmpty(extent)) {
+      this.facadeMap_.setBbox(extent);
+    }
   }
 
   /**
@@ -126,8 +192,22 @@ export default class AttributeTableControl extends M.Control {
       headerAtt = Object.keys(features[0].getAttributes());
       features.forEach((feature) => {
         const properties = Object.values(feature.getAttributes());
+        const fid = feature.getId();
+        let seleccionado = false;
+        let disableChecks = false;
+        if (this.featuresSeleccionados.includes(fid)) {
+          seleccionado = true;
+        }
+        if (this.layer_ instanceof M.layer.MVT) {
+          disableChecks = true;
+        }
         if (!M.utils.isNullOrEmpty(properties)) {
-          attributes.push(properties);
+          attributes.push({
+            properties,
+            id: fid,
+            seleccionado,
+            disableChecks,
+          });
         }
       });
       if (this.sortProperties_.active) {
@@ -135,6 +215,10 @@ export default class AttributeTableControl extends M.Control {
       }
     }
     let params = {};
+    let disableChecks = false;
+    if (this.layer_ instanceof M.layer.MVT) {
+      disableChecks = true;
+    }
     if (!M.utils.isUndefined(headerAtt)) {
       params = {
         headerAtt,
@@ -142,6 +226,8 @@ export default class AttributeTableControl extends M.Control {
         pages: this.pageResults_(attributes),
         attributes: (M.utils.isNullOrEmpty(attributes)) ? false : attributes
           .slice(this.pages_.element, this.pages_.element + this.numPages_),
+        allSelected: this.selectAllActive_,
+        disableChecks,
       };
     }
     const options = { jsonp: true, vars: params };
@@ -163,6 +249,10 @@ export default class AttributeTableControl extends M.Control {
       html.querySelector('input[value=selectAll]').addEventListener('click', this.selectAll.bind(this));
       html.querySelector('#m-attributetable-attributes').addEventListener('click', this.openPanel_.bind(this));
       html.querySelector('#m-attributetable-refresh').addEventListener('click', this.refresh_.bind(this));
+      const checks = html.querySelectorAll('#m-check-select');
+      for (let i = 0; i < checks.length; i += 1) {
+        checks[i].addEventListener('change', this.markSelected.bind(this));
+      }
       const header = Array.prototype.slice.call(this.areaTable_.querySelector('tr').querySelectorAll('td'), 1);
       header.forEach((td) => {
         td.addEventListener('click', this.sort_.bind(this));
@@ -174,6 +264,23 @@ export default class AttributeTableControl extends M.Control {
     }
     this.rePosition_();
     return html;
+  }
+
+  // TODO: LOGICA DE MARCADO/DESMARCADO CHECK
+  markSelected(evt) {
+    const feats = this.layer_.getFeatures().filter(f => f.getId() === evt.target.value);
+    if (evt.target.checked) {
+      this.featuresSeleccionados.push(evt.target.value);
+      if (feats.length > 0) {
+        this.originalStyles[evt.target.value] = feats[0].getStyle();
+        feats[0].setStyle(this.selectedStyle);
+      }
+    } else {
+      this.featuresSeleccionados.remove(evt.target.value);
+      if (feats.length > 0) {
+        feats[0].setStyle(this.originalStyles[evt.target.value]);
+      }
+    }
   }
 
   /**
@@ -194,7 +301,7 @@ export default class AttributeTableControl extends M.Control {
 
     if (M.utils.isString(layerSearch)) {
       this.facadeMap_.getLayers().forEach((lay) => {
-        if (lay.name === layerSearch) {
+        if (lay.id === layerSearch) {
           layersFind.push(lay);
         }
       });
@@ -209,7 +316,7 @@ export default class AttributeTableControl extends M.Control {
     }
     if (M.utils.isArray(layerSearch)) {
       this.facadeMap_.getLayers().forEach((lay) => {
-        if (layerSearch.indexOf(lay.name) >= 0) {
+        if (layerSearch.indexOf(lay.id) >= 0) {
           layersFind.push(lay);
         }
       });
@@ -239,10 +346,18 @@ export default class AttributeTableControl extends M.Control {
    * @function
    */
   addSelectAll_() {
-    const checks = this.areaTable_.querySelectorAll('input');
-    checks.forEach((element) => {
-      element.setAttribute('checked', true);
+    // Si se seleccionan todos los elementos de la capa
+    this.layer_.getFeatures().forEach((feature) => {
+      const fid = feature.getId();
+      // Si el f no estaba ya seleccionado,
+      if (!this.featuresSeleccionados.includes(fid)) {
+        this.featuresSeleccionados.push(fid);
+        this.originalStyles[fid] = feature.getStyle();
+        feature.setStyle(this.selectedStyle);
+      }
     });
+
+    this.renderPanel_();
   }
 
   /**
@@ -252,10 +367,13 @@ export default class AttributeTableControl extends M.Control {
    * @function
    */
   removeSelectAll_() {
-    const checks = this.areaTable_.querySelectorAll('input');
-    checks.forEach((element) => {
-      element.removeAttribute('checked');
+    this.featuresSeleccionados = [];
+    this.layer_.getFeatures().forEach((feature) => {
+      const fid = feature.getId();
+      feature.setStyle(this.originalStyles[fid]);
     });
+
+    this.renderPanel_();
   }
 
   /**
@@ -364,7 +482,7 @@ export default class AttributeTableControl extends M.Control {
     const sortBy = this.sortProperties_.sortBy;
     const pos = headerAtt.indexOf(sortBy);
     let attributesSort = attributes.sort((a, b) => {
-      return a[pos] - b[pos];
+      return a.properties[pos].localeCompare(b.properties[pos]);
     });
     if (this.sortProperties_.sortType === '>') {
       attributesSort = attributesSort.reverse();

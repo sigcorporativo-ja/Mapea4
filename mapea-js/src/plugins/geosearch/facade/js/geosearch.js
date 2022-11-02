@@ -116,6 +116,9 @@ export default class Geosearch extends M.Plugin {
       this.searchParameters_,
       this.showHelp_,
     );
+    this.control_.on(M.evt.ADDED_TO_MAP, () => {
+      this.fire(M.evt.ADDED_TO_MAP);
+    });
     this.control_.on(M.evt.ADD_TO_MAP, this.onLoadCallback_, this);
     this.panel_ = new M.ui.Panel('geosearch', {
       collapsible: true,

@@ -1,7 +1,8 @@
 ## Descripción
 
 Panel en el que seleccionar una de las capas vectoriales del mapa para que se listen sus elementos en forma de tabla. El panel
-puede desacoplarse del lateral.
+puede desacoplarse del lateral. Permite la selección de elementos, que son resaltados visualmente en el mapa, y el zoom a los 
+elementos seleccionados.
 
 ## Recursos y uso
 
@@ -17,11 +18,11 @@ mapajs.addPlugin(new M.plugin.AttributeTable({}));
 
 Configuración detallada:
 ```javascript
-// numero de elementos por pagina
+// numero de elementos por pagina y estilo de seleccion
 mapajs.addPlugin(new M.plugin.AttributeTable({
-  "pages": "8"
+  pages: 8,
+  selectedStyle: estiloSeleccion
 }));
-
 ```
 
 ## Ejemplo funcional
@@ -30,4 +31,3 @@ mapajs.addPlugin(new M.plugin.AttributeTable({
 
 ## Tabla de compatibilidad de versiones   
 [Consulta el api resourcePlugin](https://mapea4-sigc.juntadeandalucia.es/mapea/api/actions/resourcesPlugins?name=attributetable) 
-

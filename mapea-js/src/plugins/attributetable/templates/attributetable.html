@@ -6,9 +6,10 @@
             <select class="" id="m-attributetable-select">
                 <option disabled="disabled" selected="selected">Seleccione una capa...</option>
                 {{#each layers}}
-                    <option name="{{this.name}}">{{this.name}}</option>
+                    <option name="{{this.id}}">{{this.name}}</option>
                 {{/each}}
                 <select>
+                    <button class="" id="m-zoom-selected">Zoom selección</button>
         </div>
         <div id="m-attributetable-datas"></div>
     </div>

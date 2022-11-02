@@ -154,7 +154,7 @@ class WMS extends LayerBase {
     if (!isNullOrEmpty(newVersion)) {
       this.getImpl().version = newVersion;
     } else {
-      this.getImpl().version = '1.1.0'; // default value
+      this.getImpl().version = '1.3.0'; // default value
     }
   }
 
@@ -281,6 +281,17 @@ class WMS extends LayerBase {
   }
 
   /**
+   * This funcion returns the URL of the legend of GetCapabilities
+   *
+   * @function
+   * @return {Promise} url WMS equivalen service for this layer.
+   * @api
+   */
+  getLegendCapabilities() {
+    return this.getImpl().getLegendCapabilities();
+  }
+
+  /**
    * If this WMS layer actually requests a tiled layer service, there may be an
    * equivalent WMS service which can be used for other purposes (printing, etc.)
    *
@@ -370,6 +381,7 @@ class WMS extends LayerBase {
       equals = equals && (this.name === obj.name);
       equals = equals && (this.cql === obj.cql);
       equals = equals && (this.version === obj.version);
+      equals = equals && (this.id === obj.id);
     }
 
     return equals;

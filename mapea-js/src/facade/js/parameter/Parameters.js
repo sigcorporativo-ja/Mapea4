@@ -219,6 +219,30 @@ const parseGetFeatureInfo = (parameter) => {
 };
 
 /**
+ * This function parses a controls parameter in a legible
+ * parameter to Mapea and checks posible errors
+ *
+ * @private
+ * @function
+ * @param {string|Mx.parameters.Map} parameter parameters
+ * especified by the user
+ * @returns {string} Active empty layer
+ */
+const parseLayerswitcher = (parameter) => {
+  let layerswitcher;
+
+  if (isString(parameter)) {
+    layerswitcher = getParameterValue('layerswitcher', parameter);
+  } else if (isObject(parameter)) {
+    layerswitcher = parameter.layerswitcher;
+  } else {
+    Exception(`El tipo del parámetro controls no es válido: ${typeof parameter}`);
+  }
+
+  return layerswitcher;
+};
+
+/**
  * This function parses a maxExtent parameter in a legible
  * parameter to Mapea and checks posible errors
  *
@@ -532,6 +556,13 @@ class Parameters {
      * @api
      */
     this.getfeatureinfo = parseGetFeatureInfo(userParameters);
+
+    /**
+     * @public
+     * @type {Object}
+     * @api
+     */
+    this.layerswitcher = parseLayerswitcher(userParameters);
 
     /**
      * @public

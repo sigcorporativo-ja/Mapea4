@@ -217,6 +217,7 @@ class WFS extends Vector {
       equals = equals && (this.ids === obj.ids);
       equals = equals && (this.cql === obj.cql);
       equals = equals && (this.version === obj.version);
+      equals = equals && (this.id === obj.id);
     }
 
     return equals;

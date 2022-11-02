@@ -15,10 +15,10 @@
   "files": {
     "ol": {
       "scripts": [
-        "attributetable-2.0.1.ol.min.js"
+        "attributetable-2.1.0.ol.min.js"
       ],
       "styles": [
-        "attributetable-2.0.1.min.css"
+        "attributetable-2.1.0.min.css"
       ]
     }
   },
@@ -29,8 +29,8 @@
     "name": "Attributable",
     "description": "Shows a table of all the attributes of each feature of a vector layer.",
     "text": "",
-    "version": "2.0.1",
-    "date": "11/10/2019",
+    "version": "2.1.0",
+    "date": "01/09/2022",
     "author": "Junta de Andalucía",
     "org": "Junta de Andalucía",
     "tags": "mapea,plugin",
@@ -44,6 +44,6 @@
       "plugins": [{ "uuid": "", "name": "" }],
       "services": [{ "name": "", "description": "" }]
     },
-    "compatibility": ["4" ,"5", "6"]
+    "compatibility": ["6"]
   }
 }

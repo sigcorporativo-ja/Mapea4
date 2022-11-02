@@ -10,8 +10,7 @@ import * as OLeasing from 'ol/easing';
 import OLFeature from 'ol/Feature';
 import OLGeomPolygon from 'ol/geom/Polygon';
 import OLGeomPoint from 'ol/geom/Point';
-import Polygon from 'M/style/Polygon';
-import StylePoint from 'M/style/Point';
+import Generic from 'M/style/Generic';
 import FacadeCluster from 'M/style/Cluster';
 import { inverseColor, extendsObj, isFunction, isNullOrEmpty } from 'M/util/Utils';
 import * as EventType from 'M/event/eventtype';
@@ -368,13 +367,13 @@ class Cluster extends Style {
             extract: false,
           }, {
             displayInLayerSwitcher: false,
-            style: new Polygon(this.optionsVendor_.convexHullStyle),
+            style: new Generic(this.optionsVendor_.convexHullStyle),
           });
           this.convexHullLayer_.addFeatures(convexFeature);
           this.layer_.getImpl().getMap().addLayers(this.convexHullLayer_);
           this.layer_.getImpl().getMap().getMapImpl().getView()
             .on('change:resolution', this.clearConvexHull.bind(this), this);
-          this.convexHullLayer_.setStyle(new Polygon(this.optionsVendor_.convexHullStyle));
+          this.convexHullLayer_.setStyle(new Generic(this.optionsVendor_.convexHullStyle));
           this.convexHullLayer_.setZIndex(99990);
         } else {
           this.convexHullLayer_.removeFeatures(this.convexHullLayer_.getFeatures());
@@ -444,20 +443,23 @@ class Cluster extends Style {
     const numFeatures = clusterOlFeatures.length;
     const range = this.options_.ranges.find(el => (el.min <= numFeatures && el.max >= numFeatures));
     if (!isNullOrEmpty(range)) {
-      const style = range.style.clone();
+      let style = range.style.clone();
+      if (!(style instanceof Generic)) {
+        style = new Generic({ point: style.getOptions() });
+      }
       if (selected) {
-        style.set('fill.opacity', 0.33);
+        style.set('point.fill.opacity', 0.33);
       } else if (this.options_.displayAmount) {
-        style.set('label', this.options_.label);
-        let labelColor = style.get('label.color');
+        style.set('point.label', this.options_.label);
+        let labelColor = style.get('point.label.color');
         if (isNullOrEmpty(labelColor)) {
-          const fillColor = style.get('fill.color');
+          const fillColor = style.get('point.fill.color');
           if (!isNullOrEmpty(fillColor)) {
             labelColor = inverseColor(fillColor);
           } else {
             labelColor = '#000';
           }
-          style.set('label.color', labelColor);
+          style.set('point.label.color', labelColor);
         }
       }
       olStyle = style.getImpl().olStyleFn(feature, resolution);
@@ -489,15 +491,15 @@ class Cluster extends Style {
     const ranges = [{
       min: 2,
       max: breakpoint,
-      style: new StylePoint(FacadeCluster.RANGE_1_DEFAULT),
+      style: new Generic({ point: FacadeCluster.RANGE_1_DEFAULT }),
     }, {
       min: breakpoint,
       max: breakpoint * 2,
-      style: new StylePoint(FacadeCluster.RANGE_2_DEFAULT),
+      style: new Generic({ point: FacadeCluster.RANGE_2_DEFAULT }),
     }, {
       min: breakpoint * 2,
       max: numFeatures + 1,
-      style: new StylePoint(FacadeCluster.RANGE_3_DEFAULT),
+      style: new Generic({ point: FacadeCluster.RANGE_3_DEFAULT }),
     }];
     this.options_.ranges = ranges;
     return ranges;

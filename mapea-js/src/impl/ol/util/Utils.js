@@ -8,7 +8,6 @@ import { getWidth, extend, getCenter } from 'ol/extent';
 import { get as getProj, getTransform, transformExtent } from 'ol/proj';
 import OLFeature from 'ol/Feature';
 import RenderFeature from 'ol/render/Feature';
-import GeometryType from 'ol/geom/GeometryType';
 import Point from 'ol/geom/Point';
 import LineString from 'ol/geom/LineString';
 import LinearRing from 'ol/geom/LinearRing';
@@ -456,32 +455,32 @@ class Utils {
     const endss = olRenderFeature.getEndss();
     const type = olRenderFeature.getType();
     switch (type) {
-      case GeometryType.POINT:
+      case 'Point':
         geometry = new Point(coordinates);
         break;
-      case GeometryType.LINE_STRING:
+      case 'LineString':
         geometry = new LineString(coordinates);
         break;
-      case GeometryType.LINEAR_RING:
+      case 'LinearRing':
         geometry = new LinearRing(coordinates);
         break;
-      case GeometryType.POLYGON:
+      case 'Polygon':
         geometry = new Polygon(coordinates);
         break;
-      case GeometryType.MULTI_POINT:
+      case 'MultiPoint':
         geometry = new MultiPoint(coordinates);
         break;
-      case GeometryType.MULTI_LINE_STRING:
+      case 'MultiLineString':
         geometry = new MultiLineString(coordinates, undefined, ends);
         break;
-      case GeometryType.MULTI_POLYGON:
+      case 'MultiPolygon':
         geometry = new MultiPolygon(coordinates, undefined, endss);
         break;
-      case GeometryType.GEOMETRY_COLLECTION:
+      case 'GeometryCollection':
         const geometries = olRenderFeature.getGeometries();
         geometry = new GeometryCollection(geometries);
         break;
-      case GeometryType.CIRCLE:
+      case 'Circle':
         const center = olRenderFeature.getFlatInteriorPoint();
         geometry = new Circle(center);
         break;

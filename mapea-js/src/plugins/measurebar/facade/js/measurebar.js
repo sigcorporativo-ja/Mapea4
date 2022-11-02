@@ -104,6 +104,13 @@ export default class Measurebar extends M.Plugin {
       });
     }
     this.controls_ = [this.measureLength_, this.measureArea_, this.measureClear_];
+    this.measureLength_.on(M.evt.ADDED_TO_MAP, () => {
+      this.measureArea_.on(M.evt.ADDED_TO_MAP, () => {
+        this.measureClear_.on(M.evt.ADDED_TO_MAP, () => {
+          this.fire(M.evt.ADDED_TO_MAP);
+        });
+      });
+    });
     this.map_.panel.TOOLS.addControls(this.controls_);
     this.panel_ = this.map_.panel.TOOLS;
     this.map_.addPanels(this.panel_);

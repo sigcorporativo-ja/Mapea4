@@ -3,7 +3,7 @@
  */
 
 import layerswitcherTemplate from 'templates/layerswitcher.html';
-import { isNullOrEmpty, concatUrlPaths } from 'M/util/Utils';
+import { isNullOrEmpty, concatUrlPaths, isUndefined } from 'M/util/Utils';
 import { compileSync as compileTemplate } from 'M/util/Template';
 import LayerSwitcherFacade from 'M/control/Layerswitcher';
 import Layer from 'M/layer/Layer';
@@ -20,10 +20,16 @@ class LayerSwitcher extends Control {
    * @extends {ol.control.Control}
    * @api stable
    */
-  constructor() {
+  constructor(emptyLayer) {
     super();
     this.mouseoutTimeId = null;
     this.panel = null;
+    this.statusEmptyLayer = false;
+    if (!isUndefined(emptyLayer) && emptyLayer !== '') {
+      this.activeEmptyLayer = true;
+    } else {
+      this.activeEmptyLayer = false;
+    }
   }
 
   /**
@@ -64,24 +70,30 @@ class LayerSwitcher extends Control {
     const groupId = evt.target.getAttribute('data-group-id');
     let group = null;
     if (!isNullOrEmpty(evt.target)) {
-      const layerName = evt.target.getAttribute('data-layer-name');
-      if (!isNullOrEmpty(layerName)) {
+      const layerID = evt.target.getAttribute('data-layer-name');
+      if (!isNullOrEmpty(layerID)) {
         evt.stopPropagation();
-        let layer = this.facadeMap_.getLayers().filter(l => l.name === layerName)[0];
+        let layer = this.facadeMap_.getLayers().filter(l => l.id === layerID)[0];
         if (isNullOrEmpty(layer) && !isNullOrEmpty(groupId)) {
           group = LayerGroup.findGroupById(groupId, this.facadeMap_.getLayerGroup());
-          layer = group.getChildren().find(l => ((l instanceof Layer) && (l.name === layerName)));
+          layer = group.getChildren().find(l => ((l instanceof Layer) && (l.id === layerID)));
         }
         // checkbox
         if (evt.target.classList.contains('m-check')) {
           /* sets the layer visibility only if
              the layer is not base layer and visible */
-          if (layer.transparent === true || !layer.isVisible()) {
+          if (!isUndefined(layer) && (layer.transparent === true || !layer.isVisible())) {
             const opacity = evt.target.parentElement.parentElement.querySelector('div.tools > input');
             if (!isNullOrEmpty(opacity)) {
               layer.setOpacity(parseFloat(opacity.value));
             }
             layer.setVisible(!layer.isVisible());
+            this.statusEmptyLayer = false;
+          } else {
+            this.statusEmptyLayer = true;
+            this.facadeMap_.getBaseLayers().forEach((base) => {
+              base.setVisible(false);
+            });
           }
         } else if (evt.target.classList.contains('m-layerswitcher-transparency')) {
           // range
@@ -106,24 +118,30 @@ class LayerSwitcher extends Control {
     const groupId = evt.target.getAttribute('data-group-id');
     let group = null;
     if (!isNullOrEmpty(evt.target)) {
-      const layerName = evt.target.getAttribute('data-layer-name');
-      if (!isNullOrEmpty(layerName)) {
+      const layerID = evt.target.getAttribute('data-layer-name');
+      if (!isNullOrEmpty(layerID)) {
         evt.stopPropagation();
-        let layer = this.facadeMap_.getLayers().filter(l => l.name === layerName)[0];
+        let layer = this.facadeMap_.getLayers().filter(l => l.id === layerID)[0];
         if (isNullOrEmpty(layer) && !isNullOrEmpty(groupId)) {
           group = LayerGroup.findGroupById(groupId, this.facadeMap_.getLayerGroup());
-          layer = group.getChildren().find(l => ((l instanceof Layer) && (l.name === layerName)));
+          layer = group.getChildren().find(l => ((l instanceof Layer) && (l.id === layerID)));
         }
         // checkbox
         if (evt.target.classList.contains('m-check')) {
           /* sets the layer visibility only if
              the layer is not base layer and visible */
-          if (layer.transparent === true || !layer.isVisible()) {
+          if (!isUndefined(layer) && (layer.transparent === true || !layer.isVisible())) {
             const opacity = evt.target.parentElement.parentElement.querySelector('div.tools > input');
             if (!isNullOrEmpty(opacity)) {
               layer.setOpacity(parseFloat(opacity.value));
             }
             layer.setVisible(!layer.isVisible());
+            this.statusEmptyLayer = false;
+          } else {
+            this.statusEmptyLayer = true;
+            this.facadeMap_.getBaseLayers().forEach((base) => {
+              base.setVisible(false);
+            });
           }
           // range
         } else if (evt.target.classList.contains('m-layerswitcher-transparency')) {
@@ -166,6 +184,11 @@ class LayerSwitcher extends Control {
    */
   renderPanel() {
     LayerSwitcherFacade.getTemplateVariables(this.facadeMap_).then((templateVars) => {
+      if (this.activeEmptyLayer) {
+        const emptyLayer = Object.assign({}, LayerSwitcherFacade.EMPTYLAYER);
+        emptyLayer.visible = this.statusEmptyLayer;
+        templateVars.baseLayers.unshift(emptyLayer);
+      }
       const html = compileTemplate(layerswitcherTemplate, {
         vars: templateVars,
       });
@@ -285,9 +308,9 @@ class LayerSwitcher extends Control {
     const imgElements = html.querySelectorAll('img');
     Array.prototype.forEach.call(imgElements, (imgElem) => {
       imgElem.addEventListener('error', (evt) => {
-        const layerName = evt.target.getAttribute('data-layer-name');
+        const layerIDs = evt.target.getAttribute('data-layer-name');
         const legendErrorUrl = concatUrlPaths([M.config.THEME_URL, Layer.LEGEND_ERROR]);
-        const layer = this.facadeMap_.getLayers().filter(l => l.name === layerName)[0];
+        const layer = this.facadeMap_.getLayers().filter(l => l.id === layerIDs)[0];
         if (!isNullOrEmpty(layer)) {
           layer.setLegendURL(legendErrorUrl);
         }

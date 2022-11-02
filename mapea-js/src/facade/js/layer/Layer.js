@@ -114,6 +114,13 @@ class LayerBase extends Base {
      * @api
      */
     this.layerGroup_ = null;
+
+    /**
+     * ID Layer
+     * @public
+     * @api
+     */
+    this.id = generateRandom(`${parameter.name}_`);
   }
 
   /**
@@ -134,6 +141,42 @@ class LayerBase extends Base {
   setLegend(newLegend) {
     this.legend = newLegend;
     this.getImpl().legend = newLegend;
+  }
+
+  /**
+   * Returns the ID
+   * @function
+   * @api
+   * @return {Number} The legend of the layer.
+   */
+  getID() {
+    return this.id;
+  }
+
+  /**
+   * Sets the ID value
+   * @param {Number} newID - The new ID
+   */
+  setId(newID) {
+    if (!isNullOrEmpty(this.map_)) {
+      const findId = this.map_.getLayers().find((layer) => {
+        let result = null;
+        if (layer.constructor.name === 'WMC') {
+          result = layer.layers.find((layerwmc) => {
+            return layer.id === newID;
+          });
+        } else {
+          result = layer.id === newID;
+        }
+        return result;
+      });
+      if (isUndefined(findId)) {
+        this.map_.getFeatureHandler().changeNamePrevs(this.id, newID);
+        this.id = newID;
+      } else {
+        Exception(getValue('exception').id_exists);
+      }
+    }
   }
 
   /**
