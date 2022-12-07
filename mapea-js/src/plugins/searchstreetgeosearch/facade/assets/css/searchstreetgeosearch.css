@@ -385,7 +385,7 @@ div.result.autocomplete:hover {
 }
 
 .m-areas>div.m-area>div.m-panel.m-geosearch>button.m-panel-btn, .m-areas>div.m-area>div.m-panel.m-searchstreetgeosearch>button.m-panel-btn, .m-areas>div.m-area>div.m-panel.m-searchstreet>button.m-panel-btn {
-  position: static;
+  position: absolute;
   right: -40px;
   background-color: #a15bd7;
   color: #fff;
