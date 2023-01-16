@@ -1,6 +1,6 @@
 {
   "name": "mapea",
-  "version": "6.3.0",
+  "version": "6.3.1",
   "description": "Herramienta para desarrollo de mapas interactivos de forma sencilla",
   "keywords": [
     "map",
@@ -66,7 +66,7 @@
     "jsdoc": "^3.6.4",
     "jsts": "^2.0.2",
     "ol": "6.15.1",
-    "proj4": "^2.4.4"
+    "proj4": "^2.8.0"
   },
   "scripts": {
     "build": "cross-env NODE_OPTIONS=--max_old_space_size=2048 ./node/npm run build:core && ./node/npm run build:plugins && ./node/npm run build:plugins-extern",
