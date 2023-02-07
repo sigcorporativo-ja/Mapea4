@@ -39,6 +39,15 @@
             <environment>mapea-desarrollo</environment>
          </properties>
       </profile>
+       <profile>
+         <id>mapea-local</id>
+         <activation>
+            <activeByDefault>false</activeByDefault>
+         </activation>
+         <properties>
+            <environment>mapea-local</environment>
+         </properties>
+      </profile>
       <profile>
          <id>mapea-produccion</id>
          <activation>
