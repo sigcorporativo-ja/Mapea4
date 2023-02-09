@@ -22,7 +22,7 @@
     "@babel/plugin-proposal-export-default-from": "^7.0.0-beta.51",
     "@babel/preset-env": "^7.4.4",
     "babel-loader": "^8.0.0-beta.4",
-    "chromedriver": "^110.0.0",
+    "chromedriver": "^2.46.0",
     "copy-webpack-plugin": "^6.1.0",
     "cross-env": "^5.2.0",
     "css-loader": "^2.1.1",
