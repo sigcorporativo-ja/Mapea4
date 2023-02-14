@@ -34,11 +34,13 @@ class Control extends OLControl {
    */
   addTo(map, element) {
     this.facadeMap_ = map;
-    OLControl.call(this, {
+    this.element = element;
+    const control = new OLControl({
       element,
       target: null,
     });
-    map.getMapImpl().addControl(this);
+
+    map.getMapImpl().addControl(control);
   }
 
   /**
