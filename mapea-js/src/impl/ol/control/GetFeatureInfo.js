@@ -69,11 +69,12 @@ class GetFeatureInfo extends Control {
     const hasControl = olControls.some(control => control instanceof GetFeatureInfo);
     if (hasControl === false) {
       this.facadeMap_ = map;
-      OLControl.call(this, {
+      this.element = element;
+      const control = new OLControl({
         element,
         target: null,
       });
-      map.getMapImpl().addControl(this);
+      map.getMapImpl().addControl(control);
     }
   }
 
