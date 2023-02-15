@@ -405,7 +405,7 @@ class Choropleth extends StyleComposite {
           opacity: 1,
         },
         stroke: {
-          color: c,
+          color: 'black',
           width: 1,
         },
       },

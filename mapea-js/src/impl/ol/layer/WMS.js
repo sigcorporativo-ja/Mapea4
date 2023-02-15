@@ -725,7 +725,7 @@ class WMS extends LayerBase {
       this.layers.map(this.map.removeLayers, this.map);
       this.layers.length = 0;
     }
-    this.map = null;
+    // this.map = null;
   }
 
   /**
