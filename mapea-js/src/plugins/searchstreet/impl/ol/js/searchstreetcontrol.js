@@ -53,11 +53,11 @@ export default class SearchstreetControl extends ol.control.Control {
     this.facadeMap_ = map;
     this.element_ = element;
 
-    ol.control.Control.call(this, {
+    const control = new ol.control.Control({
       element,
       target: null,
     });
-    map.getMapImpl().addControl(this);
+    map.getMapImpl().addControl(control);
   }
 
   /**

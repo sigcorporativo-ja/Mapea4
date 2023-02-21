@@ -14,7 +14,8 @@ export default class SearchstreetIntegratedControl extends SearchstreetImpl {
     this.facadeMap_ = map;
     this.element_ = element;
 
-    ol.control.Control.call(this, {
+    /* eslint-disable */
+    const control = new ol.control.Control({
       element,
       target: null,
     });

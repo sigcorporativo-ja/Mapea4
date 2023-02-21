@@ -20,7 +20,8 @@ export default class GeosearchIntegrated extends GeosearchControlImpl {
 
     // goog.base(this, 'addTo', map, element);
 
-    ol.control.Control.call(this, {
+    /* eslint-disable */
+    const control = new ol.control.Control({
       element,
       target: null,
     });
