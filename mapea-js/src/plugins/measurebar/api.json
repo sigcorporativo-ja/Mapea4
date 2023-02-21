@@ -6,10 +6,10 @@
   "files": {
     "ol": {
       "scripts": [
-        "measurebar-3.1.1.ol.min.js"
+        "measurebar-3.1.2.ol.min.js"
       ],
       "styles": [
-        "measurebar-3.1.1.min.css"
+        "measurebar-3.1.2.min.css"
       ]
     }
   },
@@ -20,7 +20,7 @@
     "name": "Measurebar",
     "description": "Tool to measure distances and areas.",
     "text": "",
-    "version": "3.1.1",
+    "version": "3.1.2",
     "date": "20/10/2019",
     "author": "Junta de Andalucía",
     "org": "Junta de Andalucía",

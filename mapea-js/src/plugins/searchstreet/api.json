@@ -14,10 +14,10 @@
   "files": {
     "ol": {
       "scripts": [
-        "searchstreet-2.1.0.ol.min.js"
+        "searchstreet-2.0.4.ol.min.js"
       ],
       "styles": [
-        "searchstreet-2.1.0.min.css"
+        "searchstreet-2.0.4.min.css"
       ]
     }
   },
@@ -28,7 +28,7 @@
     "name": "Searchstreet",
     "description": "",
     "text": "",
-    "version": "2.1.0",
+    "version": "2.0.4",
     "date": "03/02/2020",
     "author": "Junta de Andalucía",
     "org": "Junta de Andalucía",
