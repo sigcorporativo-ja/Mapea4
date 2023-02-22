@@ -530,8 +530,8 @@
          "versions":[
             {
                "mapea":"6.4.0",
-               "js":"${mapea.url}/plugins/geosearchbylocation/geosearchbylocation-2.0.1.ol.min.js",
-               "css":"${mapea.url}/plugins/geosearchbylocation/geosearchbylocation-2.0.1.min.css"
+               "js":"${mapea.url}/plugins/geosearchbylocation/geosearchbylocation-2.0.2.ol.min.js",
+               "css":"${mapea.url}/plugins/geosearchbylocation/geosearchbylocation-2.0.2.min.css"
             },
             {
                "mapea":"6.3.1",
