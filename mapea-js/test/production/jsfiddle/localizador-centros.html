@@ -6,8 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="mapea" content="yes">
-    <link rel="stylesheet" href="https://sigc-dev-ol.desarrollo.guadaltel.es/mapea6/assets/css/mapea-6.4.0.ol.min.css">
-    <link rel="stylesheet" href="https://sigc-dev-ol.desarrollo.guadaltel.es/mapea6/plugins/wfstcontrols/wfstcontrols-3.0.4.min.css">
+    <link href="https://sigc-dev-ol.desarrollo.guadaltel.es/mapea6/assets/css/mapea-6.4.0.ol.min.css" rel="stylesheet" />
     <title>PRUEBA DESARROLLO</title>
     <style rel="stylesheet">
         html,
@@ -23,17 +22,13 @@
 </head>
 
 <body>
-    <button onclick="abrirPanel();">
-        Abrir panel
-    </button>
-    <button onclick="panelToolsExtra.collapse();">
-        Cerrar panel
+    <button onClick='añadirFeature()'>
+        Añadir feature geografico
     </button>
     <div id="map"></div>
     <script src="https://sigc-dev-ol.desarrollo.guadaltel.es/mapea6/js/mapea-6.4.0.ol.min.js" charset="utf-8"></script>
     <script src="https://sigc-dev-ol.desarrollo.guadaltel.es/mapea6/js/configuration-6.4.0.js" charset="utf-8"></script>
-    <script src="https://sigc-dev-ol.desarrollo.guadaltel.es/mapea6/plugins/wfstcontrols/wfstcontrols-3.0.4.ol.min.js" charset="utf-8"></script>
-    <script src="./paneles.js" charset="utf-8"></script>
+    <script src="./localizador-centros.js" charset="utf-8"></script>
 </body>
 
 </html>
