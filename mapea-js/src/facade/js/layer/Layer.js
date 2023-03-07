@@ -6,6 +6,7 @@ import * as parserParameter from '../parameter/parameter.js';
 import Base from '../Base.js';
 import { isNullOrEmpty, concatUrlPaths, isUndefined, normalize, isString, isFunction, generateRandom, isBoolean, isArray, isObject } from '../util/Utils.js';
 import { getValue } from '../i18n/language.js';
+import * as EventType from '../event/eventtype';
 
 /**
  * @classdesc
@@ -425,6 +426,8 @@ class LayerBase extends Base {
     visibility = /^1|(true)$/i.test(visibility);
 
     this.getImpl().setVisible(visibility);
+
+    this.fire(EventType.LAYER_VISIBILITY_CHANGE, [{ visibility, layer: this }, this]);
   }
 
   /**

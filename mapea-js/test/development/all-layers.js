@@ -14,11 +14,12 @@ const wms = new WMS({
   name: 'Limites',
 });
 
-const wfs = new WFS({
-  namespace: 'ggis',
-  name: 'Colegios',
-  url: 'http://clientes.guadaltel.es/desarrollo/geossigc/ows?',
-  legend: 'Prestaciones - Ámbito municipal',
+var wfs = new WFS({
+  url: "http://geostematicos-sigc.juntadeandalucia.es/geoserver/tematicos/ows?",
+  namespace: "tematicos",
+  name: "Provincias",
+  legend: "Provincias",
+  geometry: 'MPOLYGON'
 });
 
 const kml = new KML({

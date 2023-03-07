@@ -2825,22 +2825,10 @@ class Map extends Base {
    * @api
    */
   removeOverlayLayers() {
-    if (isUndefined(MapImpl.prototype.removeLayers)) {
-      Exception(getValue('exception').removelayers_method);
-    }
-
-    // gets the layers to remove
+  // gets the layers to remove
     const layers = this.getOverlayLayers();
 
-    layers.forEach((layer) => {
-      // KML and WFS layers handler its features
-      if (layer instanceof Vector) {
-        this.featuresHandler_.removeLayer(layer);
-      }
-    });
-
-    // removes the layers
-    this.getImpl().removeLayers(layers);
+    this.removeLayers(layers);
 
     return this;
   }
