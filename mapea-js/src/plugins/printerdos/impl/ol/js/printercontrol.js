@@ -69,11 +69,8 @@ export default class PrinterControl extends M.impl.Control {
     this.facadeMap_ = map;
 
     this.element = element;
-    const control = new ol.control.Control({
-      element,
-      target: null,
-    });
-    map.getMapImpl().addControl(control);
+
+    super.addTo(map, element);
   }
 
   /**

@@ -39,13 +39,6 @@ export default class SearchstreetGeosearch extends M.impl.Control {
     this.facadeMap_ = map;
     this.element_ = element;
     super.addTo(map, element);
-
-
-    // const control = new ol.control.Control({
-    //   element,
-    //   target: null,
-    // });
-    // map.getMapImpl().addControl(control);
   }
 
   /**
