@@ -279,6 +279,14 @@ export const CHANGE_ROTATION = 'change:rotation';
  * @type {string}
  * @api
  */
+export const LAYER_VISIBILITY_CHANGE = 'changed:layer-visibility';
+
+/**
+ * Event type
+ * @public
+ * @type {string}
+ * @api
+ */
 export const CLICK = 'click';
 
 /**
