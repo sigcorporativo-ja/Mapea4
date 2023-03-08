@@ -1,4 +1,4 @@
-export default class SearchstreetGeosearch extends ol.control.Control {
+export default class SearchstreetGeosearch extends M.impl.Control {
   /**
    * @classdesc Main constructor of the SearchstreetGeosearch control.
    *
@@ -7,7 +7,7 @@ export default class SearchstreetGeosearch extends ol.control.Control {
    * @api stable
    */
   constructor() {
-    super({});
+    super();
 
     /**
      * Facade of the map
@@ -38,12 +38,14 @@ export default class SearchstreetGeosearch extends ol.control.Control {
   addTo(map, element) {
     this.facadeMap_ = map;
     this.element_ = element;
+    super.addTo(map, element);
 
-    const control = new ol.control.Control({
-      element,
-      target: null,
-    });
-    map.getMapImpl().addControl(control);
+
+    // const control = new ol.control.Control({
+    //   element,
+    //   target: null,
+    // });
+    // map.getMapImpl().addControl(control);
   }
 
   /**

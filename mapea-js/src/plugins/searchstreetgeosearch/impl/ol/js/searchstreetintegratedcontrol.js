@@ -13,12 +13,6 @@ export default class SearchstreetIntegratedControl extends SearchstreetImpl {
   addTo(map, element) {
     this.facadeMap_ = map;
     this.element_ = element;
-
-    /* eslint-disable */
-    const control = new ol.control.Control({
-      element,
-      target: null,
-    });
   }
 
   /**

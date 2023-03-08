@@ -14,27 +14,6 @@ export default class GeosearchIntegrated extends GeosearchControlImpl {
     this.facadeMap_ = map;
 
     map.addLayers(this.layer_);
-
-    // this.layer_.addTo(map);
-    // map.getImpl().getFeaturesHandler().addLayer(this.layer_);
-
-    // goog.base(this, 'addTo', map, element);
-
-    /* eslint-disable */
-    const control = new ol.control.Control({
-      element,
-      target: null,
-    });
-
-    // this.facadeMap_ = map;
-    //
-    // map.addLayers(this.layer_);
-    //
-    // ol.control.Control.call(this, {
-    //   'element': element,
-    //   'target': null
-    // });
-    // map.getMapImpl().addControl(this);
   }
 
   /**

@@ -52,11 +52,12 @@ export default class GeosearchControl extends M.impl.Control {
 
     map.addLayers(this.layer_);
     this.element = element;
-    const control = new ol.control.Control({
-      element,
-      target: null,
-    });
-    map.getMapImpl().addControl(control);
+    // const control = new ol.control.Control({
+    //   element,
+    //   target: null,
+    // });
+    // map.getMapImpl().addControl(control);
+    super.addTo(map, element);
   }
 
   /**
@@ -116,7 +117,7 @@ export default class GeosearchControl extends M.impl.Control {
    * @api stable
    */
   zoomToResults() {
-    const bbox = ol.extent.boundingExtent(this.layer_.getImpl().getOLLayer()
+    const bbox = ol.extent.boundingExtent(this.layer_.getImpl().getOL3Layer()
       .getSource().getFeatures()
       .map((feature) => {
         return ol.extent.getCenter(feature.getGeometry().getExtent());

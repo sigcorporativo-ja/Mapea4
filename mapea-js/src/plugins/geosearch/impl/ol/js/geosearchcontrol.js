@@ -51,12 +51,15 @@ export default class GeosearchControl extends M.impl.Control {
     this.facadeMap_ = map;
 
     map.addLayers(this.layer_);
-    this.element = element;
-    const control = new ol.control.Control({
-      element,
-      target: null,
-    });
-    map.getMapImpl().addControl(control);
+
+    super.addTo(map, element);
+
+    // this.element = element;
+    // const control = new ol.control.Control({
+    //   element,
+    //   target: null,
+    // });
+    // map.getMapImpl().addControl(control);
   }
 
   /**
