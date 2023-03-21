@@ -357,7 +357,6 @@ class WMS extends LayerBase {
         const origin = getBottomLeft(extent);
         const opts = {
           url: this.url,
-          params: layerParams,
           tileGrid: new OLTileGrid({
             resolutions,
             extent,
@@ -373,10 +372,10 @@ class WMS extends LayerBase {
           opts.crossOrigin = crossOrigin;
         }
         olSource = new TileWMS(opts);
+        olSource.updateParams(layerParams);
       } else {
         const opts = {
           url: this.url,
-          params: layerParams,
           resolutions,
           extent,
           minResolution,
@@ -388,6 +387,7 @@ class WMS extends LayerBase {
           opts.crossOrigin = crossOrigin;
         }
         olSource = new ImageWMS(opts);
+        olSource.updateParams(layerParams);
       }
     }
     return olSource;

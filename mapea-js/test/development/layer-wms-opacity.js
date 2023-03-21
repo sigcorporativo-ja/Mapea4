@@ -10,7 +10,9 @@ const mapajs = map({
 });
 
 function changeOpacity() {
-  mapajs.getWMS('Redes_energeticas')[0].setOpacity(0.5);
+  mapajs.getWMS({
+    name: 'Redes_energeticas',
+  })[0].setOpacity(0.5);
 }
 
 document.querySelector('button').onclick = changeOpacity;
