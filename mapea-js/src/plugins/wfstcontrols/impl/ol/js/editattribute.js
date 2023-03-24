@@ -161,7 +161,10 @@ export default class EditAttribute extends M.impl.Control {
       this.editFeature.setGeometry(editFeatureGeom);
       this.editFeature.unset(editFeatureGeomName);
 
-      const projectionCode = this.facadeMap_.getProjection().code;
+      let projectionCode = this.facadeMap_.getProjection().code;
+      if (projectionCode === 'EPSG:4326') {
+        projectionCode = 'CRS:84';
+      }
       const formatWFS = new ol.format.WFS();
       const wfstRequestXml = formatWFS.writeTransaction(null, [this.editFeature], null, {
         featureNS: describeFeatureType.featureNS,

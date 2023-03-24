@@ -82,7 +82,10 @@ export default class SaveFeature extends M.impl.Control {
         });
       }
 
-      const projectionCode = this.facadeMap_.getProjection().code;
+      let projectionCode = this.facadeMap_.getProjection().code;
+      if (projectionCode === 'EPSG:4326') {
+        projectionCode = 'CRS:84';
+      }
       const formatWFS = new ol.format.WFS();
       const wfstRequestXml = formatWFS
         .writeTransaction(saveFeaturesDraw, saveFeaturesModify, saveFeaturesDelete, {

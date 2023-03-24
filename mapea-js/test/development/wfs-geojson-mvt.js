@@ -9,7 +9,8 @@ const mapjs = Mmap({
   container: 'map',
   controls: ['layerswitcher'],
   projection: 'EPSG:3857*m',
-  layers: ['OSM']
+  layers: ['OSM'],
+  //bbox: [-998230.9872854212, 4316600.505522167, 215803.1745700189, 4636952.283813728]
 });
 
 // const provincias = new WFS({
@@ -26,20 +27,12 @@ const mapjs = Mmap({
 //   name: 'Municipios',
 // });
 
-const mvt = new MVT({
-  url: 'https://herramienta-centralizada-sigc.desarrollo.guadaltel.es/geoserver/gwc/service/tms/1.0.0/Global:sp___estaciones_sev_f7635e5b_5061_49a4_8124_e1c5846c2ffa@EPSG%3A3857@pbf/{z}/{x}/{-y}.pbf',
-  name: 'Nombre mvt',
-  legend: 'Leyenda mvt',
-  projection: mapjs.getProjection().code
-});
 
 document.getElementById('change-CDAU').addEventListener('click', () => {
   const allLayers = mapjs.getRootLayers().filter(layer => layer.type !== 'GeoJSON' && layer.type !== 'WMS' && layer.type !== 'WFS' && layer.type !== 'MVT');
   mapjs.removeWMC(mapjs.getWMC()[0]);
   mapjs.removeLayers(allLayers);
-
-  mapjs.addWMC('cdau');
-
+  mapjs.addWMC('http://mapea4-sigc.juntadeandalucia.es/files/wmc/context_cdau_hibrido.xml');
   console.log('change-CDAU')
 });
 document.getElementById('change-OSM').addEventListener('click', () => {
@@ -54,9 +47,5 @@ document.getElementById('change-OSM').addEventListener('click', () => {
 document.getElementById('change-4326').addEventListener('click', () => {
   mapjs.removeLayers(mapjs.getRootLayers().find(l => l.type === 'MVT'))
   mapjs.setProjection('EPSG:4326*m')
-  mvt.url = 'https://herramienta-centralizada-sigc.desarrollo.guadaltel.es/geoserver/gwc/service/tms/1.0.0/Global:sp___estaciones_sev_f7635e5b_5061_49a4_8124_e1c5846c2ffa@EPSG%3A4326@pbf/{z}/{x}/{-y}.pbf'
-  mapjs.addLayers([mvt]);
   console.log('change-4326')
 });
-
-mapjs.addLayers([mvt]);
