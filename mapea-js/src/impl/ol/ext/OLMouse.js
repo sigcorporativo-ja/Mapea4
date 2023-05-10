@@ -75,7 +75,7 @@ class Mouse extends MousePosition {
    * @function
    */
   updateHTML_(pixel) {
-    let html = this.undefinedHTML_;
+    let html = this.placeholder_;
     const projection = this.getProjection();
     if (pixel && this.mapProjection_) {
       if (!this.transform_) {

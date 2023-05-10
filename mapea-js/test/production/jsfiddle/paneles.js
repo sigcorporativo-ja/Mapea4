@@ -1,7 +1,7 @@
 var mapajs = M.map({
   container: "map",
   wmcfiles: ["mapa"],
-  layers: ["WFST*capa wfs*http://clientes.guadaltel.es/desarrollo/geossigc/wfs?*callejero:prueba_pol_wfst*MPOLYGON"]
+  layers: ["WFS*Provincias*http://geostematicos-sigc.juntadeandalucia.es/geoserver/tematicos/ows?*tematicos:Provincias*MPOLYGON"]
 });
 
 /***crear un panel nuevo ***/

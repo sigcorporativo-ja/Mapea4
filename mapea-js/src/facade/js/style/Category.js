@@ -207,19 +207,15 @@ class Category extends Composite {
         getImageSize(style.get('icon.src')).then((img) => {
           image.width = style.get('icon.scale') ? img.width * style.get('icon.scale') : img.width;
           image.height = style.get('icon.scale') ? img.height * style.get('icon.scale') : img.height;
-          style.toImage().then((data) => {
-            image.src = data;
-          });
+        });
+      }
+      const src = style.toImage();
+      if (src instanceof Promise) {
+        src.then((data) => {
+          image.src = data;
         });
       } else {
-        const src = style.toImage();
-        if (src instanceof Promise) {
-          src.then((data) => {
-            image.src = data;
-          });
-        } else {
-          image.src = src;
-        }
+        image.src = src;
       }
     }
   }

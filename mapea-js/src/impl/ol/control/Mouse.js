@@ -15,7 +15,7 @@ class Mouse extends OLControlMousePosition {
     const opts = extend({
       coordinateFormat: createStringXY(options.precision || 4),
       label: options.label,
-      undefinedHTML: '',
+      placeholder: '',
       className: 'm-mouse-position g-cartografia-flecha',
     }, vendorOptions, true);
 

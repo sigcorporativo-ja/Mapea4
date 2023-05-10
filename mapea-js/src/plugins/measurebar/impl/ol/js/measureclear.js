@@ -46,11 +46,8 @@ export default class MeasureClear extends M.impl.Control {
     this.facadeMap_ = map;
     const button = element.getElementsByTagName('button')['m-measure-button'];
     button.addEventListener('click', this.onClick.bind(this));
-    ol.control.Control.call(this, {
-      element,
-      target: null,
-    });
-    map.getMapImpl().addControl(this);
+    this.element = element;
+    super.addTo(map, element);
   }
 
   /**

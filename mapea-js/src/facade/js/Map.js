@@ -2804,6 +2804,34 @@ class Map extends Base {
     const resolution = getResolutionFromScale(scale, this.getProjection().units);
     this.getImpl().setToClosestScale(resolution);
   }
+
+  /**
+   * This function gets no-base layers added to the map
+   *
+   * @function
+   * @returns {Array<Layer>}
+   * @api
+   */
+  getOverlayLayers() {
+    const layers = this.getLayers().filter(layer => layer.name !== '__draw__' && layer.transparent === true);
+    return layers;
+  }
+
+  /**
+   * This function removes no-base layers to the map
+   *
+   * @function
+   * @returns {Array<Layer>}
+   * @api
+   */
+  removeOverlayLayers() {
+  // gets the layers to remove
+    const layers = this.getOverlayLayers();
+
+    this.removeLayers(layers);
+
+    return this;
+  }
 }
 
 /**

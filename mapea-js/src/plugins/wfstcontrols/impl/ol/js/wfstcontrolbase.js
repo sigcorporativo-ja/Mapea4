@@ -49,11 +49,9 @@ export default class WFSTBase extends M.impl.Control {
   addTo(map, element) {
     this.facadeMap_ = map;
 
-    ol.control.Control.call(this, {
-      element,
-      target: null,
-    });
-    map.getMapImpl().addControl(this);
+    this.element = element;
+
+    super.addTo(map, element);
   }
 
   /**

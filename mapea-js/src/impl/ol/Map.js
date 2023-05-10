@@ -1222,7 +1222,7 @@ class Map extends MObject {
           }
           // recalculates resolution if there are not
           // any base layer
-          if (!existsBaseLayer) {
+          if (!existsBaseLayer && layer.name.indexOf('cluster_cover_') === -1) {
             this.updateResolutionsFromBaseLayer();
           }
         }
