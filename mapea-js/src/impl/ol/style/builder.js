@@ -99,6 +99,7 @@ export const getLabel = (options, featureVariable, layer) => {
       textBaseline: Object.values(Baseline).includes(baseline) ? baseline : DEFAULT_BASELINE,
       text: textLabel === undefined ? undefined : String(textLabel),
       rotation: Simple.getValue(options.label.rotation, featureVariable, layer),
+      overflow: Simple.getValue(options.label.overflow, featureVariable, layer),
     });
     if (!isNullOrEmpty(options.label.stroke)) {
       const { miterlimit, linedashoffset } = options.label.stroke;
