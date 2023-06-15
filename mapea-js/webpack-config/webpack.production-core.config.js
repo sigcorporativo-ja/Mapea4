@@ -47,21 +47,6 @@ module.exports = {
       }, {
         test: /\.js$/,
         exclude: /(node_modules\/(?!ol)|bower_components)/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [
-              [
-                '@babel/preset-env',
-                {
-                  targets: {
-                    esmodules: true,
-                  },
-                },
-              ],
-            ],
-          },
-        },
       },
       {
         test: /\.js$/,
