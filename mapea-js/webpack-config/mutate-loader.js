@@ -10,104 +10,24 @@
 const CONF_ENV = {
   dev: [{
       path: 'ol/format/GML3',
-      original: `GML3.prototype.getCoords_ = function (point, opt_srsName, opt_hasZ) {
-        var axisOrientation = 'enu';
-        if (opt_srsName) {
-            axisOrientation = getProjection(opt_srsName).getAxisOrientation();
-        }
-        var coords = ((axisOrientation.substr(0, 2) === 'en') ?
-            point[0] + ' ' + point[1] :
-            point[1] + ' ' + point[0]);
-        if (opt_hasZ) {
-            // For newly created points, Z can be undefined.
-            var z = point[2] || 0;
-            coords += ' ' + z;
-        }
-        return coords;
-    };`,
-      mutated: `GML3.prototype.getCoords_ = function (point, opt_srsName, opt_hasZ) {
-        return point[0] + ' ' + point[1];
-    };`,
-    }, {
-      path: 'ol/layer/Layer',
-      original: `export function inView(layerState, viewState) {
-    if (!layerState.visible) {
-        return false;
+      original: `getCoords_(point, srsName, hasZ) {
+    let axisOrientation = 'enu';
+    if (srsName) {
+      axisOrientation = getProjection(srsName).getAxisOrientation();
     }
-    var resolution = viewState.resolution;
-    if (resolution < layerState.minResolution || resolution >= layerState.maxResolution) {
-        return false;
-    }
-    var zoom = viewState.zoom;
-    return zoom > layerState.minZoom && zoom <= layerState.maxZoom;
-}`,
-      mutated: `export function inView(layerState, viewState) {
-    if (!layerState.visible) {
-        return false;
-    }
-    var resolution = viewState.resolution;
-    if (resolution < layerState.minResolution || resolution > layerState.maxResolution) {
-        return false;
-    }
-    var zoom = viewState.zoom;
-    return zoom > layerState.minZoom && zoom <= layerState.maxZoom;
-  }`,
-    },
-    {
-      path: 'ol/format/GML3',
-      original: `GML3.prototype.writePos_ = function (node, value, objectStack) {
-        var context = objectStack[objectStack.length - 1];
-        var hasZ = context['hasZ'];
-        var srsDimension = hasZ ? '3' : '2';
-        node.setAttribute('srsDimension', srsDimension);
-        var srsName = context['srsName'];
-        var axisOrientation = 'enu';
-        if (srsName) {
-            axisOrientation = getProjection(srsName).getAxisOrientation();
-        }
-        var point = value.getCoordinates();
-        var coords;
-        // only 2d for simple features profile
-        if (axisOrientation.substr(0, 2) === 'en') {
-            coords = (point[0] + ' ' + point[1]);
-        }
-        else {
-            coords = (point[1] + ' ' + point[0]);
-        }
-        if (hasZ) {
-            // For newly created points, Z can be undefined.
-            var z = point[2] || 0;
-            coords += ' ' + z;
-        }
-        writeStringTextNode(node, coords);
-    };`,
-      mutated: `GML3.prototype.writePos_ = function (node, value, objectStack) {
-        var point = value.getCoordinates();
-        var coords = point[0] + " " + point[1];
-        writeStringTextNode(node, coords);
-    };`,
-    }
-  ],
-  prod: [{
-      path: 'ol/format/GML3',
-      original: `GML3.prototype.getCoords_ = function (point, opt_srsName, opt_hasZ) {
-    var axisOrientation = 'enu';
-
-    if (opt_srsName) {
-      axisOrientation = getProjection(opt_srsName).getAxisOrientation();
-    }
-
-    var coords = axisOrientation.substr(0, 2) === 'en' ? point[0] + ' ' + point[1] : point[1] + ' ' + point[0];
-
-    if (opt_hasZ) {
+    let coords =
+      axisOrientation.substr(0, 2) === 'en'
+        ? point[0] + ' ' + point[1]
+        : point[1] + ' ' + point[0];
+    if (hasZ) {
       // For newly created points, Z can be undefined.
-      var z = point[2] || 0;
+      const z = point[2] || 0;
       coords += ' ' + z;
     }
 
     return coords;
-  };`,
-      mutated: `GML3.prototype.getCoords_ = function (point, opt_srsName, opt_hasZ) {
+  }`,
+      mutated: `getCoords_(point, opt_srsName, opt_hasZ) {
         return point[0] + ' ' + point[1];
     };`,
     }, {
@@ -116,14 +36,14 @@ const CONF_ENV = {
   if (!layerState.visible) {
     return false;
   }
-
-  var resolution = viewState.resolution;
-
-  if (resolution < layerState.minResolution || resolution >= layerState.maxResolution) {
+  const resolution = viewState.resolution;
+  if (
+    resolution < layerState.minResolution ||
+    resolution >= layerState.maxResolution
+  ) {
     return false;
   }
-
-  var zoom = viewState.zoom;
+  const zoom = viewState.zoom;
   return zoom > layerState.minZoom && zoom <= layerState.maxZoom;
 }`,
       mutated: `export function inView(layerState, viewState) {
@@ -140,36 +60,116 @@ const CONF_ENV = {
     },
     {
       path: 'ol/format/GML3',
-      original: `GML3.prototype.writePos_ = function (node, value, objectStack) {
-    var context = objectStack[objectStack.length - 1];
-    var hasZ = context['hasZ'];
-    var srsDimension = hasZ ? '3' : '2';
+      original: `writePos_(node, value, objectStack) {
+    const context = objectStack[objectStack.length - 1];
+    const hasZ = context['hasZ'];
+    const srsDimension = hasZ ? '3' : '2';
     node.setAttribute('srsDimension', srsDimension);
-    var srsName = context['srsName'];
-    var axisOrientation = 'enu';
-
+    const srsName = context['srsName'];
+    let axisOrientation = 'enu';
     if (srsName) {
       axisOrientation = getProjection(srsName).getAxisOrientation();
     }
-
-    var point = value.getCoordinates();
-    var coords; // only 2d for simple features profile
-
+    const point = value.getCoordinates();
+    let coords;
+    // only 2d for simple features profile
     if (axisOrientation.substr(0, 2) === 'en') {
       coords = point[0] + ' ' + point[1];
     } else {
       coords = point[1] + ' ' + point[0];
     }
-
     if (hasZ) {
       // For newly created points, Z can be undefined.
-      var z = point[2] || 0;
+      const z = point[2] || 0;
+      coords += ' ' + z;
+    }
+    writeStringTextNode(node, coords);
+  }`,
+      mutated: `writePos_(node, value, objectStack) {
+        var point = value.getCoordinates();
+        var coords = point[0] + " " + point[1];
+        writeStringTextNode(node, coords);
+    };`,
+    }
+  ],
+  prod: [{
+      path: 'ol/format/GML3',
+      original: `getCoords_(point, srsName, hasZ) {
+    let axisOrientation = 'enu';
+    if (srsName) {
+      axisOrientation = getProjection(srsName).getAxisOrientation();
+    }
+    let coords =
+      axisOrientation.substr(0, 2) === 'en'
+        ? point[0] + ' ' + point[1]
+        : point[1] + ' ' + point[0];
+    if (hasZ) {
+      // For newly created points, Z can be undefined.
+      const z = point[2] || 0;
       coords += ' ' + z;
     }
 
+    return coords;
+  }`,
+      mutated: `getCoords_(point, opt_srsName, opt_hasZ) {
+        return point[0] + ' ' + point[1];
+    };`,
+    }, {
+      path: 'ol/layer/Layer',
+      original: `export function inView(layerState, viewState) {
+  if (!layerState.visible) {
+    return false;
+  }
+  const resolution = viewState.resolution;
+  if (
+    resolution < layerState.minResolution ||
+    resolution >= layerState.maxResolution
+  ) {
+    return false;
+  }
+  const zoom = viewState.zoom;
+  return zoom > layerState.minZoom && zoom <= layerState.maxZoom;
+}`,
+      mutated: `export function inView(layerState, viewState) {
+    if (!layerState.visible) {
+        return false;
+    }
+    var resolution = viewState.resolution;
+    if (resolution < layerState.minResolution || resolution > layerState.maxResolution) {
+        return false;
+    }
+    var zoom = viewState.zoom;
+    return zoom > layerState.minZoom && zoom <= layerState.maxZoom;
+  }`,
+    },
+    {
+      path: 'ol/format/GML3',
+      original: `writePos_(node, value, objectStack) {
+    const context = objectStack[objectStack.length - 1];
+    const hasZ = context['hasZ'];
+    const srsDimension = hasZ ? '3' : '2';
+    node.setAttribute('srsDimension', srsDimension);
+    const srsName = context['srsName'];
+    let axisOrientation = 'enu';
+    if (srsName) {
+      axisOrientation = getProjection(srsName).getAxisOrientation();
+    }
+    const point = value.getCoordinates();
+    let coords;
+    // only 2d for simple features profile
+    if (axisOrientation.substr(0, 2) === 'en') {
+      coords = point[0] + ' ' + point[1];
+    } else {
+      coords = point[1] + ' ' + point[0];
+    }
+    if (hasZ) {
+      // For newly created points, Z can be undefined.
+      const z = point[2] || 0;
+      coords += ' ' + z;
+    }
     writeStringTextNode(node, coords);
-  };`,
-      mutated: `GML3.prototype.writePos_ = function (node, value, objectStack) {
+  }`,
+      mutated: `writePos_(node, value, objectStack) {
         var point = value.getCoordinates();
         var coords = point[0] + " " + point[1];
         writeStringTextNode(node, coords);
