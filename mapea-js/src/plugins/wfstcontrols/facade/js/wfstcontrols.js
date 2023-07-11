@@ -137,6 +137,29 @@ export default class WFSTControls extends M.Plugin {
       name: this.layername_,
     })[0];
     const wfslayer = M.utils.isNullOrEmpty(firstNamedLayer) ? firstLayer : firstNamedLayer;
+
+    let geomChanged = false;
+
+    wfslayer.on(M.evt.LOAD, () => {
+      if (!geomChanged) {
+        if (!M.utils.isNullOrEmpty(wfslayer) &&
+          !wfslayer.geometry &&
+          wfslayer.getFeatures &&
+          wfslayer.getFeatures().length > 0) {
+          const reemplazos = {
+            MultiPolygon: 'MPOLYGON',
+            MultiPPoint: 'MPOINT',
+          };
+
+          const geom = wfslayer.getFeatures()[0].getImpl()
+            .getOLFeature().getGeometry().getType();
+
+          wfslayer.geometry = geom.replace(geom, reemplazos[geom]);
+          geomChanged = true;
+        }
+      }
+    });
+
     this.panel_ = new M.ui.Panel('edit', {
       collapsible: true,
       className: 'm-edition',
