@@ -143,7 +143,6 @@ export default class WFSTControls extends M.Plugin {
         !wfslayer.geometry &&
         wfslayer.getFeatures &&
         wfslayer.getFeatures().length > 0) {
-
         wfslayer.geometry = wfslayer.getFeatures()[0].getImpl()
           .getOLFeature().getGeometry().getType();
       }
