@@ -137,6 +137,18 @@ export default class WFSTControls extends M.Plugin {
       name: this.layername_,
     })[0];
     const wfslayer = M.utils.isNullOrEmpty(firstNamedLayer) ? firstLayer : firstNamedLayer;
+
+    wfslayer.on(M.evt.LOAD, () => {
+      if (!M.utils.isNullOrEmpty(wfslayer) &&
+        !wfslayer.geometry &&
+        wfslayer.getFeatures &&
+        wfslayer.getFeatures().length > 0) {
+
+        wfslayer.geometry = wfslayer.getFeatures()[0].getImpl()
+          .getOLFeature().getGeometry().getType();
+      }
+    });
+
     this.panel_ = new M.ui.Panel('edit', {
       collapsible: true,
       className: 'm-edition',
