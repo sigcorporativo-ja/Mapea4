@@ -140,23 +140,30 @@ export default class WFSTControls extends M.Plugin {
 
     let geomChanged = false;
 
+    const tryParseGeometry = () => {
+      if (!M.utils.isNullOrEmpty(wfslayer) &&
+        !wfslayer.geometry &&
+        wfslayer.getFeatures &&
+        wfslayer.getFeatures().length > 0) {
+        const reemplazos = {
+          MultiPolygon: 'MPOLYGON',
+          MultiPPoint: 'MPOINT',
+        };
+
+        const geom = wfslayer.getFeatures()[0].getImpl()
+          .getOLFeature().getGeometry().getType();
+
+        wfslayer.geometry = geom.replace(geom, reemplazos[geom]);
+        return true;
+      }
+      return false;
+    };
+
+    geomChanged = tryParseGeometry();
+
     wfslayer.on(M.evt.LOAD, () => {
       if (!geomChanged) {
-        if (!M.utils.isNullOrEmpty(wfslayer) &&
-          !wfslayer.geometry &&
-          wfslayer.getFeatures &&
-          wfslayer.getFeatures().length > 0) {
-          const reemplazos = {
-            MultiPolygon: 'MPOLYGON',
-            MultiPPoint: 'MPOINT',
-          };
-
-          const geom = wfslayer.getFeatures()[0].getImpl()
-            .getOLFeature().getGeometry().getType();
-
-          wfslayer.geometry = geom.replace(geom, reemplazos[geom]);
-          geomChanged = true;
-        }
+        tryParseGeometry();
       }
     });
 
