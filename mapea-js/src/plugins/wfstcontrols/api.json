@@ -15,7 +15,15 @@
       "name": "layername"
     },{
       "type": "simple",
-      "name": "geometry"
+      "name": "geometry",
+      "possibleValues": [
+        "POINT",
+        "LINE",
+        "POLYGON",
+        "MPOINT",
+        "MLINE",
+        "MPOLYGON"
+      ]
     }]
   }],
   "files": {
