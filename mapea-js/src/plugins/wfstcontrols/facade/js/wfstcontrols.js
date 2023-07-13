@@ -14,12 +14,30 @@ import api from '../../api';
  *
  * @constructor
  * @extends {M.Plugin}
- * @param {array} controls - Array of controls to be added
+ * @param {array | string} controls - Array of controls to be added
+ * @param {string} layername - Name of the WFS layer
+ * @param {string} geometry - Geometry of the WFS layer
  * @api stable
  */
 export default class WFSTControls extends M.Plugin {
-  constructor(controls, layername) {
+  constructor(controls, layername, geometry) {
     super();
+
+    let controlsfix;
+    let layernamefix;
+    let geometryfix;
+
+    // Parse new controls model to the old one
+
+    if (!controls.length || !Array.isArray(controls)) {
+      layernamefix = controls.layername;
+      controlsfix = controls.features.split(',');
+      geometryfix = controls.geometry;
+    } else {
+      layernamefix = layername;
+      controlsfix = controls;
+      geometryfix = geometry;
+    }
 
     /**
      * Array of controls to be added
@@ -27,13 +45,21 @@ export default class WFSTControls extends M.Plugin {
      * @type {String}
      */
 
-    this.controls = controls;
+    this.controls = controlsfix;
     /**
      * Array of controls to be added
      * @private
      * @type {String}
      */
     this.controls_ = [];
+
+    /**
+     * Geometry of the layer
+     * @private
+     * @type {String}
+     */
+
+    this.geometry = geometryfix;
 
     /**
      * Name of this control
@@ -48,7 +74,7 @@ export default class WFSTControls extends M.Plugin {
      * @private
      * @type {String}
      */
-    this.layername_ = layername;
+    this.layername_ = layernamefix;
 
     /**
      * Facade of the map
@@ -138,34 +164,40 @@ export default class WFSTControls extends M.Plugin {
     })[0];
     const wfslayer = M.utils.isNullOrEmpty(firstNamedLayer) ? firstLayer : firstNamedLayer;
 
-    let geomChanged = false;
+    if (!this.geometry) {
+      let geomChanged = false;
 
-    const tryParseGeometry = () => {
-      if (!M.utils.isNullOrEmpty(wfslayer) &&
-        !wfslayer.geometry &&
-        wfslayer.getFeatures &&
-        wfslayer.getFeatures().length > 0) {
-        const reemplazos = {
-          MultiPolygon: 'MPOLYGON',
-          MultiPPoint: 'MPOINT',
-        };
+      const tryParseGeometry = () => {
+        if (!M.utils.isNullOrEmpty(wfslayer) &&
+          !wfslayer.geometry &&
+          wfslayer.getFeatures &&
+          wfslayer.getFeatures().length > 0) {
+          const reemplazos = {
+            MultiPolygon: 'MPOLYGON',
+            MultiPPoint: 'MPOINT',
+          };
 
-        const geom = wfslayer.getFeatures()[0].getImpl()
-          .getOLFeature().getGeometry().getType();
+          // const geom = wfslayer.getFeatures()[0].getImpl()
+          //   .getOLFeature().getGeometry().getType();
 
-        wfslayer.geometry = geom.replace(geom, reemplazos[geom]);
-        return true;
-      }
-      return false;
-    };
+          const geom = wfslayer.getGeometryType();
 
-    geomChanged = tryParseGeometry();
+          wfslayer.geometry = geom.replace(geom, reemplazos[geom]);
+          return true;
+        }
+        return false;
+      };
 
-    wfslayer.on(M.evt.LOAD, () => {
-      if (!geomChanged) {
-        tryParseGeometry();
-      }
-    });
+      geomChanged = tryParseGeometry();
+
+      wfslayer.on(M.evt.LOAD, () => {
+        if (!geomChanged) {
+          tryParseGeometry();
+        }
+      });
+    } else {
+      wfslayer.geometry = this.geometry;
+    }
 
     this.panel_ = new M.ui.Panel('edit', {
       collapsible: true,
@@ -250,6 +282,17 @@ export default class WFSTControls extends M.Plugin {
    */
   getControls() {
     return this.controls_;
+  }
+
+  /**
+   * This function return the geometry provided
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  getGeometry() {
+    return this.geometry;
   }
 
   /**

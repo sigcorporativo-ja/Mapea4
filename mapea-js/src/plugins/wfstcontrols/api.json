@@ -5,22 +5,17 @@
   },
   "constructor": "M.plugin.WFSTControls",
   "parameters": [{
-    "type": "array",
+    "type": "object",
     "properties": [{
       "type": "simple",
-      "position": 0
-    }, {
+      "name": "features",
+      "value": "drawfeature,modifyfeature,deletefeature,editattribute"
+    },{
       "type": "simple",
-      "position": 1
-    }, {
+      "name": "layername"
+    },{
       "type": "simple",
-      "position": 2
-    }, {
-      "type": "simple",
-      "position": 3
-    }, {
-      "type": "simple",
-      "position": 4
+      "name": "geometry"
     }]
   }],
   "files": {
