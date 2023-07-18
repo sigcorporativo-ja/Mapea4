@@ -86,9 +86,13 @@ export default class SaveFeature extends M.impl.Control {
       if (projectionCode === 'EPSG:4326') {
         projectionCode = 'CRS:84';
       }
+
+      // Setup formatter
       const formatWFS = new ol.format.WFS();
-      const wfstRequestXml = formatWFS
-        .writeTransaction(saveFeaturesDraw, saveFeaturesModify, saveFeaturesDelete, {
+
+      // Array of transactions to execute
+      const transactionsToExec = [formatWFS
+        .writeTransaction(saveFeaturesDraw, undefined, undefined, {
           featureNS: describeFeatureType.featureNS,
           featurePrefix: describeFeatureType.featurePrefix,
           featureType: this.layer_.name,
@@ -96,23 +100,56 @@ export default class SaveFeature extends M.impl.Control {
           gmlOptions: {
             srsName: projectionCode,
           },
+        }), formatWFS.writeTransaction(undefined, saveFeaturesModify, undefined, {
+        featureNS: describeFeatureType.featureNS,
+        featurePrefix: describeFeatureType.featurePrefix,
+        featureType: this.layer_.name,
+        srsName: projectionCode,
+        gmlOptions: {
+          srsName: projectionCode,
+        },
+      }), formatWFS.writeTransaction(undefined, undefined, saveFeaturesDelete, {
+        featureNS: describeFeatureType.featureNS,
+        featurePrefix: describeFeatureType.featurePrefix,
+        featureType: this.layer_.name,
+        srsName: projectionCode,
+        gmlOptions: {
+          srsName: projectionCode,
+        },
+      })];
+      console.log(transactionsToExec);
+      // Function to sleep synchronously
+      const sleep = (ms) => {
+        const start = new Date().getTime();
+        const expire = start + ms;
+        while (new Date().getTime() < expire) {
+          /* empty */
+        }
+      };
+
+      // For each transaction
+      transactionsToExec.forEach((transactionToExec) => {
+        // If it is blank, return
+        if (transactionToExec.innerHTML === '') return;
+        const oSerializer = new XMLSerializer();
+        const wfstRequestText = oSerializer.serializeToString(transactionToExec);
+
+        // const wfstRequestText = goog.dom.xml.serialize(transactionToExec);
+        M.remote.post(`${this.layer_.url}&ticket=${window.mapjs.getTicket()}`, wfstRequestText).then((response) => {
+          // clears layer
+          const clearCtrl = this.facadeMap_.getControls(FClearFeature.NAME)[0];
+          clearCtrl.getImpl().clear();
+          if (response.code === 200 && response.text.indexOf('ExceptionText') === -1 && response.text.indexOf('<error><descripcion>') === -1) {
+            M.dialog.success('Se ha guardado correctamente');
+          } else if (response.code === 401) {
+            M.dialog.error('Ha ocurrido un error al guardar: Usuario no autorizado');
+          } else {
+            M.dialog.error('Ha ocurrido un error al guardar: '.concat(response.text));
+          }
         });
 
-      const oSerializer = new XMLSerializer();
-      const wfstRequestText = oSerializer.serializeToString(wfstRequestXml);
-
-      // const wfstRequestText = goog.dom.xml.serialize(wfstRequestXml);
-      M.remote.post(`${this.layer_.url}&ticket=${window.mapjs.getTicket()}`, wfstRequestText).then((response) => {
-        // clears layer
-        const clearCtrl = this.facadeMap_.getControls(FClearFeature.NAME)[0];
-        clearCtrl.getImpl().clear();
-        if (response.code === 200 && response.text.indexOf('ExceptionText') === -1 && response.text.indexOf('<error><descripcion>') === -1) {
-          M.dialog.success('Se ha guardado correctamente');
-        } else if (response.code === 401) {
-          M.dialog.error('Ha ocurrido un error al guardar: Usuario no autorizado');
-        } else {
-          M.dialog.error('Ha ocurrido un error al guardar: '.concat(response.text));
-        }
+        // sleep to let geoserver refresh itself
+        sleep(200);
       });
     });
   }
@@ -147,8 +184,9 @@ export default class SaveFeature extends M.impl.Control {
       feature.set(describeFeatureType.geometryName, editFeatureGeom);
       feature.setGeometryName(describeFeatureType.geometryName);
       feature.setGeometry(editFeatureGeom);
-      feature.unset(editFeatureGeomName);
-
+      if (editFeatureGeomName !== describeFeatureType.geometryName) {
+        feature.unset(editFeatureGeomName);
+      }
       // sets default values
       if (!M.utils.isNullOrEmpty(describeFeatureType) &&
         M.utils.isArray(describeFeatureType.properties)) {
