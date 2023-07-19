@@ -67,6 +67,8 @@ export default class DeleteFeature extends M.impl.Control {
     olLayer.getSource().removeFeature(feature);
     this.layer_.removeFeatures(features[0]);
 
+    feature.toDelete = true;
+
     // prevents saving new features
     if (!M.utils.isNullOrEmpty(feature.getId())) {
       this.modifiedFeatures.push(feature);

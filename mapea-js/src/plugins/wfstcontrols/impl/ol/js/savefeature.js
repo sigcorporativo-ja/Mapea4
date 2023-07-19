@@ -58,6 +58,7 @@ export default class SaveFeature extends M.impl.Control {
       const drawfeatureCtrl = this.facadeMap_.getControls(FDrawFeature.NAME)[0];
       if (!M.utils.isNullOrEmpty(drawfeatureCtrl)) {
         saveFeaturesDraw = drawfeatureCtrl.getImpl().modifiedFeatures;
+        saveFeaturesDraw = saveFeaturesDraw.filter(featureAux => !featureAux.toDelete);
         SaveFeature.applyDescribeFeatureType.bind(this)(saveFeaturesDraw, describeFeatureType);
       }
       const modifyfeatureCtrl = this.facadeMap_.getControls(FModifyFeature.NAME)[0];
