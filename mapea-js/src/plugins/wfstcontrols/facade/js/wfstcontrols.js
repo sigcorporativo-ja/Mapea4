@@ -34,8 +34,8 @@ export default class WFSTControls extends M.Plugin {
       layernamefix = controls.layername;
       controlsfix = controls.features.split(',');
       geometryfix = controls.geometry;
-      proxyfix.status = controls.proxy ? controls.proxy.status : true;
-      proxyfix.disable = controls.proxy ? controls.proxy.disable : true;
+      proxyfix.status = controls.proxy ? controls.proxy.status === true || controls.proxy.status === 'true' : true;
+      proxyfix.disable = controls.proxy ? controls.proxy.disable === true || controls.proxy.disable === 'true' : true;
     } else {
       layernamefix = layername;
       controlsfix = controls;
