@@ -24,7 +24,20 @@
         "MLINE",
         "MPOLYGON"
       ]
-    }]
+    },{
+      "type": "object",
+      "name": "proxy",
+      "properties": [{
+        "type": "boolean",
+        "name": "status",
+        "value": true
+      },{
+        "type": "boolean",
+        "name": "disable",
+        "value": false
+      }]
+      }
+    ]
   }],
   "files": {
     "ol": {

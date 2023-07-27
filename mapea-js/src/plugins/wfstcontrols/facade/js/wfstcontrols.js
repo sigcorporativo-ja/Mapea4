@@ -20,12 +20,13 @@ import api from '../../api';
  * @api stable
  */
 export default class WFSTControls extends M.Plugin {
-  constructor(controls, layername, geometry) {
+  constructor(controls, layername, geometry, proxyStatus, proxyDisable) {
     super();
 
     let controlsfix;
     let layernamefix;
     let geometryfix;
+    const proxyfix = {};
 
     // Parse new controls model to the old one
 
@@ -33,10 +34,14 @@ export default class WFSTControls extends M.Plugin {
       layernamefix = controls.layername;
       controlsfix = controls.features.split(',');
       geometryfix = controls.geometry;
+      proxyfix.status = controls.proxy ? controls.proxy.status : true;
+      proxyfix.disable = controls.proxy ? controls.proxy.disable : true;
     } else {
       layernamefix = layername;
       controlsfix = controls;
       geometryfix = geometry;
+      proxyfix.status = proxyStatus;
+      proxyfix.disable = proxyDisable;
     }
 
     /**
@@ -75,6 +80,14 @@ export default class WFSTControls extends M.Plugin {
      * @type {String}
      */
     this.layername_ = layernamefix;
+
+    /**
+     * Proxy config
+     * @private
+     * @type {boolean}
+     */
+
+    this.proxy = proxyfix;
 
     /**
      * Facade of the map
@@ -177,9 +190,6 @@ export default class WFSTControls extends M.Plugin {
             MultiPPoint: 'MPOINT',
           };
 
-          // const geom = wfslayer.getFeatures()[0].getImpl()
-          //   .getOLFeature().getGeometry().getType();
-
           const geom = wfslayer.getGeometryType();
 
           wfslayer.geometry = geom.replace(geom, reemplazos[geom]);
@@ -251,7 +261,7 @@ export default class WFSTControls extends M.Plugin {
       }
 
       if (addSave) {
-        this.savefeature_ = new SaveFeature(wfslayer);
+        this.savefeature_ = new SaveFeature(wfslayer, this.proxy);
         this.controls_.push(this.savefeature_);
         this.numControls_ += 1;
         this.savefeature_.on(M.evt.ADDED_TO_MAP, () => {

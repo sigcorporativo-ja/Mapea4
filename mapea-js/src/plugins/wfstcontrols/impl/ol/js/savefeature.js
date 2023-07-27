@@ -17,7 +17,7 @@ export default class SaveFeature extends M.impl.Control {
    * @extends {M.impl.Control}
    * @api stable
    */
-  constructor(layer) {
+  constructor(layer, proxy) {
     super();
     /**
      * Layer for use in control
@@ -25,6 +25,7 @@ export default class SaveFeature extends M.impl.Control {
      * @type {M.layer.WFS}
      */
     this.layer_ = layer;
+    this.proxy_ = proxy;
   }
 
   /**
@@ -49,6 +50,11 @@ export default class SaveFeature extends M.impl.Control {
    * @api stable
    */
   saveFeature() {
+    if (this.proxy_) {
+      if (this.proxy_.disable) {
+        M.proxy(false);
+      }
+    }
     const layerImpl = this.layer_.getImpl();
     layerImpl.getDescribeFeatureType().then((describeFeatureType) => {
       let saveFeaturesDraw = null;
@@ -118,7 +124,7 @@ export default class SaveFeature extends M.impl.Control {
           srsName: projectionCode,
         },
       })];
-      console.log(transactionsToExec);
+
       // Function to sleep synchronously
       const sleep = (ms) => {
         const start = new Date().getTime();
@@ -152,6 +158,11 @@ export default class SaveFeature extends M.impl.Control {
         // sleep to let geoserver refresh itself
         sleep(200);
       });
+      if (this.proxy_) {
+        if (this.proxy_.status) {
+          M.proxy(true);
+        }
+      }
     });
   }
 

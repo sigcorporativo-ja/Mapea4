@@ -65,7 +65,7 @@
     //modelo antiguo sin geometria
     // mapjs.addPlugin(new WFSTControls(["drawfeature", "modifyfeature", "deletefeature", "editattribute"], 'shapesprov'));
     //modelo nuevo con geometria
-    mapjs.addPlugin(new M.plugin.WFSTControls({ features: 'drawfeature,modifyfeature,deletefeature,editattribute', layername: 'shapesprov', geometry: 'MPOLYGON' }));
+    mapjs.addPlugin(new M.plugin.WFSTControls({ features: 'drawfeature,modifyfeature,deletefeature,editattribute', layername: 'shapesprov', geometry: 'MPOLYGON', proxy:{status:true, disable:true}}));
     //modelo nuevo SIN geometria
     // mapjs.addPlugin(new WFSTControls({features:'drawfeature,modifyfeature,deletefeature,editattribute', layername:'shapesprov'}));
     // }, 4000)
