@@ -30,11 +30,11 @@
       "properties": [{
         "type": "boolean",
         "name": "status",
-        "value": true
+        "value": "true"
       },{
         "type": "boolean",
         "name": "disable",
-        "value": false
+        "value": "false"
       }]
       }
     ]
