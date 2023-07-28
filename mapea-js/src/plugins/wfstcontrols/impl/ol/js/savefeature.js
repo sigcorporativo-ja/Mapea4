@@ -143,7 +143,8 @@ export default class SaveFeature extends M.impl.Control {
         const wfstRequestText = oSerializer.serializeToString(transactionToExec);
 
         // const wfstRequestText = goog.dom.xml.serialize(transactionToExec);
-        M.remote.post(`${this.layer_.url}&ticket=${this.mapjs_.getTicket()}`, wfstRequestText).then((response) => {
+        // M.remote.post(`${this.layer_.url}&ticket=${this.mapjs_.getTicket()}`, wfstRequestText).then((response) => {
+        M.remote.post(`${this.layer_.url}`, wfstRequestText).then((response) => {
           // clears layer
           const clearCtrl = this.facadeMap_.getControls(FClearFeature.NAME)[0];
           clearCtrl.getImpl().clear();
