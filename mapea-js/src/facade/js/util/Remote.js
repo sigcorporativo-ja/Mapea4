@@ -113,7 +113,7 @@ const jsonp = (urlVar, data, options) => {
  * TODO
  */
 const ajax = (urlVar, dataVar, methodType, useProxy) => {
-  let url = window.mapjs && urlVar.includes('geoprint') ? `${urlVar}&ticket=${window.mapjs.getTicket()}` : urlVar;
+  let url = window.mapjs && !urlVar.includes('geoprint') ? `${urlVar}&ticket=${window.mapjs.getTicket()}` : urlVar;
   let data = dataVar;
   if ((useProxy !== false) && (useproxy === true)) {
     url = manageProxy(url, methodType);
