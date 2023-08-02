@@ -34,7 +34,7 @@ export default class GeosearchControl extends M.impl.Control {
      * @type {M.impl.Layer}
      */
     this.layer_ = new Geosearchlayer({
-      name: options.layerName,
+      name: options.layerName || '__geosearch_plugin_layer_name__',
     });
   }
 
@@ -51,12 +51,8 @@ export default class GeosearchControl extends M.impl.Control {
     this.facadeMap_ = map;
 
     map.addLayers(this.layer_);
-
-    ol.control.Control.call(this, {
-      element,
-      target: null,
-    });
-    map.getMapImpl().addControl(this);
+    this.element = element;
+    super.addTo(map, element);
   }
 
   /**
@@ -116,7 +112,7 @@ export default class GeosearchControl extends M.impl.Control {
    * @api stable
    */
   zoomToResults() {
-    const bbox = ol.extent.boundingExtent(this.layer_.getImpl().getOLLayer()
+    const bbox = ol.extent.boundingExtent(this.layer_.getImpl().getOL3Layer()
       .getSource().getFeatures()
       .map((feature) => {
         return ol.extent.getCenter(feature.getGeometry().getExtent());

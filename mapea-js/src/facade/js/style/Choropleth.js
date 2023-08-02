@@ -365,7 +365,7 @@ class Choropleth extends StyleComposite {
         }
       }
       for (let i = this.breakPoints_.length - 1; i > -1; i -= 1) {
-        const filterLTE = new Filter.LTE(this.attributeName_, this.breakPoints_[i]);
+        const filterLTE = Filter.LTE(this.attributeName_, this.breakPoints_[i]);
         filterLTE.execute(features).forEach(f => f.setStyle(this.choroplethStyles_[i]));
       }
       this.updateCanvas();
@@ -405,7 +405,7 @@ class Choropleth extends StyleComposite {
           opacity: 1,
         },
         stroke: {
-          color: c,
+          color: 'black',
           width: 1,
         },
       },

@@ -3,7 +3,6 @@
  */
 import OLFormatWFS from 'ol/format/WFS';
 import { unByKey } from 'ol/Observable';
-import OLControl from 'ol/control/Control';
 import * as dialog from 'M/dialog';
 import { isString, addParameters } from 'M/util/Utils';
 import getfeatureinfoPopupTemplate from 'templates/getfeatureinfo_popup.html';
@@ -69,10 +68,7 @@ class GetFeatureInfo extends Control {
     const hasControl = olControls.some(control => control instanceof GetFeatureInfo);
     if (hasControl === false) {
       this.facadeMap_ = map;
-      OLControl.call(this, {
-        element,
-        target: null,
-      });
+      this.element = element;
       map.getMapImpl().addControl(this);
     }
   }

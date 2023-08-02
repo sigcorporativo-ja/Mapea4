@@ -3,7 +3,7 @@ import SearchstreetPopup from '../../../templates/searchstreetpopup.html';
 /**
  * @namespace M.impl.control
  */
-export default class SearchstreetControl extends ol.control.Control {
+export default class SearchstreetControl extends M.impl.Control {
   /**
    * @classdesc Main constructor of the Searchstreet control.
    *
@@ -12,7 +12,7 @@ export default class SearchstreetControl extends ol.control.Control {
    * @api stable
    */
   constructor() {
-    super({});
+    super();
 
     /**
      * Facade of the map
@@ -53,11 +53,7 @@ export default class SearchstreetControl extends ol.control.Control {
     this.facadeMap_ = map;
     this.element_ = element;
 
-    ol.control.Control.call(this, {
-      element,
-      target: null,
-    });
-    map.getMapImpl().addControl(this);
+    super.addTo(map, element);
   }
 
   /**

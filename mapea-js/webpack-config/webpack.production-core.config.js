@@ -46,13 +46,7 @@ module.exports = {
         include: /node_modules\/ol\/*/,
       }, {
         test: /\.js$/,
-        exclude: /(node_modules\/(?!ol)|bower_components)/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env'],
-          },
-        },
+        exclude: /(node_modules\/(?!ol)|bower_components)/
       },
       {
         test: /\.js$/,

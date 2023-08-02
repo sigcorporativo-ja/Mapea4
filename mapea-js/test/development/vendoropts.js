@@ -243,13 +243,13 @@ window.vendorMouse = (evt) => {
     Se incluyen los siguientes parámetros vendor:
       {
         projection: getProj('EPSG:4326'),
-        undefinedHTML: 'sin valor',
+        placeholder: 'sin valor',
         coordinateFormat: (coord) => "x: \${coord[0]} | y: \${coord[1]}"
       }
   `)) {
     const mouse = new Mouse({
       projection: getProj('EPSG:4326'),
-      undefinedHTML: 'sin valor',
+      placeholder: 'sin valor',
       coordinateFormat: (coord) => `x: ${coord[0]} | y: ${coord[1]}`
     });
     let panel = mapjs.getPanels('map-info')[0];

@@ -13,11 +13,6 @@ export default class SearchstreetIntegratedControl extends SearchstreetImpl {
   addTo(map, element) {
     this.facadeMap_ = map;
     this.element_ = element;
-
-    ol.control.Control.call(this, {
-      element,
-      target: null,
-    });
   }
 
   /**

@@ -185,24 +185,28 @@ class OverviewMap extends OLControlOverviewMap {
    */
   addLayers(map) {
     const olLayers = [];
-    map.getLayers().forEach((layer) => {
-      if ((layer.type === WMSType || layer.transparent === false) && layer.isVisible()) {
-        // const olLayer = layer.getImpl().cloneOLLayer();
-        const olLayer = layer.getImpl().getOLLayer();
-        let layerAux = null;
-        const properties = olLayer.getProperties();
-        delete properties.map;
-        if (layer.tiled === true) {
-          layerAux = new OLLayerTile(properties);
-        } else {
-          layerAux = new OLLayerImage(properties);
+    map.getLayers().forEach((l) => {
+      [l].forEach((layer) => {
+        if ((layer.type === WMSType || layer.transparent === false) && layer.isVisible()) {
+          // const olLayer = layer.getImpl().cloneOLLayer();
+          const olLayer = layer.getImpl().getOLLayer();
+          let layerAux = null;
+          if (!isNullOrEmpty(olLayer)) {
+            const properties = olLayer.getProperties();
+            delete properties.map;
+            if (layer.tiled === true) {
+              layerAux = new OLLayerTile(properties);
+            } else {
+              layerAux = new OLLayerImage(properties);
+            }
+          }
+          if (isNullOrEmpty(layerAux)) {
+            layer.getImpl().on(EventType.ADDED_TO_MAP, this.addLayer_.bind(this));
+          } else {
+            olLayers.push(layerAux);
+          }
         }
-        if (isNullOrEmpty(layerAux)) {
-          layer.getImpl().on(EventType.ADDED_TO_MAP, this.addLayer_.bind(this));
-        } else {
-          olLayers.push(layerAux);
-        }
-      }
+      });
     });
     const newView = new View({
       projection: getProj(map.getProjection().code),

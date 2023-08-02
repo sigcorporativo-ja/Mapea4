@@ -1,3 +1,4 @@
+M.config.PROXY_POST_URL='https://sigc-dev.desarrollo.guadaltel.es/mapea6/proxyPost'
 //Creamos el mapa
 var mapajs = M.map({
   container: "map"
@@ -16,7 +17,7 @@ mapajs.getMapImpl().on('click', function(e) {
   });
 
   // Una peticion con POST
-  let url = 'http://www.ieca.junta-andalucia.es/geoserver-ieca/topp/wfs?';
+  let url = 'https://www.juntadeandalucia.es/institutodeestadisticaycartografia/geoserver-ieca/topp/wfs?';
   let request = '<wfs:GetFeature service="WFS"  version="1.0.0"' +
     '  outputFormat="json"' +
     '  xmlns:topp="http://www.openplans.org/topp"' +
@@ -29,5 +30,5 @@ mapajs.getMapImpl().on('click', function(e) {
     '</wfs:Query>' +
     '</wfs:GetFeature>';
 
-  M.remote.post(url, request).then(res => console.log(JSON.parse(res.text)));
+  M.remote.post(url, request).then(res => console.log(res));
 });

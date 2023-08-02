@@ -52,11 +52,7 @@ export default class GeosearchControl extends M.impl.Control {
 
     map.addLayers(this.layer_);
 
-    ol.control.Control.call(this, {
-      element,
-      target: null,
-    });
-    map.getMapImpl().addControl(this);
+    super.addTo(map, element);
   }
 
   /**

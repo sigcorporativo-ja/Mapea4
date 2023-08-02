@@ -3,7 +3,7 @@
  */
 import { decodeHtml } from 'M/util/Utils';
 import OLFormatKML from 'ol/format/KML';
-import IconAnchorUnits from 'ol/style/IconAnchorUnits';
+import Icon from 'ol/style/Icon';
 import OLStyleIcon from 'ol/style/Icon';
 import { parse as parseXML } from 'ol/xml';
 
@@ -119,8 +119,8 @@ class KML extends OLFormatKML {
         screenYUnits = KML.DEFAULT_IMAGE_STYLE_ANCHOR_Y_UNITS;
       } else if (/^http:\/\/maps\.(?:google|gstatic)\.com\//.test(src)) {
         screenXY = [0.5, 0];
-        screenXUnits = IconAnchorUnits.FRACTION;
-        screenYUnits = IconAnchorUnits.FRACTION;
+        screenXUnits = Icon.FRACTION;
+        screenYUnits = Icon.FRACTION;
       }
 
       // rotation
@@ -197,7 +197,7 @@ KML.DEFAULT_IMAGE_STYLE_ANCHOR = [20, 2]; // FIXME maybe [8, 32] ?
  *  See https://github.com/openlayers/openlayers/blob/v4.0.1/src/ol/format/kml.js#L168
  * See https://github.com/openlayers/openlayers/blob/c27aac20b7642f7878abe1e23ace07a851511829/src/ol/style/IconAnchorUnits.js#L11
  * @const
- * @type {ol.style.IconAnchorUnits}
+ * @type {ol.style.Icon}
  */
 KML.DEFAULT_IMAGE_STYLE_ANCHOR_X_UNITS = 'pixels';
 
@@ -205,7 +205,7 @@ KML.DEFAULT_IMAGE_STYLE_ANCHOR_X_UNITS = 'pixels';
  * See https://github.com/openlayers/openlayers/blob/v4.0.1/src/ol/format/kml.js#L176
  * See https://github.com/openlayers/openlayers/blob/c27aac20b7642f7878abe1e23ace07a851511829/src/ol/style/IconAnchorUnits.js#L11
  * @const
- * @type {ol.style.IconAnchorUnits}
+ * @type {ol.style.Icon}
  */
 KML.DEFAULT_IMAGE_STYLE_ANCHOR_Y_UNITS = 'pixels';
 

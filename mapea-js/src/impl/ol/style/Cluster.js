@@ -367,13 +367,15 @@ class Cluster extends Style {
             extract: false,
           }, {
             displayInLayerSwitcher: false,
-            style: new Generic(this.optionsVendor_.convexHullStyle),
+            style: new Generic({ polygon: this.optionsVendor_.convexHullStyle }),
           });
           this.convexHullLayer_.addFeatures(convexFeature);
           this.layer_.getImpl().getMap().addLayers(this.convexHullLayer_);
           this.layer_.getImpl().getMap().getMapImpl().getView()
             .on('change:resolution', this.clearConvexHull.bind(this), this);
-          this.convexHullLayer_.setStyle(new Generic(this.optionsVendor_.convexHullStyle));
+          this.convexHullLayer_.setStyle(new Generic({
+            polygon: this.optionsVendor_.convexHullStyle,
+          }));
           this.convexHullLayer_.setZIndex(99990);
         } else {
           this.convexHullLayer_.removeFeatures(this.convexHullLayer_.getFeatures());
