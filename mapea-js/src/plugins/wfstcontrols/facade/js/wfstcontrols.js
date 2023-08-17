@@ -178,6 +178,11 @@ export default class WFSTControls extends M.Plugin {
     })[0];
     const wfslayer = M.utils.isNullOrEmpty(firstNamedLayer) ? firstLayer : firstNamedLayer;
 
+    if (!wfslayer) {
+      M.dialog.error('Ha ocurrido un error al cargar el plugin: No se ha encontrado una capa WFS');
+      return;
+    }
+
     if (!this.geometry) {
       let geomChanged = false;
 
