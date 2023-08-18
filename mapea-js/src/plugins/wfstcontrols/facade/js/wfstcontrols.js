@@ -196,10 +196,10 @@ export default class WFSTControls extends M.Plugin {
             MultiPPoint: 'MPOINT',
           };
 
-          try{
+          try {
             const geom = wfslayer.getGeometryType();
             wfslayer.geometry = geom.replace(geom, reemplazos[geom]);
-          }catch (error) {
+          } catch (error) {
             M.dialog.error('Ha ocurrido un error al cargar el plugin: No se ha podido asignar la geometría de la capa de forma automática, debe hacerlo de forma manual usando el parámetro geometry.');
           }
           return true;
@@ -215,9 +215,9 @@ export default class WFSTControls extends M.Plugin {
         }
       });
     } else {
-      try{
+      try {
         wfslayer.geometry = this.geometry;
-      }catch (error) {
+      } catch (error) {
         M.dialog.error('Ha ocurrido un error al cargar el plugin: No se ha podido asignar la geometría de la capa de forma manual.');
       }
     }
