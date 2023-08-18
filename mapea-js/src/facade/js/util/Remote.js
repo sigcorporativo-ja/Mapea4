@@ -59,7 +59,8 @@ const manageProxy = (url, methodType) => {
  * TODO
  */
 const jsonp = (urlVar, data, options) => {
-  let url = window.mapjs && !urlVar.includes('geoprint') ? `${urlVar}&ticket=${window.mapjs.getTicket()}` : urlVar;
+  const toExclude = ['geoprint', 'api.json'];
+  let url = window.mapjs && !toExclude.includes(urlVar) ? `${urlVar}&ticket=${window.mapjs.getTicket()}` : urlVar;
   if (!isNullOrEmpty(data)) {
     url = addParameters(url, data);
   }
