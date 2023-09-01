@@ -141,8 +141,10 @@ class WFS {
     if (!isNullOrEmpty(this.describeFeatureTypeOutputFormat_)) {
       describeFeatureParams.outputFormat = this.describeFeatureTypeOutputFormat_;
     }
-
-    const params = addParameters(this.url_, describeFeatureParams);
+    const fixurl = M.config.ticket
+      ? `${this.url_}ticket=${M.config.ticket}`
+      : this.url_;
+    const params = addParameters(fixurl, describeFeatureParams);
     const describeFeatureTypeUrl = addParameters(params, this.describeFeatureTypeVendor_);
     const descFTypeOForm = this.describeFeatureTypeOutputFormat_;
     const descrFTypeFormat = new Featuretype(this.name_, descFTypeOForm, this.projection_);

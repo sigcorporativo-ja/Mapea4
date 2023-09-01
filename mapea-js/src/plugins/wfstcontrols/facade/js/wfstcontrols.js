@@ -171,7 +171,6 @@ export default class WFSTControls extends M.Plugin {
    */
   addTo(map) {
     this.map_ = map;
-    window.mapjs = this.map_;
     const firstLayer = this.map_.getWFS()[0];
     const firstNamedLayer = this.map_.getWFS({
       name: this.layername_,
