@@ -143,7 +143,7 @@ export default class SaveFeature extends M.impl.Control {
         const wfstRequestText = oSerializer.serializeToString(transactionToExec);
 
         const fixurl = M.config.ticket
-          ? `${this.layer_.url}&ticket=${this.mapjs_.getTicket()}`
+          ? `${this.layer_.url}&ticket=${M.config.ticket}`
           : this.layer_.url;
         M.remote.post(fixurl, wfstRequestText).then((response) => {
           // clears layer
