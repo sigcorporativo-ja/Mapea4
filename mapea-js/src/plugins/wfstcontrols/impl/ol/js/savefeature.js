@@ -144,7 +144,7 @@ export default class SaveFeature extends M.impl.Control {
 
         const fixurl = M.config.ticket
           ? `${this.layer_.url}&ticket=${this.mapjs_.getTicket()}`
-          : this.layer_.url
+          : this.layer_.url;
         M.remote.post(fixurl, wfstRequestText).then((response) => {
           // clears layer
           const clearCtrl = this.facadeMap_.getControls(FClearFeature.NAME)[0];
