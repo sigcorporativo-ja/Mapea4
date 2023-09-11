@@ -12,9 +12,9 @@ export default class SaveFeature extends M.Control {
    * @extends {M.Control}
    * @api stable
    */
-  constructor(layer) {
+  constructor(layer, proxy) {
     // implementation of this control
-    const impl = new SaveFeatureImpl(layer);
+    const impl = new SaveFeatureImpl(layer, proxy);
     // calls the super constructor
     super(impl, SaveFeature.NAME);
 

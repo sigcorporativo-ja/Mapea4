@@ -56,6 +56,7 @@ export default class DrawFeature extends WFSTBase {
     this.interaction_.on('drawend', (event) => {
       const feature = event.feature;
       this.modifiedFeatures.push(feature);
+      this.layer_.addFeatures(M.impl.Feature.olFeature2Facade(feature));
     }, this);
 
     // updates features from refresh
