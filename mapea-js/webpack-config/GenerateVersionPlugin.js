@@ -21,10 +21,10 @@ class GenerateVersionPlugin {
   apply(compiler) {
     compiler.hooks.done.tap('GenerateVersionPlugin', (stats, e) => {
       const { path } = stats.compilation.options.output;
-      stats.compilation.chunks.forEach((chunk, index) => {
+      stats.compilation.chunks.forEach((chunk) => {
         chunk.files.forEach((file) => {
           const basename = pathmodule.basename(file);
-          const version = this.version || this.geExecuteCB(index, stats);
+          const version = this.version || this.geExecuteCB(chunk, stats);
           let replacePath;
           if (this.regex instanceof RegExp) {
             replacePath = basename.replace(this.regex, `$1-${version}$2`);
@@ -46,8 +46,8 @@ class GenerateVersionPlugin {
   /**
    * @function
    */
-  geExecuteCB(index, stats) {
-    const entry = Object.keys(stats.compilation.options.entry)[index];
+  geExecuteCB(chunk, stats) {
+    const entry = chunk.name;
     const name = entry.split('/').slice(-1)[0];
     const context = stats.compilation.options.resolve.alias[this.aliasRoot];
     const absolutePath = pathmodule.resolve(context, name, this.fileName);

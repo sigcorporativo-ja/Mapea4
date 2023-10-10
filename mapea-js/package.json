@@ -50,7 +50,7 @@
     "uglifycss": "0.0.29",
     "url-loader": "^1.0.1",
     "walk": "^2.3.9",
-    "webpack": "^4.41.2",
+    "webpack": "5.88.2",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0",
     "yargs": "17.0.0"
@@ -61,7 +61,7 @@
     "handlebars": "4.5.2",
     "jsdoc": "^3.6.4",
     "jsts": "^2.0.2",
-    "ol": "7.2.2",
+    "ol": "8.1",
     "proj4": "2.8.1"
   },
   "scripts": {

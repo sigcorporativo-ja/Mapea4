@@ -87,13 +87,21 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        loader: 'style-loader!css-loader',
+        use: [{
+            loader: 'style-loader'
+          },{
+            loader: 'css-loader'
+          },
+        ],
         exclude: [/node_modules\/(?!ol)/],
       },
       {
         test: /\.(woff|woff2|eot|ttf|svg|jpg)$/,
         exclude: /node_modules/,
-        loader: 'url-loader?name=fonts/[name].[ext]',
+        loader: 'url-loader',
+        options: {
+          name: 'fonts/[name].[ext]',
+        },
       }
     ],
   },

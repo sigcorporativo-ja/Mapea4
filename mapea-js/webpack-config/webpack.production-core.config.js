@@ -13,9 +13,9 @@ const sourcemap = argv['source-map'];
 
 module.exports = {
   mode: 'production',
-  node: {
-    fs: 'empty',
-  },
+  // node: {
+  //   fs: 'empty',
+  // },
   entry: {
     [`mapea-${pjson.version}.ol.min`]: path.resolve(__dirname, '..', 'src', 'index.js'),
   },
@@ -71,7 +71,10 @@ module.exports = {
       {
         test: /\.(woff|woff2|eot|ttf|svg|jpg)$/,
         exclude: /node_modules/,
-        loader: 'url-loader?name=fonts/[name].[ext]',
+        loader: 'url-loader',
+        options: {
+          name: 'fonts/[name].[ext]',
+        },
       }
     ],
   },
