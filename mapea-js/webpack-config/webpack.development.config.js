@@ -2,6 +2,8 @@ const path = require('path');
 const fse = require('fs-extra');
 const webpack = require('webpack');
 const argv = require('yargs').argv;
+const ESLintPlugin = require('eslint-webpack-plugin');
+
 
 const testName = argv.name;
 const coremin = argv['core-min'];
@@ -54,6 +56,11 @@ module.exports = {
       'package.json': path.resolve(__dirname, '..', 'package.json'),
     },
     extensions: ['.wasm', '.mjs', '.js', '.json', '.css', '.hbs', '.html', '.jpg'],
+    fallback: {
+      fs: false,
+      path: false,
+      crypto: false,
+    },
   },
   module: {
     rules: [{
@@ -72,11 +79,6 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        loader: 'eslint-loader',
-        exclude: [/node_modules/, /lib/, /test/, /dist/],
-      },
-      {
-        test: /\.js$/,
         loader: path.resolve(__dirname, 'expose-entry-loader'),
         exclude: [/node_modules/, /lib/, /dist/],
       },
@@ -90,7 +92,7 @@ module.exports = {
         use: [{
             loader: 'style-loader'
           },{
-            loader: 'css-loader'
+            loader: 'css-loader',
           },
         ],
         exclude: [/node_modules\/(?!ol)/],
@@ -107,14 +109,25 @@ module.exports = {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
+    new ESLintPlugin({
+      // extensions: [`js`, `jsx`],
+      files: 'src/**/*.js',
+      exclude: ['src/**/*', '**/node_modules/**', '/lib/', '/test/', '/dist/'],
+    }),
   ],
   devServer: {
+    // https: true,
     hot: true,
-    open: true,
-    openPage: `test/development/${testName}.html`,
-    watchOptions: {
-      poll: 1000,
+    // host: '0.0.0.0',
+    // open: true,
+    // port: 6123,
+    open: `test/development/${testName}.html`,
+    static: {
+      directory: path.join(__dirname, '/../'),
     },
+  },
+  watchOptions: {
+    poll: 1000,
   },
   devtool: 'eval-source-map',
 };
