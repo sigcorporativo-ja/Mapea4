@@ -49,7 +49,6 @@
     "terser-webpack-plugin": "5.3.9",
     "uglify-js": "^2.6.1",
     "uglifycss": "0.0.29",
-    "url-loader": "^1.0.1",
     "walk": "^2.3.9",
     "webpack": "5.88.2",
     "webpack-cli": "5.1.4",
