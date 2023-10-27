@@ -50,7 +50,7 @@
 					</LegendURL>-->
 				</Style>
 			</StyleList>
-			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730</sld:MinScaleDenominator>
 			<sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
 		</Layer>
 
@@ -80,7 +80,7 @@
 					<Title>Estilo de la leyenda</Title>
 				</Style>
 			</StyleList>
-			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730</sld:MinScaleDenominator>
 			<sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
 		</Layer>
 	
@@ -112,7 +112,7 @@
 					</LegendURL>
 				</Style>
 			</StyleList>
-			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
+			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730</sld:MinScaleDenominator>
 			<sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
 		</Layer>
 
@@ -169,7 +169,7 @@
 					<Title>Estilo de la leyenda</Title>
 				</Style>
 			</StyleList>
-			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
+			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730</sld:MinScaleDenominator>
 			<sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1999.9989179605843128</sld:MaxScaleDenominator>
 		</Layer>
 
@@ -199,7 +199,7 @@
 					<Title>Estilo de la leyenda</Title>
 				</Style>
 			</StyleList>
-			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">1500</sld:MinScaleDenominator>
+			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730</sld:MinScaleDenominator>
 			<sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">8000</sld:MaxScaleDenominator>
 		</Layer>
 		<!--  ******  Viales y Portales   ******  -->
@@ -228,7 +228,7 @@
 					<Title>Estilo de la leyenda</Title>
 				</Style>
 			</StyleList>
-			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
+			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730</sld:MinScaleDenominator>
 			<sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1550</sld:MaxScaleDenominator>
 		</Layer>
 
