@@ -115,8 +115,8 @@
          "versions":[
             {
                "mapea":"6.5.0",
-               "js":"${mapea.url}/plugins/printerdos/printerdos-4.2.1.ol.min.js",
-               "css":"${mapea.url}/plugins/printerdos/printerdos-4.2.1.min.css"
+               "js":"${mapea.url}/plugins/printerdos/printerdos-4.2.2.ol.min.js",
+               "css":"${mapea.url}/plugins/printerdos/printerdos-4.2.2.min.css"
             },
             {
                "mapea":"6.4.0",
