@@ -229,6 +229,10 @@
     animation: mloading 1s linear infinite;
 }
 
+.m-hidden {
+    display: none;
+}
+
 
 /****************************
  INTERNET EXPLORER HACKS

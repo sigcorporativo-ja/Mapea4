@@ -220,6 +220,10 @@
    left: 10px;
 }
 
+.m-hidden {
+   display: none;
+ }
+
 
 /****************************
  INTERNET EXPLORER HACKS
