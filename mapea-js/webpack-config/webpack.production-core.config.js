@@ -50,7 +50,8 @@ module.exports = {
           }
         },
         include: /node_modules\/ol\/*/,
-      }, {
+      },
+      {
         test: /\.js$/,
         exclude: /(node_modules\/(?!ol)|bower_components)/
       },
@@ -63,19 +64,16 @@ module.exports = {
         test: /\.css$/,
         loader: MiniCssExtractPlugin.loader,
         exclude: /node_modules\/(?!ol)/,
-      }, {
+      },
+      {
         test: /\.css$/,
         loader: 'css-loader',
         exclude: [/node_modules\/(?!ol)/],
-
       },
       {
         test: /\.(woff|woff2|eot|ttf|svg|jpg)$/,
         exclude: /node_modules/,
-        type: 'asset/resource',
-        generator: {
-          filename: 'fonts/[name].[ext]',
-        },
+        type: 'asset/inline',
       },
     ],
   },
