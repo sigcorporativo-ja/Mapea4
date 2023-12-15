@@ -23,9 +23,9 @@
 	<!--  ******   Ortofoto    ******  -->
 		<Layer hidden="0" queryable="0">
 			<Server service="OGC:WMS" title="Andalucía" version="1.1.1">
-				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/wms/ortofoto2016?"/>
+				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/wms/ortofoto_2019?"/>
 			</Server>
-			<Name>ortofotografia_2016_rgb</Name>
+			<Name>ortofotografia_2019_rgb</Name>
 			<Title>Callejero Digital de Andalucía Unificado (Híbrido)</Title>
 			<SRS>EPSG:25830</SRS>
 			<FormatList>
@@ -39,7 +39,7 @@
 			</Extension>
 			<StyleList>
 				<Style current="1">
-					<Name></Name>
+					<Name>default</Name>
 					<Title>Estilo de la leyenda</Title>
 					<LegendURL format="image/png" height="891" width="333">
 							<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
