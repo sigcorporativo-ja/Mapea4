@@ -33,7 +33,7 @@
 			</FormatList>
 			<Extension>
 				<ol:transparent xmlns:ol="http://openlayers.org/context">false</ol:transparent>
-				<ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+				<ol:isBaseLayer xmlns:ol="http://openlayers.org/context">true</ol:isBaseLayer>
 				<ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
 				<ol:singleTile xmlns:ol="http://openlayers.org/context">false</ol:singleTile>
 			</Extension>
@@ -65,7 +65,7 @@
 			<Extension>
 				<ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
 				<ol:opacity xmlns:ol="http://openlayers.org/context">0.5</ol:opacity>
-				<ol:isBaseLayer xmlns:ol="http://openlayers.org/context">true</ol:isBaseLayer>
+				<ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
 				<ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">false</ol:displayInLayerSwitcher>
 				<ol:singleTile xmlns:ol="http://openlayers.org/context">false</ol:singleTile>
 			</Extension>
