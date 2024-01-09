@@ -142,7 +142,7 @@ function fun(M_) {
      * @public
      * @api stable
      */
-    'urls': 'https://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/context_cdau_callejero.xml,https://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/context_cdau_hibrido.xml,https://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/context_cdau_satelite.xml,https://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/contextCallejeroCache.xml,https://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/contextCallejero.xml,https://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/contextIDEA.xml,https://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/contextOrtofoto2009.xml,https://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/callejero2011cache.xml,https://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/ortofoto2011cache.xml,https://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/hibrido2011cache.xml,https://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/contextOrtofoto.xml'.split(',').map(e => e),
+    'urls': 'https://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/context_cdau_callejero.xml,https://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/context_cdau_hibrido.xml,https://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/context_cdau_satelite.xml,https://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/contextCallejeroCache.xml,https://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/contextCallejero.xml,https://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/callejero2011cache.xml,https://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/ortofoto2011cache.xml,https://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/hibrido2011cache.xml,https://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/contextOrtofoto.xml'.split(',').map(e => e),
 
     /**
      * WMC predefined names
@@ -151,7 +151,7 @@ function fun(M_) {
      * @public
      * @api stable
      */
-    'predefinedNames': 'cdau,cdau_hibrido,cdau_satelite,callejerocacheado,callejero,idea,ortofoto09,callejero2011cache,ortofoto2011cache,hibrido2011cache,ortofoto'.split(','),
+    'predefinedNames': 'cdau,cdau_hibrido,cdau_satelite,callejerocacheado,callejero,callejero2011cache,ortofoto2011cache,hibrido2011cache,ortofoto'.split(','),
 
     /**
      * WMC context names
@@ -160,7 +160,7 @@ function fun(M_) {
      * @public
      * @api stable
      */
-    'names': 'Callejero,Hibrido,Satelite,mapa callejero cache,mapa del callejero,mapa idea,mapa ortofoto09,Callejero,Ortofoto,HÃ­brido,mapa ortofoto'.split(',')
+    'names': 'Callejero,Hibrido,Satelite,mapa callejero cache,mapa del callejero,Callejero,Ortofoto,HÃ­brido,mapa ortofoto'.split(',')
   });
 
   /**

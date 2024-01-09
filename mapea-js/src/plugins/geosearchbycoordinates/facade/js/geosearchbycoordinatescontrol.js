@@ -144,9 +144,38 @@ export default class GeosearchByCoordinatesControl extends GeosearchControl {
 
     const btnShowList = template.querySelector('button#m-geosearchbycoordinates-button-list');
     btnShowList.onclick = this.showList_.bind(this);
+    this.createImagesCache(template);
     return template;
   }
 
+  /**
+   * This function creates the images cache
+   *
+   * @public
+   * @function
+   * @param {M.Map} map to add the control
+   * @api stabletrue
+   */
+  createImagesCache(html) {
+    console.log(html);
+    const container = html.getElementsByClassName("img-cache-loader")[0];
+
+    const urls = [
+      '/img/m-pin-24.svg',
+      '/img/m-pin-24-new.svg',
+      '/img/m-pin-24-sel.svg'
+    ]; 
+
+    urls.forEach(url => {
+      let img = new Image();
+      img.src = M.utils.concatUrlPaths([M.config.THEME_URL, url]);
+      img.width = '24';
+      img.height = '24';
+      img.crossOrigin = 'anonymous';
+      container.append(img);    
+    });
+  }
+  
   /**
    * This function returns the HTML control button
    *

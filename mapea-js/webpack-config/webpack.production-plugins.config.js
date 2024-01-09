@@ -6,6 +6,8 @@ const entryPoints = require('./entry-points-plugins.json');
 
 const distDir = path.resolve(__dirname, '..', 'dist');
 const pluginDir = path.resolve(__dirname, '..', 'src', 'plugins');
+const ESLintPlugin = require('eslint-webpack-plugin');
+
 
 module.exports = {
   mode: 'production',
@@ -19,16 +21,16 @@ module.exports = {
       plugins: pluginDir,
     },
     extensions: ['.wasm', '.mjs', '.js', '.json', '.css', '.hbs', '.html'],
+    fallback: {
+      fs: false,
+      path: false,
+      crypto: false,
+    },
   },
   module: {
     rules: [{
         test: /\.js$/,
         exclude: /(node_modules\/(?!ol)|bower_components)/        
-      },
-      {
-        test: /\.js$/,
-        loader: 'eslint-loader',
-        exclude: [/node_modules/],
       },
       {
         test: [/\.hbs$/, /\.html$/],
@@ -46,14 +48,14 @@ module.exports = {
 
       },
       {
-        test: /\.(woff|woff2|eot|ttf|svg)$/,
+        test: /\.(woff|woff2|eot|ttf|svg|jpg)$/,
         exclude: /node_modules/,
-        loader: 'url-loader?name=fonts/[name].[ext]',
-      }
+        type: 'asset/inline',
+      },
     ],
   },
   optimization: {
-    noEmitOnErrors: true,
+    emitOnErrors: false,
   },
   plugins: [
     new GenerateVersionPlugin({
@@ -65,6 +67,11 @@ module.exports = {
     new CopywebpackPlugin(),
     new MiniCssExtractPlugin({
       filename: '[name].min.css',
+    }),
+    new ESLintPlugin({
+      extensions: [`js`, `jsx`],
+      // files: 'src/**/*',
+      exclude: ['src/**/*', '**/node_modules/**', '/lib/', '/test/', '/dist/'],
     }),
   ],
 };

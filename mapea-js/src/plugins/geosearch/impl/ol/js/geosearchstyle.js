@@ -28,7 +28,7 @@ export default class GeoSearchStyle {
       GeoSearchStyle.DEFAULT[M.geom.wkt.type.POINT] = new ol.style.Style({
         image: new ol.style.Icon({
           img: imgIconDefault,
-          imgSize: [24, 24],
+          //imgSize: [24, 24],
         }),
       });
 
@@ -47,7 +47,7 @@ export default class GeoSearchStyle {
       GeoSearchStyle.DEFAULT[M.geom.wkt.type.POLYGON] = new ol.style.Style({
         image: new ol.style.Icon({
           img: imgIconDefault,
-          imgSize: [24, 24],
+          //imgSize: [24, 24],
         }),
       });
       // Creates default geometries style
@@ -69,7 +69,7 @@ export default class GeoSearchStyle {
       GeoSearchStyle.NEW[M.geom.wkt.type.POINT] = new ol.style.Style({
         image: new ol.style.Icon({
           img: imgIconNew,
-          imgSize: [24, 24],
+          //imgSize: [24, 24],
         }),
       });
 
@@ -88,7 +88,7 @@ export default class GeoSearchStyle {
       GeoSearchStyle.NEW[M.geom.wkt.type.POLYGON] = new ol.style.Style({
         image: new ol.style.Icon({
           img: imgIconNew,
-          imgSize: [24, 24],
+          //imgSize: [24, 24],
         }),
       });
       GeoSearchStyle.NEW[M.geom.wkt.type.MULTI_POINT] =
@@ -109,7 +109,7 @@ export default class GeoSearchStyle {
       GeoSearchStyle.SELECTED[M.geom.wkt.type.POINT] = new ol.style.Style({
         image: new ol.style.Icon({
           img: imgIconSelected,
-          imgSize: [24, 24],
+          //imgSize: [24, 24],
         }),
       });
       // Create Default Style Line
