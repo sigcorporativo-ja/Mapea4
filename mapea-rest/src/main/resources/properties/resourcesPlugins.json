@@ -5,8 +5,8 @@
          "versions":[
             {
                "mapea":"6.5.0",
-               "js":"${mapea.url}/plugins/attributetable/attributetable-2.1.0.ol.min.js",
-               "css":"${mapea.url}/plugins/attributetable/attributetable-2.1.0.min.css"
+               "js":"${mapea.url}/plugins/attributetable/attributetable-2.2.0.ol.min.js",
+               "css":"${mapea.url}/plugins/attributetable/attributetable-2.2.0.min.css"
             },
             {
                "mapea":"6.4.0",
@@ -445,8 +445,8 @@
          "versions":[
             {
                "mapea":"6.5.0",
-               "js":"${mapea.url}/plugins/printer/printer-2.0.1.ol.min.js",
-               "css":"${mapea.url}/plugins/printer/printer-2.0.1.min.css"
+               "js":"${mapea.url}/plugins/printer/printer-2.0.2.ol.min.js",
+               "css":"${mapea.url}/plugins/printer/printer-2.0.2.min.css"
             },
             {
                "mapea":"6.4.0",
