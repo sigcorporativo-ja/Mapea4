@@ -4,6 +4,11 @@
          "name":"attributetable",
          "versions":[
             {
+               "mapea":"6.6.0",
+               "js":"${mapea.url}/plugins/attributetable/attributetable-2.2.0.ol.min.js",
+               "css":"${mapea.url}/plugins/attributetable/attributetable-2.2.0.min.css"
+            },
+            {
                "mapea":"6.5.0",
                "js":"${mapea.url}/plugins/attributetable/attributetable-2.2.0.ol.min.js",
                "css":"${mapea.url}/plugins/attributetable/attributetable-2.2.0.min.css"
@@ -113,6 +118,11 @@
       {
          "name":"printerdos",
          "versions":[
+            {
+               "mapea":"6.6.0",
+               "js":"${mapea.url}/plugins/printerdos/printerdos-4.2.2.ol.min.js",
+               "css":"${mapea.url}/plugins/printerdos/printerdos-4.2.2.min.css"
+            },
             {
                "mapea":"6.5.0",
                "js":"${mapea.url}/plugins/printerdos/printerdos-4.2.2.ol.min.js",
@@ -224,6 +234,11 @@
          "name":"geosearch",
          "versions":[
             {
+               "mapea":"6.6.0",
+               "js":"${mapea.url}/plugins/geosearch/geosearch-2.0.5.ol.min.js",
+               "css":"${mapea.url}/plugins/geosearch/geosearch-2.0.5.min.css"
+            },
+            {
                "mapea":"6.5.0",
                "js":"${mapea.url}/plugins/geosearch/geosearch-2.0.5.ol.min.js",
                "css":"${mapea.url}/plugins/geosearch/geosearch-2.0.5.min.css"
@@ -333,6 +348,11 @@
       {
          "name":"measurebar",
          "versions":[
+            {
+               "mapea":"6.6.0",
+               "js":"${mapea.url}/plugins/measurebar/measurebar-3.1.2.ol.min.js",
+               "css":"${mapea.url}/plugins/measurebar/measurebar-3.1.2.min.css"
+            },
             {
                "mapea":"6.5.0",
                "js":"${mapea.url}/plugins/measurebar/measurebar-3.1.2.ol.min.js",
@@ -444,6 +464,11 @@
          "name":"printer",
          "versions":[
             {
+               "mapea":"6.6.0",
+               "js":"${mapea.url}/plugins/printer/printer-2.0.2.ol.min.js",
+               "css":"${mapea.url}/plugins/printer/printer-2.0.2.min.css"
+            },
+            {
                "mapea":"6.5.0",
                "js":"${mapea.url}/plugins/printer/printer-2.0.2.ol.min.js",
                "css":"${mapea.url}/plugins/printer/printer-2.0.2.min.css"
@@ -553,6 +578,11 @@
       {
          "name":"geosearchbylocation",
          "versions":[
+            {
+               "mapea":"6.6.0",
+               "js":"${mapea.url}/plugins/geosearchbylocation/geosearchbylocation-2.0.3.ol.min.js",
+               "css":"${mapea.url}/plugins/geosearchbylocation/geosearchbylocation-2.0.3.min.css"
+            },
             {
                "mapea":"6.5.0",
                "js":"${mapea.url}/plugins/geosearchbylocation/geosearchbylocation-2.0.3.ol.min.js",
@@ -664,6 +694,11 @@
          "name":"geosearchbycoordinates",
          "versions":[
             {
+               "mapea":"6.6.0",
+               "js":"${mapea.url}/plugins/geosearchbycoordinates/geosearchbycoordinates-1.0.4.ol.min.js",
+               "css":"${mapea.url}/plugins/geosearchbycoordinates/geosearchbycoordinates-1.0.4.min.css"
+            },
+            {
                "mapea":"6.5.0",
                "js":"${mapea.url}/plugins/geosearchbycoordinates/geosearchbycoordinates-1.0.4.ol.min.js",
                "css":"${mapea.url}/plugins/geosearchbycoordinates/geosearchbycoordinates-1.0.4.min.css"
@@ -773,6 +808,11 @@
       {
          "name":"searchstreetgeosearch",
          "versions":[
+            {
+               "mapea":"6.6.0",
+               "js":"${mapea.url}/plugins/searchstreetgeosearch/searchstreetgeosearch-2.1.2.ol.min.js",
+               "css":"${mapea.url}/plugins/searchstreetgeosearch/searchstreetgeosearch-2.1.2.min.css"
+            },
             {
                "mapea":"6.5.0",
                "js":"${mapea.url}/plugins/searchstreetgeosearch/searchstreetgeosearch-2.1.2.ol.min.js",
@@ -884,6 +924,11 @@
          "name":"searchstreet",
          "versions":[
             {
+               "mapea":"6.6.0",
+               "js":"${mapea.url}/plugins/searchstreet/searchstreet-2.0.4.ol.min.js",
+               "css":"${mapea.url}/plugins/searchstreet/searchstreet-2.0.4.min.css"
+            },
+            {
                "mapea":"6.5.0",
                "js":"${mapea.url}/plugins/searchstreet/searchstreet-2.0.4.ol.min.js",
                "css":"${mapea.url}/plugins/searchstreet/searchstreet-2.0.4.min.css"
@@ -993,6 +1038,11 @@
       {
          "name":"wfstcontrols",
          "versions":[
+            {
+               "mapea":"6.6.0",
+               "js":"${mapea.url}/plugins/wfstcontrols/wfstcontrols-3.0.5.ol.min.js",
+               "css":"${mapea.url}/plugins/wfstcontrols/wfstcontrols-3.0.5.min.css"
+            },
             {
                "mapea":"6.5.0",
                "js":"${mapea.url}/plugins/wfstcontrols/wfstcontrols-3.0.5.ol.min.js",
