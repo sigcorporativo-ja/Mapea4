@@ -4,7 +4,6 @@
 
 import chroma from 'chroma-js';
 import reproj from 'impl/util/reprojection';
-import impl from 'impl/util/Utils';
 import getImplWMTSCapabilities from 'impl/util/GetCapabilities.js';
 import { INCHES_PER_UNIT, DOTS_PER_INCH } from '../units.js';
 import * as WKT from '../geom/WKT.js';
@@ -232,18 +231,6 @@ export const addParameters = (url, params) => {
 
   return requestUrl;
 };
-
-  /**
-   * Get the width of an extent.
-   * @public
-   * @function
-   * @param {ol.Extent} extent Extent.
-   * @return {number} Width.
-   * @api stable
-   */
-  export const getFeaturesExtent = (features, projectionCode) => {
-    return impl.getFeaturesExtent(features, projectionCode);
-  }
 
 /**
  *
