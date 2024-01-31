@@ -84,7 +84,6 @@ class WMTS extends LayerBase {
    */
   addTo(map) {
     this.map = map;
-    this.fire(EventType.ADDED_TO_MAP);
 
     // calculates the resolutions from scales
     if (!isNull(this.options) &&
@@ -101,6 +100,8 @@ class WMTS extends LayerBase {
     } else {
       this.addLayer_(capabilitiesOpts);
     }
+    this.fire(EventType.ADDED_TO_MAP);
+    this.facadeLayer_?.fire(EventType.ADDED_TO_MAP);
   }
 
   /**
@@ -229,6 +230,7 @@ class WMTS extends LayerBase {
     this.ol3Layer.set('animated', true);
 
     this.fire(EventType.ADDED_TO_MAP, this);
+    this.facadeLayer_?.fire(EventType.ADDED_TO_MAP, this);
   }
 
   /**

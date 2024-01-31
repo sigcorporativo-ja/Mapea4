@@ -110,7 +110,6 @@ class OSM extends Layer {
    */
   addTo(map) {
     this.map = map;
-    this.fire(EventType.ADDED_TO_MAP);
 
     this.ol3Layer = new OLLayerTile(extend({}, this.vendorOptions_, true));
     this.updateSource_();
@@ -154,6 +153,8 @@ class OSM extends Layer {
 
     // set the extent when the map changed
     this.map.on(EventType.CHANGE_PROJ, () => this.updateSource_());
+    this.fire(EventType.ADDED_TO_MAP);
+    this.facadeLayer_?.fire(EventType.ADDED_TO_MAP);
   }
 
   /**

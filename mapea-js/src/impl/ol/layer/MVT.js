@@ -84,7 +84,6 @@ class MVT extends Vector {
    */
   addTo(map) {
     this.map = map;
-    this.fire(EventType.ADDED_TO_MAP);
 
     this.formater_ = new MVTFormatter({
       featureClass: this.mode_ === mode.FEATURE ? Feature : RenderFeature,
@@ -127,6 +126,8 @@ class MVT extends Vector {
         }
       }
     });
+    this.fire(EventType.ADDED_TO_MAP);
+    this.facadeVector_?.fire(EventType.ADDED_TO_MAP);
   }
 
   /**

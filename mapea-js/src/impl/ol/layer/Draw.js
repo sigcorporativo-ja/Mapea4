@@ -70,7 +70,6 @@ class Draw extends Layer {
    */
   addTo(map) {
     this.map = map;
-    this.fire(EventType.ADDED_TO_MAP);
 
     this.ol3Layer = new OLLayerVector({
       source: new OLSourceVector({}),
@@ -101,6 +100,7 @@ class Draw extends Layer {
     }
     const olMap = this.map.getMapImpl();
     olMap.addLayer(this.ol3Layer);
+    this.fire(EventType.ADDED_TO_MAP);
   }
 
   /**

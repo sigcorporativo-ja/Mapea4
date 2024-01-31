@@ -200,7 +200,6 @@ class WMS extends LayerBase {
    */
   addTo(map) {
     this.map = map;
-    this.fire(EventType.ADDED_TO_MAP);
 
     // calculates the resolutions from scales
     if (!isNull(this.options) &&
@@ -227,6 +226,8 @@ class WMS extends LayerBase {
         SLD_VERSION: '1.1.0',
       });
     }
+    this.fire(EventType.ADDED_TO_MAP);
+    this.facadeLayer_?.fire(EventType.ADDED_TO_MAP);
   }
 
   /**

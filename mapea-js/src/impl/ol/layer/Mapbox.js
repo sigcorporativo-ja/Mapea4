@@ -107,7 +107,6 @@ class Mapbox extends Layer {
    */
   addTo(map) {
     this.map = map;
-    this.fire(EventType.ADDED_TO_MAP);
 
     const extent = this.facadeLayer_.getMaxExtent();
     this.ol3Layer = new OLLayerTile(extend({
@@ -155,6 +154,8 @@ class Mapbox extends Layer {
     // activates animation for base layers or animated parameters
     const animated = ((this.transparent === false) || (this.options.animated === true));
     this.ol3Layer.set('animated', animated);
+    this.fire(EventType.ADDED_TO_MAP);
+    this.facadeLayer_?.fire(EventType.ADDED_TO_MAP);
   }
 
   /**
