@@ -65,6 +65,9 @@ class WFS extends Vector {
 
     // extract
     this.extract = parameters.extract;
+
+    // template
+    this.template = parameters.template;
   }
 
   /**

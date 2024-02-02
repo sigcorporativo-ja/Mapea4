@@ -581,6 +581,10 @@ class Map extends MObject {
             if (!isNullOrEmpty(filterLayer.extract)) {
               layerMatched = (layerMatched && (filterLayer.extract === kmlLayer.extract));
             }
+            // template
+            if (!isNullOrEmpty(filterLayer.template)) {
+              layerMatched = (layerMatched && (filterLayer.template === kmlLayer.template));
+            }
           } else {
             layerMatched = false;
           }

@@ -2,6 +2,7 @@ import { map as Mmap } from 'M/mapea';
 import GeoJSON from 'M/layer/GeoJSON';
 import StylePoint from 'M/style/Point';
 import StylePolygon from 'M/style/Polygon';
+import template from '../development/templates/customGeojsonPopupTemplate.html'
 
 window.StylePoint = StylePoint;
 window.StylePolygon = StylePolygon;
@@ -17,6 +18,7 @@ mapjs.addLayers(new GeoJSON({
   name: 'Provincias',
   url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/tematicos/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=tematicos:Provincias&maxFeatures=50&outputFormat=application/json',
   extract: true,
+  template: template,
 }));
 
 // GeoJSON local

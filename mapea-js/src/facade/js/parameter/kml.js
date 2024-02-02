@@ -105,6 +105,12 @@ const kml = (userParamer) => {
       attr: 'extract',
     });
 
+    const template = getParameter({
+      parameter: userParam,
+      type: 'string',
+      attr: 'template',
+    });
+
     const label = getParameter({
       parameter: userParam,
       type: 'boolean_eql',
@@ -118,6 +124,7 @@ const kml = (userParamer) => {
         url: url(REGEXP_KML, 2) + url(REGEXP_KML, 3),
         extract: extract(REGEXP_KML, 4),
         label: label(REGEXP_KML, 5),
+        template: template(REGEXP_KML, 6),
       };
     } else {
       layerObj = {
@@ -126,6 +133,7 @@ const kml = (userParamer) => {
         url: url(REGEXP_KML),
         extract: extract(REGEXP_KML),
         label: label(REGEXP_KML),
+        template: template(REGEXP_KML),
       };
     }
 

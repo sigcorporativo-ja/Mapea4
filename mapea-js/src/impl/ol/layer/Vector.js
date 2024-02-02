@@ -306,7 +306,9 @@ class Vector extends Layer {
         if (isFunction(clickFn)) {
           clickFn(evt, feature);
         } else {
-          const htmlAsText = compileTemplate(PopupTemplate, {
+          const popup_template = !isNullOrEmpty(this.template) ? this.template : PopupTemplate;
+
+          const htmlAsText = compileTemplate(popup_template, {
             vars: this.parseFeaturesForTemplate_(features),
             parseToHtml: false,
           });

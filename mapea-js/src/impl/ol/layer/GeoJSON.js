@@ -235,6 +235,7 @@ class GeoJSON extends Vector {
     if (obj instanceof GeoJSON) {
       equals = equals && (this.name === obj.name);
       equals = equals && (this.extract === obj.extract);
+      equals = equals && (this.template === obj.template);
     }
     return equals;
   }
