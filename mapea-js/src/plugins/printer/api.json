@@ -50,10 +50,10 @@
   "files": {
     "ol": {
       "scripts": [
-        "printer-2.0.1.ol.min.js"
+        "printer-2.0.2.ol.min.js"
       ],
       "styles": [
-        "printer-2.0.1.min.css"
+        "printer-2.0.2.min.css"
       ]
     }
   },
@@ -64,8 +64,8 @@
     "name": "Printer",
     "description": "Tool for printing maps.",
     "text": "",
-    "version": "2.0.1",
-    "date": "11/10/2019",
+    "version": "2.0.2",
+    "date": "19/01/2024",
     "author": "Junta de Andalucía",
     "org": "Junta de Andalucía",
     "tags": "mapea,plugin",

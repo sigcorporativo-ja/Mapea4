@@ -50,7 +50,7 @@ export default class Printer extends M.Plugin {
      * @private
      * @type {String}
      */
-    this.url_ = M.config.geoprint2.URL;
+    this.url_ = M.config.geoprint.URL;
     if (!M.utils.isNullOrEmpty(parameters.url)) {
       this.url_ = parameters.url;
     }

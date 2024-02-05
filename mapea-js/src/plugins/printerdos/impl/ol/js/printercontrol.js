@@ -1097,7 +1097,7 @@ export default class PrinterControl extends M.impl.Control {
         matrices: matrixIdsObj.TileMatrix.map((tileMatrix, i) => {
           return {
             identifier: tileMatrix.Identifier,
-            matrixSize: [tileMatrix.MatrixHeight, tileMatrix.MatrixWidth],
+            matrixSize: [tileMatrix.MatrixWidth, tileMatrix.MatrixHeight],
             scaleDenominator: tileMatrix.ScaleDenominator,
             tileSize: [tileMatrix.TileWidth, tileMatrix.TileHeight],
             topLeftCorner: tileMatrix.TopLeftCorner,

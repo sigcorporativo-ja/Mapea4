@@ -122,6 +122,7 @@ export default class AttributeTableControl extends M.Control {
       this.areaTable_ = html.querySelector('div#m-attributetable-datas');
       html.querySelector('#m-attributetable-layer').addEventListener('click', this.openPanel_.bind(this));
       html.querySelector('#m-zoom-selected').addEventListener('click', this.zoomToSelected.bind(this));
+      html.querySelector('#m-download-layer').addEventListener('click', this.downloadLayer.bind(this));
       html.querySelector('#m-attributetable-select').addEventListener('change', (evt) => {
         this.pages_ = {
           total: 0,
@@ -162,6 +163,134 @@ export default class AttributeTableControl extends M.Control {
       this.facadeMap_.setBbox(extent);
     }
   }
+
+  /**
+   *
+   * @param {*} evt
+   */
+  downloadLayer(evt) {
+    if (this.layer_) {
+      const fileName = this.layer_.name;
+      const geojsonLayer = this.toGeoJSON(this.layer_);
+      const arrayContent = JSON.stringify(geojsonLayer);
+      const mimeType = 'geo+json';
+      const extensionFormat = 'geojson';
+
+      const url = window.URL.createObjectURL(new window.Blob([arrayContent], {
+        type: `application/${mimeType}`,
+      }));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `${fileName}.${extensionFormat}`);
+      document.body.appendChild(link);
+      link.click();
+    }
+  }
+
+  /**
+   * This function gets the geojson representation of the layer
+   * @function
+   * @api
+   */
+  toGeoJSON(layer) {
+    const code = this.map_.getProjection().code;
+    const featuresAsJSON = layer.getFeatures().map(feature => feature.getGeoJSON());
+    return { type: 'FeatureCollection', features: this.geojsonTo4326(featuresAsJSON, code) };
+  }
+
+  /**
+   * Converts features coordinates on geojson format to 4326.
+   * @public
+   * @function
+   */
+  geojsonTo4326(featuresAsJSON, codeProjection) {
+    const jsonResult = [];
+    featuresAsJSON.forEach((featureAsJSON) => {
+      const coordinates = featureAsJSON.geometry.coordinates;
+      let newCoordinates = [];
+      switch (featureAsJSON.geometry.type) {
+        case 'Point':
+          newCoordinates = this.getImpl().getTransformedCoordinates(codeProjection, coordinates);
+          break;
+        case 'MultiPoint':
+          for (let i = 0; i < coordinates.length; i += 1) {
+            const newDot = this
+              .getImpl().getTransformedCoordinates(codeProjection, coordinates[i]);
+            newCoordinates.push(newDot);
+          }
+          break;
+        case 'LineString':
+          for (let i = 0; i < coordinates.length; i += 1) {
+            const newDot = this.getImpl().getTransformedCoordinates(
+              codeProjection,
+              coordinates[i],
+            );
+            newCoordinates.push(newDot);
+          }
+          break;
+        case 'MultiLineString':
+          for (let i = 0; i < coordinates.length; i += 1) {
+            const newLine = [];
+            for (let j = 0; j < coordinates[i].length; j += 1) {
+              const newDot = this
+                .getImpl().getTransformedCoordinates(codeProjection, coordinates[i][j]);
+              newLine.push(newDot);
+            }
+            newCoordinates.push(newLine);
+          }
+          break;
+        case 'Polygon':
+          for (let i = 0; i < coordinates.length; i += 1) {
+            const newPoly = [];
+            for (let j = 0; j < coordinates[i].length; j += 1) {
+              const newDot = this
+                .getImpl().getTransformedCoordinates(codeProjection, coordinates[i][j]);
+              newPoly.push(newDot);
+            }
+            newCoordinates.push(newPoly);
+          }
+          break;
+        case 'MultiPolygon':
+          for (let i = 0; i < coordinates.length; i += 1) {
+            const newPolygon = [];
+            for (let j = 0; j < coordinates[i].length; j += 1) {
+              const newPolygonLine = [];
+              for (let k = 0; k < coordinates[i][j].length; k += 1) {
+                const newDot = this
+                  .getImpl().getTransformedCoordinates(codeProjection, coordinates[i][j][k]);
+                newPolygonLine.push(newDot);
+              }
+              newPolygon.push(newPolygonLine);
+            }
+            newCoordinates.push(newPolygon);
+          }
+          break;
+        default:
+      }
+      const jsonFeature = this.createGeoJSONFeature(featureAsJSON, newCoordinates);
+      jsonResult.push(jsonFeature);
+    });
+    return jsonResult;
+  }
+
+  /**
+   * Creates GeoJSON feature from a previous feature and a new set of coordinates.
+   * @public
+   * @function
+   * @api
+   * @param {GeoJSON Feature} previousFeature
+   * @param {Array} coordinates
+   */
+  createGeoJSONFeature(previousFeature, coordinates) {
+    return {
+      ...previousFeature,
+      geometry: {
+        type: previousFeature.geometry.type,
+        coordinates,
+      },
+    };
+  }
+
 
   /**
    * This function refresh the panel info

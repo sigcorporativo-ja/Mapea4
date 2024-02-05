@@ -14,12 +14,35 @@ import api from '../../api';
  *
  * @constructor
  * @extends {M.Plugin}
- * @param {array} controls - Array of controls to be added
+ * @param {array | string} controls - Array of controls to be added
+ * @param {string} layername - Name of the WFS layer
+ * @param {string} geometry - Geometry of the WFS layer
  * @api stable
  */
 export default class WFSTControls extends M.Plugin {
-  constructor(controls, layername) {
+  constructor(controls, layername, geometry, proxyStatus, proxyDisable) {
     super();
+
+    let controlsfix;
+    let layernamefix;
+    let geometryfix;
+    const proxyfix = {};
+
+    // Parse new controls model to the old one
+
+    if (!controls.length || !Array.isArray(controls)) {
+      layernamefix = controls.layername;
+      controlsfix = controls.features.split(',');
+      geometryfix = controls.geometry;
+      proxyfix.status = controls.proxy ? controls.proxy.status === true || controls.proxy.status === 'true' : true;
+      proxyfix.disable = controls.proxy ? controls.proxy.disable === true || controls.proxy.disable === 'true' : true;
+    } else {
+      layernamefix = layername;
+      controlsfix = controls;
+      geometryfix = geometry;
+      proxyfix.status = proxyStatus;
+      proxyfix.disable = proxyDisable;
+    }
 
     /**
      * Array of controls to be added
@@ -27,13 +50,21 @@ export default class WFSTControls extends M.Plugin {
      * @type {String}
      */
 
-    this.controls = controls;
+    this.controls = controlsfix;
     /**
      * Array of controls to be added
      * @private
      * @type {String}
      */
     this.controls_ = [];
+
+    /**
+     * Geometry of the layer
+     * @private
+     * @type {String}
+     */
+
+    this.geometry = geometryfix;
 
     /**
      * Name of this control
@@ -48,7 +79,15 @@ export default class WFSTControls extends M.Plugin {
      * @private
      * @type {String}
      */
-    this.layername_ = layername;
+    this.layername_ = layernamefix;
+
+    /**
+     * Proxy config
+     * @private
+     * @type {boolean}
+     */
+
+    this.proxy = proxyfix;
 
     /**
      * Facade of the map
@@ -137,6 +176,51 @@ export default class WFSTControls extends M.Plugin {
       name: this.layername_,
     })[0];
     const wfslayer = M.utils.isNullOrEmpty(firstNamedLayer) ? firstLayer : firstNamedLayer;
+
+    if (!wfslayer) {
+      M.dialog.error('Ha ocurrido un error al cargar el plugin: No se ha encontrado una capa WFS');
+      return;
+    }
+
+    if (!this.geometry) {
+      let geomChanged = false;
+
+      const tryParseGeometry = () => {
+        if (!M.utils.isNullOrEmpty(wfslayer) &&
+          !wfslayer.geometry &&
+          wfslayer.getFeatures &&
+          wfslayer.getFeatures().length > 0) {
+          const reemplazos = {
+            MultiPolygon: 'MPOLYGON',
+            MultiPPoint: 'MPOINT',
+          };
+
+          try {
+            const geom = wfslayer.getGeometryType();
+            wfslayer.geometry = geom.replace(geom, reemplazos[geom]);
+          } catch (error) {
+            M.dialog.error('Ha ocurrido un error al cargar el plugin: No se ha podido asignar la geometría de la capa de forma automática, debe hacerlo de forma manual usando el parámetro geometry.');
+          }
+          return true;
+        }
+        return false;
+      };
+
+      geomChanged = tryParseGeometry();
+
+      wfslayer.on(M.evt.LOAD, () => {
+        if (!geomChanged) {
+          tryParseGeometry();
+        }
+      });
+    } else {
+      try {
+        wfslayer.geometry = this.geometry;
+      } catch (error) {
+        M.dialog.error('Ha ocurrido un error al cargar el plugin: No se ha podido asignar la geometría de la capa de forma manual.');
+      }
+    }
+
     this.panel_ = new M.ui.Panel('edit', {
       collapsible: true,
       className: 'm-edition',
@@ -189,7 +273,7 @@ export default class WFSTControls extends M.Plugin {
       }
 
       if (addSave) {
-        this.savefeature_ = new SaveFeature(wfslayer);
+        this.savefeature_ = new SaveFeature(wfslayer, this.proxy);
         this.controls_.push(this.savefeature_);
         this.numControls_ += 1;
         this.savefeature_.on(M.evt.ADDED_TO_MAP, () => {
@@ -220,6 +304,17 @@ export default class WFSTControls extends M.Plugin {
    */
   getControls() {
     return this.controls_;
+  }
+
+  /**
+   * This function return the geometry provided
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  getGeometry() {
+    return this.geometry;
   }
 
   /**

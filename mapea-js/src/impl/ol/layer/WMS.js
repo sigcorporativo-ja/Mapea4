@@ -382,6 +382,7 @@ class WMS extends LayerBase {
           maxResolution,
           opacity,
           zIndex,
+          params: {},
         };
         if (!isUndefined(crossOrigin)) {
           opts.crossOrigin = crossOrigin;

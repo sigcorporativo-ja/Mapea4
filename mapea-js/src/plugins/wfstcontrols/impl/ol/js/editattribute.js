@@ -181,7 +181,10 @@ export default class EditAttribute extends M.impl.Control {
 
       // closes the popup
       this.facadeMap_.removePopup(this.popup_);
-      M.remote.post(this.layer_.url, wfstRequestText).then((response) => {
+      const fixurl = M.config.ticket
+        ? `${this.layer_.url}&ticket=${M.config.ticket}`
+        : this.layer_.url;
+      M.remote.post(fixurl, wfstRequestText).then((response) => {
         popupButton.classList.remove('m-savefeature-saving');
         if (response.code === 200) {
           M.dialog.success('Se ha guardado correctamente el elemento');
