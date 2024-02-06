@@ -308,10 +308,15 @@ class Vector extends Layer {
         } else {
           const popup_template = !isNullOrEmpty(this.template) ? this.template : PopupTemplate;
 
-          const htmlAsText = compileTemplate(popup_template, {
+          let htmlAsText = compileTemplate(popup_template, {
             vars: this.parseFeaturesForTemplate_(features),
             parseToHtml: false,
           });
+          if (this.name){
+            const layerNameHTML = `<div>${this.name}</div>`
+            htmlAsText = layerNameHTML + htmlAsText;
+          }
+          
           const featureTabOpts = {
             icon: 'g-cartografia-pin',
             title: this.name,
