@@ -157,7 +157,6 @@ export default class GeosearchByCoordinatesControl extends GeosearchControl {
    * @api stabletrue
    */
   createImagesCache(html) {
-    console.log(html);
     const container = html.getElementsByClassName("img-cache-loader")[0];
 
     const urls = [
