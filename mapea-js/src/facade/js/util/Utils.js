@@ -4,6 +4,7 @@
 
 import chroma from 'chroma-js';
 import reproj from 'impl/util/reprojection';
+import ImplUtils from 'impl/util/Utils.js'
 import getImplWMTSCapabilities from 'impl/util/GetCapabilities.js';
 import { INCHES_PER_UNIT, DOTS_PER_INCH } from '../units.js';
 import * as WKT from '../geom/WKT.js';
@@ -172,6 +173,14 @@ export const normalize = (stringToNormalize, upperCase) => {
   }
   return normalizedString;
 };
+
+/**
+ * @function
+ * @api
+ */
+export const getFeaturesExtent = (features, projectionCode) => {
+  return ImplUtils.getFeaturesExtent(features, projectionCode);
+}
 
 /**
  *
