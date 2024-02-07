@@ -226,8 +226,37 @@ export default class SearchstreetGeosearchControl extends M.Control {
         geosearchResuts.classList.add('show');
       }
     });
+    this.createImagesCache(html);
     return new Promise((resolve) => {
       resolve(html);
+    });
+  }
+
+  /**
+   * This function creates the images cache
+   *
+   * @public
+   * @function
+   * @param {M.Map} map to add the control
+   * @api stabletrue
+   */
+  createImagesCache(html) {
+    console.log(html);
+    const container = html.getElementsByClassName("img-cache-loader")[0];
+
+    const urls = [
+      '/img/m-pin-24.svg',
+      '/img/m-pin-24-new.svg',
+      '/img/m-pin-24-sel.svg'
+    ]; 
+
+    urls.forEach(url => {
+      let img = new Image();
+      img.src = M.utils.concatUrlPaths([M.config.THEME_URL, url]);
+      img.width = '24';
+      img.height = '24';
+      img.crossOrigin = 'anonymous';
+      container.append(img);    
     });
   }
 
