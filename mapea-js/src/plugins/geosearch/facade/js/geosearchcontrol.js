@@ -183,7 +183,6 @@ export default class GeosearchControl extends M.Control {
    * @api stabletrue
    */
   createImagesCache(html) {
-    console.log(html);
     const container = html.getElementsByClassName("img-cache-loader")[0];
 
     const urls = [
