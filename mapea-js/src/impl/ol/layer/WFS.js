@@ -297,6 +297,18 @@ class WFS extends Vector {
     this.recreateOlLayer();
   }
 
+  /**
+   * Sets the geometry of the layer
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  setGeometry(newGeometry) {
+    this.geometry = newGeometry;
+    this.recreateOlLayer();
+  }
+
   // /**
   //  * This function destroys this layer, cleaning the HTML
   //  * and unregistering all events

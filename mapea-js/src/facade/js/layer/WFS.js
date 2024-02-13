@@ -200,8 +200,21 @@ class WFS extends Vector {
    * @param {String} newNamespace Namespace
    * @api
    */
-  setNamespace(newName) {
+  setNamespace(newNamespace) {
     this.getImpl().setNamespace(newNamespace);
+  }
+
+  /**
+   * Sets the geometry of the layer
+   *
+   * @function
+   * @public
+   * @param {String} newGeometry Geometry
+   * @api
+   */
+  setGeometry(newGeometry) {
+    this.geometry = newGeometry;
+    this.getImpl().setGeometry(newGeometry);
   }
 
   /**
