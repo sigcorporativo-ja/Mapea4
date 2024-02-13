@@ -461,11 +461,7 @@ class WMS extends LayerBase {
    */
   setURL(newURL) {
     this.url = newURL;
-    const olMap = this.map.getMapImpl();
-    if (!isNullOrEmpty(this.ol3Layer)) {
-      olMap.removeLayer(this.ol3Layer);
-    }
-    this.addSingleLayer_();  
+    this.recreateOlLayer();
   }
 
   /**
@@ -477,11 +473,7 @@ class WMS extends LayerBase {
    */
   setName(newName) {
     this.name = newName;
-    const olMap = this.map.getMapImpl();
-    if (!isNullOrEmpty(this.ol3Layer)) {
-      olMap.removeLayer(this.ol3Layer);
-    }
-    this.addSingleLayer_();  
+    this.recreateOlLayer();
   }
 
   /**
@@ -709,6 +701,22 @@ class WMS extends LayerBase {
     if (!isNullOrEmpty(ol3Layer)) {
       ol3Layer.getSource().updateParams({ time: Date.now() });
     }
+  }
+
+  /**
+   * Removes and creates the ol3layer
+   *
+   * @public
+   * @function
+   * @api stable
+   * @export
+   */
+  recreateOlLayer() {
+    const olMap = this.map.getMapImpl();
+    if (!isNullOrEmpty(this.ol3Layer)) {
+      olMap.removeLayer(this.ol3Layer);
+    }
+    this.addSingleLayer_();
   }
 
   /**
