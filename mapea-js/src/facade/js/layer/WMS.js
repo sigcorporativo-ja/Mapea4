@@ -196,6 +196,30 @@ class WMS extends LayerBase {
   }
 
   /**
+   * Sets the url of the layer
+   *
+   * @function
+   * @public
+   * @param {String} newURL URL
+   * @api
+   */
+  setURL(newURL) {
+    this.getImpl().setURL(newURL);
+  }
+
+  /**
+   * Sets the name of the layer
+   *
+   * @function
+   * @public
+   * @param {String} newName Name
+   * @api
+   */
+  setName(newName) {
+    this.getImpl().setName(newName);
+  }
+
+  /**
    * Calculates the maxExtent of this layer, being the first value found in this order:
    * 1. checks if the user specified a maxExtent parameter for the layer.
    * 2. gets the maxExtent of the layer in the WMC, if any.
