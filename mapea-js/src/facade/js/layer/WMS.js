@@ -182,6 +182,20 @@ class WMS extends LayerBase {
   }
 
   /**
+   * This function sets 
+   * the tileLoadFunction
+   * On the implementation
+   *
+   * @function
+   * @public
+   * @param {Function} func Function to override
+   * @api
+   */
+  setTileLoadFunction(func){
+    this.getImpl().setTileLoadFunction(func);
+  }
+
+  /**
    * Calculates the maxExtent of this layer, being the first value found in this order:
    * 1. checks if the user specified a maxExtent parameter for the layer.
    * 2. gets the maxExtent of the layer in the WMC, if any.

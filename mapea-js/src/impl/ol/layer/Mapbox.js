@@ -59,6 +59,9 @@ class Mapbox extends Layer {
       this.visibility = false;
     }
 
+    // sets tileLoadFunction
+    this.tileLoadFunction = options.tileLoadFunction;
+
     this.zIndex_ = ImplMap.Z_INDEX[LayerType.Mapbox];
   }
 
@@ -112,6 +115,7 @@ class Mapbox extends Layer {
     this.ol3Layer = new OLLayerTile(extend({
       source: new OLSourceXYZ({
         url: `${this.url}${this.name}/{z}/{x}/{y}.png?${M.config.MAPBOX_TOKEN_NAME}=${this.accessToken}`,
+        tileLoadFunction: this.tileLoadFunction,
       }),
       extent,
     }, this.vendorOptions_, true));
@@ -177,9 +181,22 @@ class Mapbox extends Layer {
         extent,
         resolutions,
         attributionControl: true,
+        tileLoadFunction: this.tileLoadFunction,
       });
       this.ol3Layer.setSource(newSource);
     }
+  }
+
+  /**
+   * This function sets 
+   * the tileLoadFunction
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  setTileLoadFunction(func){
+    this.getOLLayer().getSource().setTileLoadFunction(func);
   }
 
   /**

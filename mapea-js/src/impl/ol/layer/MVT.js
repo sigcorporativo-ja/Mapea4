@@ -67,6 +67,14 @@ class MVT extends Vector {
     this.mode_ = parameters.mode;
 
     /**
+     * Function to override the ol tile loading.
+     *
+     * @private
+     * @type {string}
+     */
+    this.tileLoadFunction = options.tileLoadFunction;
+
+    /**
      * Loaded flag attribute
      *
      * @private
@@ -97,6 +105,7 @@ class MVT extends Vector {
       format: this.formater_,
       url,
       projection: this.projection_,
+      tileLoadFunction: this.tileLoadFunction,
     });
 
     // register events in order to fire the LOAD event
@@ -128,6 +137,18 @@ class MVT extends Vector {
     });
     this.fire(EventType.ADDED_TO_MAP);
     this.facadeVector_?.fire(EventType.ADDED_TO_MAP);
+  }
+
+  /**
+   * This function sets 
+   * the tileLoadFunction
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  setTileLoadFunction(func){
+    this.getOLLayer().getSource().setTileLoadFunction(func);
   }
 
   /**

@@ -113,6 +113,20 @@ class WMTS extends LayerBase {
   }
 
   /**
+   * This function sets 
+   * the tileLoadFunction
+   * On the implementation
+   *
+   * @function
+   * @public
+   * @param {Function} func Function to override
+   * @api
+   */
+  setTileLoadFunction(func){
+    this.getImpl().setTileLoadFunction(func);
+  }
+
+  /**
    * Creates a Promise which will be
    * resolved when the GetCapabilities request is retrieved
    * by the service and parsed. The capabilities is cached in

@@ -72,6 +72,13 @@ class WMTS extends LayerBase {
       style: 'default',
       format: 'image/jpeg',
     };
+
+    /**
+     * Function to override the tile loading
+     * @private
+     * @type {Function}
+     */
+    this.tileLoadFunction = options.tileLoadFunction || undefined;
   }
 
   /**
@@ -143,6 +150,8 @@ class WMTS extends LayerBase {
           opts.crossOrigin = crossOrigin;
         }
 
+        opts.tileLoadFunction = this.tileLoadFunction;
+
         const newSource = new OLSourceWMTS(opts);
         this.ol3Layer.setSource(newSource);
       });
@@ -205,6 +214,7 @@ class WMTS extends LayerBase {
       //   matrixIds,
       // }),
       extent,
+      tileLoadFunction: this.tileLoadFunction,
     }, true));
 
     this.ol3Layer = new OLLayerTile(extend({
@@ -274,6 +284,18 @@ class WMTS extends LayerBase {
       }
     }
     return this.capabilitiesOptionsPromise;
+  }
+
+  /**
+   * This function sets 
+   * the tileLoadFunction
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  setTileLoadFunction(func){
+    this.getOLLayer().getSource().setTileLoadFunction(func);
   }
 
   /**

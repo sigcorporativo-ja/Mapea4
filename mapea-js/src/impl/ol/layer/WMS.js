@@ -90,6 +90,13 @@ class WMS extends LayerBase {
     this.getCapabilitiesPromise = null;
 
     /**
+     * Function to override the tile loading
+     * @private
+     * @type {Function}
+     */
+    this.tileLoadFunction = options.tileLoadFunction;
+
+    /**
      * get WMS extent promise
      * @private
      * @type {Promise}
@@ -372,7 +379,10 @@ class WMS extends LayerBase {
         if (!isUndefined(crossOrigin)) {
           opts.crossOrigin = crossOrigin;
         }
-        olSource = new TileWMS(opts);
+
+        opts.tileLoadFunction = this.tileLoadFunction;
+
+        olSource = new TileWMS(opts);        
         olSource.updateParams(layerParams);
       } else {
         const opts = {
@@ -428,6 +438,18 @@ class WMS extends LayerBase {
         baseLayersIdx += 1;
       });
     });
+  }
+
+  /**
+   * This function sets 
+   * the tileLoadFunction
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  setTileLoadFunction(func){
+    this.getOLLayer().getSource().setTileLoadFunction(func);
   }
 
   /**

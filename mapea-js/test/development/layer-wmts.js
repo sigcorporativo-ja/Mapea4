@@ -122,7 +122,7 @@ const layer2 = new WMTS({
   url: "http://www.ideandalucia.es/geowebcache/service/wmts",
   name: "orto_2010-11",
   matrixSet: "EPSG:25830",
-  legend: "orto_2010-11"
+  legend: "orto_2010-11",
 }, {
   capabilities: {
     "urls": [
@@ -137,6 +137,28 @@ const layer2 = new WMTS({
     "style": "",
     "dimensions": {}
   },
+  // tileLoadFunction: ((tile, src)=>{   
+  //   const xhr = new XMLHttpRequest();
+  //   xhr.responseType = 'blob';
+  //   xhr.addEventListener('loadend', function (evt) {
+  //     const data = this.response;
+  //     if (data !== undefined) {
+  //       tile.getImage().src = URL.createObjectURL(data);
+  //     } else {
+  //       tile.setState(TileState.ERROR);
+  //     }
+  //   });
+  //   xhr.addEventListener('error', function () {
+  //     tile.setState(TileState.ERROR);
+  //   });
+  //   xhr.open('GET', src);
+  //   xhr.send();
+    
+  //   console.log('tile cargada WMTS');
+  // }),
 });
 
+layer2.on('added:map', () => {
+  console.log('layer2 añadido');
+});
 mapajs.addWMTS(layer2);
