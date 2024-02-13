@@ -104,6 +104,22 @@ class WFS extends Vector {
   }
 
   /**
+   * Removes and creates the ol3layer
+   *
+   * @public
+   * @function
+   * @api stable
+   * @export
+   */
+  recreateOlLayer() {
+    const olMap = this.map.getMapImpl();
+    if (!isNullOrEmpty(this.ol3Layer)) {
+      olMap.removeLayer(this.ol3Layer);
+    }
+    this.addSingleLayer_();
+  }
+
+  /**
    * This function sets the map object of the layer
    *
    * @private
@@ -243,6 +259,42 @@ class WFS extends Vector {
       defaultValue = '-';
     }
     return defaultValue;
+  }
+
+  /**
+   * Sets the url of the layer
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  setURL(newURL) {
+    this.url = newURL;
+    this.recreateOlLayer();
+  }
+
+  /**
+   * Sets the name of the layer
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  setName(newName) {
+    this.name = newName;
+    this.recreateOlLayer();
+  }
+
+  /**
+   * Sets the namespace of the layer
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  setNamespace(newNamespace) {
+    this.namespace = newNamespace;
+    this.recreateOlLayer();
   }
 
   // /**
