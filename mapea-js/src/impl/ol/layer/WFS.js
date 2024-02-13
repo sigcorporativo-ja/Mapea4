@@ -116,7 +116,7 @@ class WFS extends Vector {
     if (!isNullOrEmpty(this.ol3Layer)) {
       olMap.removeLayer(this.ol3Layer);
     }
-    this.addSingleLayer_();
+    this.refresh(true);
   }
 
   /**
