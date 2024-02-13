@@ -112,10 +112,6 @@ class WFS extends Vector {
    * @export
    */
   recreateOlLayer() {
-    const olMap = this.map.getMapImpl();
-    if (!isNullOrEmpty(this.ol3Layer)) {
-      olMap.removeLayer(this.ol3Layer);
-    }
     this.refresh(true);
   }
 
