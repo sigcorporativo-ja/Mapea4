@@ -94,7 +94,7 @@ class WMS extends LayerBase {
      * @private
      * @type {Function}
      */
-    this.tileLoadFunction = options.tileLoadFunction;
+    this.tileLoadFunction = vendorOptions?.tileLoadFunction;
 
     /**
      * get WMS extent promise

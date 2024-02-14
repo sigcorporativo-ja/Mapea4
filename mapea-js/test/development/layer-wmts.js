@@ -137,26 +137,29 @@ const layer2 = new WMTS({
     "style": "",
     "dimensions": {}
   },
-  // tileLoadFunction: ((tile, src)=>{   
-  //   const xhr = new XMLHttpRequest();
-  //   xhr.responseType = 'blob';
-  //   xhr.addEventListener('loadend', function (evt) {
-  //     const data = this.response;
-  //     if (data !== undefined) {
-  //       tile.getImage().src = URL.createObjectURL(data);
-  //     } else {
-  //       tile.setState(TileState.ERROR);
-  //     }
-  //   });
-  //   xhr.addEventListener('error', function () {
-  //     tile.setState(TileState.ERROR);
-  //   });
-  //   xhr.open('GET', src);
-  //   xhr.send();
+},
+// {
+//   tileLoadFunction: ((tile, src)=>{   
+//     const xhr = new XMLHttpRequest();
+//     xhr.responseType = 'blob';
+//     xhr.addEventListener('loadend', function (evt) {
+//       const data = this.response;
+//       if (data !== undefined) {
+//         tile.getImage().src = URL.createObjectURL(data);
+//       } else {
+//         tile.setState(TileState.ERROR);
+//       }
+//     });
+//     xhr.addEventListener('error', function () {
+//       tile.setState(TileState.ERROR);
+//     });
+//     xhr.open('GET', src);
+//     xhr.send();
     
-  //   console.log('tile cargada WMTS');
-  // }),
-});
+//     console.log('tile cargada WMTS');
+//   }),
+// }
+);
 
 layer2.on('added:map', () => {
   console.log('layer2 añadido');

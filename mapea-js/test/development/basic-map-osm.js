@@ -9,24 +9,27 @@ const mapjs = map({
 });
 window.map = mapjs;
 
-mapjs.addLayers([new OSM('', {
-  // tileLoadFunction: ((tile, src)=>{ 
-  //     const xhr = new XMLHttpRequest();
-  //     xhr.responseType = 'blob';
-  //     xhr.addEventListener('loadend', function (evt) {
-  //       const data = this.response;
-  //       if (data !== undefined) {
-  //         tile.getImage().src = URL.createObjectURL(data);
-  //       } else {
-  //         tile.setState(TileState.ERROR);
-  //       }
-  //     });
-  //     xhr.addEventListener('error', function () {
-  //       tile.setState(TileState.ERROR);
-  //     });
-  //     xhr.open('GET', src);
-  //     xhr.send();
+mapjs.addLayers([new OSM('',
+// {},
+// {
+//   tileLoadFunction: ((tile, src)=>{ 
+//       const xhr = new XMLHttpRequest();
+//       xhr.responseType = 'blob';
+//       xhr.addEventListener('loadend', function (evt) {
+//         const data = this.response;
+//         if (data !== undefined) {
+//           tile.getImage().src = URL.createObjectURL(data);
+//         } else {
+//           tile.setState(TileState.ERROR);
+//         }
+//       });
+//       xhr.addEventListener('error', function () {
+//         tile.setState(TileState.ERROR);
+//       });
+//       xhr.open('GET', src);
+//       xhr.send();
       
-  //     console.log('capa cargada OSM');
-  // }),
-})]);
+//       console.log('capa cargada OSM');
+//   }),
+// }
+)]);

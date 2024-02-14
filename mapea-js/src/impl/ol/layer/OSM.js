@@ -60,7 +60,7 @@ class OSM extends Layer {
     }
 
     // sets tileLoadFunction
-    this.tileLoadFunction = options.tileLoadFunction;
+    this.tileLoadFunction = vendorOptions?.tileLoadFunction;
 
     this.zIndex_ = ImplMap.Z_INDEX[LayerType.OSM];
 

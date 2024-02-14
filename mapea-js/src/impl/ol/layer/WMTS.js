@@ -78,7 +78,7 @@ class WMTS extends LayerBase {
      * @private
      * @type {Function}
      */
-    this.tileLoadFunction = options.tileLoadFunction || undefined;
+    this.tileLoadFunction = vendorOptions?.tileLoadFunction;
   }
 
   /**

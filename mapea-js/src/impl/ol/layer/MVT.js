@@ -72,7 +72,7 @@ class MVT extends Vector {
      * @private
      * @type {string}
      */
-    this.tileLoadFunction = options.tileLoadFunction;
+    this.tileLoadFunction = vendorOptions?.tileLoadFunction;
 
     /**
      * Loaded flag attribute

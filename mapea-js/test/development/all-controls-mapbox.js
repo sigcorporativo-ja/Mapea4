@@ -13,12 +13,13 @@ window.map = mapjs;
 
 const mapboxLayer = new MAPBOX(
   'MAPBOX*mapbox.satellite',
-  {
-    // tileLoadFunction: function(imageTile, src) {
-    //   imageTile.getImage().src = src;
-    //   console.log('tile cargada mapbox');
-    // }
-  }
+  // {},
+  // {
+  //   tileLoadFunction: function(imageTile, src) {
+  //     imageTile.getImage().src = src;
+  //     console.log('tile cargada mapbox');
+  //   } 
+  // }
 );
 
 mapjs.addLayers([mapboxLayer]);

@@ -54,7 +54,7 @@ class MVT extends Vector {
       Exception('El tipo de capa debe ser \''.concat(MVTType).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
     }
   }
-  
+
   /**
    * This function sets 
    * the tileLoadFunction
