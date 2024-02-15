@@ -203,7 +203,7 @@ class KML extends Vector {
     });
     this.loader_ = new LoaderKML(this.map, this.url, this.formater_);
     this.ol3Layer = new OLLayerVector(extend({}, this.vendorOptions_, true));
-    this.updateSource_();
+    this.updateSource_(true);
     // sets its visibility if it is in range
     if (this.options.visibility !== false) {
       this.setVisible(this.inRange());
@@ -222,9 +222,9 @@ class KML extends Vector {
    * @private
    * @function
    */
-  updateSource_() {
+  updateSource_(force) {
     if (isNullOrEmpty(this.vendorOptions_.source)) {
-      this.requestFeatures_().then((response) => {
+      this.requestFeatures_(force).then((response) => {
         this.ol3Layer.setSource(new OLSourceVector({
           loader: () => {
             const screenOverlay = response.screenOverlay;
@@ -309,8 +309,8 @@ class KML extends Vector {
    * @private
    * @function
    */
-  requestFeatures_() {
-    if (isNullOrEmpty(this.loadFeaturesPromise_)) {
+  requestFeatures_(force) {
+    if (force || isNullOrEmpty(this.loadFeaturesPromise_)) {
       this.loadFeaturesPromise_ = new Promise((resolve) => {
         this.loader_.getLoaderFn((features) => {
           resolve(features);
