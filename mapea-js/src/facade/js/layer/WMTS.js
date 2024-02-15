@@ -127,6 +127,30 @@ class WMTS extends LayerBase {
   }
 
   /**
+   * Sets the url of the layer
+   *
+   * @function
+   * @public
+   * @param {String} newURL URL
+   * @api
+   */
+  setURL(newURL) {
+    this.getImpl().setURL(newURL);
+  }
+
+  /**
+   * Sets the name of the layer
+   *
+   * @function
+   * @public
+   * @param {String} newName Name
+   * @api
+   */
+  setName(newName) {
+    this.getImpl().setName(newName);
+  }
+
+  /**
    * Creates a Promise which will be
    * resolved when the GetCapabilities request is retrieved
    * by the service and parsed. The capabilities is cached in

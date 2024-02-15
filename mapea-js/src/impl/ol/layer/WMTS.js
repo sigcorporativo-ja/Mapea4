@@ -299,6 +299,30 @@ class WMTS extends LayerBase {
   }
 
   /**
+   * Sets the url of the layer
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  setURL(newURL) {
+    this.url = newURL;
+    this.recreateOlLayer();
+  }
+
+  /**
+   * Sets the name of the layer
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  setName(newName) {
+    this.name = newName;
+    this.recreateOlLayer();
+  }
+  
+  /**
    * TODO
    *
    * @public
@@ -353,6 +377,28 @@ class WMTS extends LayerBase {
    */
   setFacadeObj(obj) {
     this.facadeLayer_ = obj;
+  }
+
+  /**
+   * Removes and creates the ol3layer
+   *
+   * @public
+   * @function
+   * @api stable
+   * @export
+   */
+  recreateOlLayer() {
+    const olMap = this.map.getMapImpl();
+    if (!isNullOrEmpty(this.ol3Layer)) {
+      olMap.removeLayer(this.ol3Layer);
+    }
+    
+    const capabilitiesOpts = this.getCapabilitiesOptions_();
+    if (capabilitiesOpts instanceof Promise) {
+      capabilitiesOpts.then(capabilitiesOptions => this.addLayer_(capabilitiesOptions));
+    } else {
+      this.addLayer_(capabilitiesOpts);
+    }
   }
 
   /**
