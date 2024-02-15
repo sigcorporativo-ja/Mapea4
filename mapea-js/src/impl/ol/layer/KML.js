@@ -183,6 +183,40 @@ class KML extends Vector {
   }
 
   /**
+   * Removes and creates the ol3layer
+   *
+   * @public
+   * @function
+   * @api stable
+   * @export
+   */
+  recreateOlLayer() {
+    const olMap = this.map.getMapImpl();
+
+    if (!isNullOrEmpty(this.ol3Layer)) {
+      olMap.removeLayer(this.ol3Layer);
+      this.ol3Layer = null;
+    }
+
+    this.formater_ = new FormatKML({
+      label: this.label_,
+    });
+    this.loader_ = new LoaderKML(this.map, this.url, this.formater_);
+    this.ol3Layer = new OLLayerVector(extend({}, this.vendorOptions_, true));
+    this.updateSource_();
+    // sets its visibility if it is in range
+    if (this.options.visibility !== false) {
+      this.setVisible(this.inRange());
+    }
+    // sets its z-index
+    if (this.zIndex_ !== null) {
+      this.setZIndex(this.zIndex_);
+    }
+
+    olMap.addLayer(this.ol3Layer);
+  }
+
+  /**
    * This function sets the map object of the layer
    *
    * @private
@@ -207,6 +241,18 @@ class KML extends Vector {
         this.facadeVector_.addFeatures(response.features);
       });
     }
+  }
+
+  /**
+   * Sets the url of the layer
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  setURL(newURL) {
+    this.url = newURL;
+    this.recreateOlLayer();
   }
 
   /**

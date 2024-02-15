@@ -124,6 +124,18 @@ class KML extends LayerVector {
   }
 
   /**
+   * Sets the url of the layer
+   *
+   * @function
+   * @public
+   * @param {String} newURL URL
+   * @api
+   */
+  setURL(newURL) {
+    this.getImpl().setURL(newURL);
+  }
+
+  /**
    * Checks if an object is equal to this layer. Two KML layers are equal if both of them
    * are instances of KML, and have the same 'name' and 'extract' attributes
    *
