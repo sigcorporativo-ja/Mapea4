@@ -129,6 +129,18 @@ class GeoJSON extends LayerVector {
   }
 
   /**
+   * Sets the url of the layer
+   *
+   * @function
+   * @public
+   * @param {String} newURL URL
+   * @api
+   */
+  setURL(newURL) {
+    this.getImpl().setURL(newURL);
+  }
+
+  /**
    * Sets the source of the layer, in GeoJSON format
    *
    * @function

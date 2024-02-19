@@ -132,6 +132,32 @@ class GeoJSON extends Vector {
   }
 
   /**
+   * Updates the layer with the new URL
+   *
+   * @public
+   * @function
+   * @api stable
+   * @export
+   */
+  recreateOlLayer() {
+    this.loader_.url_ = this.url
+    this.loadFeaturesPromise_ = undefined;
+    this.updateSource_();
+  }
+
+  /**
+   * Sets the url of the layer
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  setURL(newURL) {
+    this.url = newURL;
+    this.recreateOlLayer();
+  }
+
+  /**
    * This function sets the map object of the layer
    *
    * @public
