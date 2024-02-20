@@ -163,6 +163,96 @@ class Mapbox extends Layer {
   }
 
   /**
+   * Removes and creates the ol3layer
+   *
+   * @public
+   * @function
+   * @api stable
+   * @export
+   */
+  recreateOlLayer() {
+    const olMap = this.map.getMapImpl();
+    if (!isNullOrEmpty(this.ol3Layer)) {
+      olMap.removeLayer(this.ol3Layer);
+      this.ol3Layer = null;
+    }
+
+    this.map.getLayers().forEach((layer) => {
+      if (layer instanceof FacadeMapbox || layer instanceof FacadeOSM) {
+        this.haveOSMorMapboxLayer = true;
+      }
+    });
+
+    if (!this.haveOSMorMapboxLayer) {
+      this.map.getImpl().getMapImpl().getControls().getArray()
+        .forEach((data) => {
+          if (data instanceof OLControlAttribution) {
+            this.map.getImpl().getMapImpl().removeControl(data);
+          }
+        });
+    }
+
+    
+    const extent = this.facadeLayer_.getMaxExtent();
+    this.ol3Layer = new OLLayerTile(extend({
+      source: new OLSourceXYZ({
+        url: `${this.url}${this.name}/{z}/{x}/{y}.png?${M.config.MAPBOX_TOKEN_NAME}=${this.accessToken}`,
+        tileLoadFunction: this.tileLoadFunction,
+      }),
+      extent,
+    }, this.vendorOptions_, true));
+
+    this.map.getMapImpl().addLayer(this.ol3Layer);
+
+    // recalculate resolutions
+    this.map.getMapImpl().updateSize();
+    const size = this.map.getMapImpl().getSize();
+    const units = this.map.getProjection().units;
+    this.resolutions_ = generateResolutionsFromExtent(this.getExtent(), size, 16, units);
+
+    // sets its visibility if it is in range
+    if (this.isVisible() && !this.inRange()) {
+      this.setVisible(false);
+    }
+    if (this.zIndex_ !== null) {
+      this.setZIndex(this.zIndex_);
+    }
+
+    // sets the resolutions
+    if (this.resolutions_ !== null) {
+      this.setResolutions(this.resolutions_);
+    }
+
+    // activates animation for base layers or animated parameters
+    const animated = ((this.transparent === false) || (this.options.animated === true));
+    this.ol3Layer.set('animated', animated);
+  }
+
+  /**
+   * Sets the url of the layer
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  setURL(newURL) {
+    this.url = newURL;
+    this.recreateOlLayer();
+  }
+
+  /**
+   * Sets the name of the layer
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  setName(newName) {
+    this.name = newName;
+    this.recreateOlLayer();
+  }
+  
+  /**
    * This function sets the resolutions for this layer
    *
    * @public
