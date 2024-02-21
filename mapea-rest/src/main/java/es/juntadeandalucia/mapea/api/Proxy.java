@@ -271,7 +271,8 @@ public class Proxy {
 		}
 
 		if (contentLength == null) {
-			throw new InvalidResponseException("El content-length está vacío.");
+			contentLength = 0;
+			// throw new InvalidResponseException("El content-length está vacío.");
 		}
 		if (Proxy.IMAGE_MAX_BYTE_SIZE < contentLength) {
 			throw new InvalidResponseException("El recurso excede el tamaño permitido");
