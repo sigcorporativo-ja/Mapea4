@@ -97,6 +97,12 @@ const wms = (userParameters) => {
       attr: 'legend',
     });
 
+    const cql = getParameter({
+      parameter: userParam,
+      type: 'string',
+      attr: 'cql',
+    });
+
     const transparent = getParameter({
       parameter: userParam,
       type: 'boolean',
@@ -141,6 +147,7 @@ const wms = (userParameters) => {
         maxExtent: maxExtentWMS(REGEXP_WMS, 6),
         version: version(REGEXP_WMS, 7),
         styles: styles(REGEXP_WMS, 8),
+        cql: cql(REGEXP_WMS, 9)
       };
     } else {
       params = {

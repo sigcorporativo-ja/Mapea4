@@ -348,6 +348,7 @@ class WMS extends LayerBase {
         TRANSPARENT: this.transparent,
         FORMAT: 'image/png',
         STYLES: this.styles,
+        CQL_FILTER: this.cql,
       };
 
       if (!isNullOrEmpty(this.sldBody)) {
@@ -375,6 +376,7 @@ class WMS extends LayerBase {
           maxResolution,
           opacity,
           zIndex,
+          myparam: "aa",
         };
         if (!isUndefined(crossOrigin)) {
           opts.crossOrigin = crossOrigin;
