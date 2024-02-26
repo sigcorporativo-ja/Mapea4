@@ -493,7 +493,12 @@ class Vector extends Layer {
         resolve(extent);
       } else {
         this.requestFeatures_().then((features) => {
-          const extent = ImplUtils.getFeaturesExtent(features, codeProj);
+          const features_arr = features.features
+            && !Array.isArray(features)
+            && Array.isArray(features.features)
+            ? features.features
+            : features;
+          const extent = ImplUtils.getFeaturesExtent(features_arr, codeProj);
           resolve(extent);
         });
       }
