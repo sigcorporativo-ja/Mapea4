@@ -50,7 +50,9 @@ class WMS extends LayerBase {
     this.legend = parameters.legend;
 
     // cql
-    this.cql = parameters.cql;
+    if (vendorOptions.cql) {
+      this.cql = vendorOptions.cql;
+    }
 
     // version
     this.version = parameters.version;
