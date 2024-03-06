@@ -7,6 +7,16 @@ import reproj from 'impl/util/reprojection';
 import getImplWMTSCapabilities from 'impl/util/GetCapabilities.js';
 import { INCHES_PER_UNIT, DOTS_PER_INCH } from '../units.js';
 import * as WKT from '../geom/WKT.js';
+
+/**
+ *
+ * @function
+ * @api
+ */
+export const getFeaturesExtent = (features, projectionCode) => {
+  return M.impl.getFeaturesExtent(features, projectionCode);
+};
+
 /**
  *
  * @function
