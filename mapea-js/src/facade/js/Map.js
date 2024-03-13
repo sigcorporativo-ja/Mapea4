@@ -198,6 +198,11 @@ class Map extends Base {
      */
     this.ticket_ = null;
 
+    // ticket
+    if (!isNullOrEmpty(params.ticket)) {
+      this.setTicket(params.ticket);
+    }
+
     // adds class to the container
     params.container.classList.add('m-mapea-container');
     if (!isNullOrEmpty(params.bgColorContainer)) {
@@ -332,11 +337,6 @@ class Map extends Base {
     // label
     if (!isNullOrEmpty(params.label)) {
       this.addLabel(params.label);
-    }
-
-    // ticket
-    if (!isNullOrEmpty(params.ticket)) {
-      this.setTicket(params.ticket);
     }
 
     // initial zoom

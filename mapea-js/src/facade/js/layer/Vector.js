@@ -46,6 +46,9 @@ class Vector extends LayerBase {
       this.extract = true; // by default
     }
 
+    // template
+    this.template = parameters.template;
+
     /**
      * Style of the layer
      * @private
@@ -97,6 +100,17 @@ class Vector extends LayerBase {
     } else {
       this.getImpl().extract = true;
     }
+  }
+
+  /**
+   * 'template' the features properties
+   */
+  get template() {
+    return this.getImpl().template;
+  }
+
+  set template(newTemplate) {
+    this.getImpl().template = newTemplate;
   }
 
   /**

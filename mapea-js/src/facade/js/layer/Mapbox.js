@@ -133,6 +133,44 @@ class Mapbox extends LayerBase {
   }
 
   /**
+   * This function sets 
+   * the tileLoadFunction
+   * On the implementation
+   *
+   * @function
+   * @public
+   * @param {Function} func Function to override
+   * @api
+   */
+  setTileLoadFunction(func){
+    this.getImpl().setTileLoadFunction(func);
+  }
+
+  /**
+   * Sets the url of the layer
+   *
+   * @function
+   * @public
+   * @param {String} newURL URL
+   * @api
+   */
+  setURL(newURL) {
+    this.getImpl().setURL(newURL);
+  }
+
+  /**
+   * Sets the name of the layer
+   *
+   * @function
+   * @public
+   * @param {String} newName Name
+   * @api
+   */
+  setName(newName) {
+    this.getImpl().setName(newName);
+  }
+
+  /**
    * Checks if an object is equal to this layer, which means that it is a Mapbox Layer instance and
    * has the same url, name and options.
    *

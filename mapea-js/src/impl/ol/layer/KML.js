@@ -103,7 +103,6 @@ class KML extends Vector {
    */
   addTo(map) {
     this.map = map;
-    this.fire(EventType.ADDED_TO_MAP);
     map.on(EventType.CHANGE_PROJ, this.setProjection_.bind(this), this);
     this.formater_ = new FormatKML({
       label: this.label_,
@@ -121,6 +120,8 @@ class KML extends Vector {
     }
     const olMap = this.map.getMapImpl();
     olMap.addLayer(this.ol3Layer);
+    this.fire(EventType.ADDED_TO_MAP);
+    this.facadeVector_?.fire(EventType.ADDED_TO_MAP);
   }
 
   /**
@@ -140,7 +141,9 @@ class KML extends Vector {
       const featureDesc = feature.getAttribute('description');
       const featureCoord = feature.getImpl().getOLFeature().getGeometry().getFirstCoordinate();
 
-      const htmlAsText = compileTemplate(popupKMLTemplate, {
+      const popup_template = !isNullOrEmpty(this.template) ? this.template : popupKMLTemplate;
+
+      const htmlAsText = compileTemplate(popup_template, {
         vars: {
           name: featureName,
           desc: featureDesc,
@@ -180,14 +183,48 @@ class KML extends Vector {
   }
 
   /**
+   * Removes and creates the ol3layer
+   *
+   * @public
+   * @function
+   * @api stable
+   * @export
+   */
+  recreateOlLayer() {
+    const olMap = this.map.getMapImpl();
+
+    if (!isNullOrEmpty(this.ol3Layer)) {
+      olMap.removeLayer(this.ol3Layer);
+      this.ol3Layer = null;
+    }
+
+    this.formater_ = new FormatKML({
+      label: this.label_,
+    });
+    this.loader_ = new LoaderKML(this.map, this.url, this.formater_);
+    this.ol3Layer = new OLLayerVector(extend({}, this.vendorOptions_, true));
+    this.updateSource_(true);
+    // sets its visibility if it is in range
+    if (this.options.visibility !== false) {
+      this.setVisible(this.inRange());
+    }
+    // sets its z-index
+    if (this.zIndex_ !== null) {
+      this.setZIndex(this.zIndex_);
+    }
+
+    olMap.addLayer(this.ol3Layer);
+  }
+
+  /**
    * This function sets the map object of the layer
    *
    * @private
    * @function
    */
-  updateSource_() {
+  updateSource_(force) {
     if (isNullOrEmpty(this.vendorOptions_.source)) {
-      this.requestFeatures_().then((response) => {
+      this.requestFeatures_(force).then((response) => {
         this.ol3Layer.setSource(new OLSourceVector({
           loader: () => {
             const screenOverlay = response.screenOverlay;
@@ -204,6 +241,18 @@ class KML extends Vector {
         this.facadeVector_.addFeatures(response.features);
       });
     }
+  }
+
+  /**
+   * Sets the url of the layer
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  setURL(newURL) {
+    this.url = newURL;
+    this.recreateOlLayer();
   }
 
   /**
@@ -260,8 +309,8 @@ class KML extends Vector {
    * @private
    * @function
    */
-  requestFeatures_() {
-    if (isNullOrEmpty(this.loadFeaturesPromise_)) {
+  requestFeatures_(force) {
+    if (force || isNullOrEmpty(this.loadFeaturesPromise_)) {
       this.loadFeaturesPromise_ = new Promise((resolve) => {
         this.loader_.getLoaderFn((features) => {
           resolve(features);
@@ -286,6 +335,7 @@ class KML extends Vector {
       equals = (this.url === obj.url);
       equals = equals && (this.name === obj.name);
       equals = equals && (this.extract === obj.extract);
+      equals = equals && (this.template === obj.template);
     }
     return equals;
   }

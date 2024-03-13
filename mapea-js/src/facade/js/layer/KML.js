@@ -57,6 +57,9 @@ class KML extends LayerVector {
     // extract
     this.extract = parameters.extract;
 
+    // template
+    this.template = parameters.template;
+
     // options
     this.options = options;
 
@@ -99,6 +102,17 @@ class KML extends LayerVector {
   }
 
   /**
+   * 'template' the features properties
+   */
+  get template() {
+    return this.getImpl().template;
+  }
+
+  set template(newTemplate) {
+    this.getImpl().template = newTemplate;
+  }
+
+  /**
    * 'options' the layer options
    */
   get options() {
@@ -107,6 +121,18 @@ class KML extends LayerVector {
 
   set options(newOptions) {
     this.getImpl().options = newOptions;
+  }
+
+  /**
+   * Sets the url of the layer
+   *
+   * @function
+   * @public
+   * @param {String} newURL URL
+   * @api
+   */
+  setURL(newURL) {
+    this.getImpl().setURL(newURL);
   }
 
   /**
@@ -124,6 +150,7 @@ class KML extends LayerVector {
       equals = (this.url === obj.url);
       equals = equals && (this.name === obj.name);
       equals = equals && (this.extract === obj.extract);
+      equals = equals && (this.template === obj.template);
       equals = equals && (this.id === obj.id);
     }
 

@@ -102,7 +102,8 @@ class WMC110 extends XML {
     }
 
     if (!isNullOrEmpty(group)) {
-      group.addChild(layer, parseInt(groupOrder, 10));
+      // -1 To match the addChild parameter (starts from 0)
+      group.addChild(layer, parseInt(groupOrder - 1, 10));
     } else {
       if (isNullOrEmpty(context.layers)) {
         context.layers = [];

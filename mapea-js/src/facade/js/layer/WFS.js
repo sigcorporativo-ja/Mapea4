@@ -65,6 +65,9 @@ class WFS extends Vector {
 
     // extract
     this.extract = parameters.extract;
+
+    // template
+    this.template = parameters.template;
   }
 
   /**
@@ -164,6 +167,56 @@ class WFS extends Vector {
       this.getImpl().version = '1.0.0'; // default value
     }
   }
+
+  /**
+   * Sets the url of the layer
+   *
+   * @function
+   * @public
+   * @param {String} newURL URL
+   * @api
+   */
+  setURL(newURL) {
+    this.getImpl().setURL(newURL);
+  }
+
+  /**
+   * Sets the name of the layer
+   *
+   * @function
+   * @public
+   * @param {String} newName Name
+   * @api
+   */
+  setName(newName) {
+    this.getImpl().setName(newName);
+  }
+
+  /**
+   * Sets the namespace of the layer
+   *
+   * @function
+   * @public
+   * @param {String} newNamespace Namespace
+   * @api
+   */
+  setNamespace(newNamespace) {
+    this.getImpl().setNamespace(newNamespace);
+  }
+
+  /**
+   * Sets the geometry of the layer
+   *
+   * @function
+   * @public
+   * @param {String} newGeometry Geometry
+   * @api
+   */
+  setGeometry(newGeometry) {
+    this.geometry = newGeometry;
+    this.getImpl().setGeometry(newGeometry);
+  }
+
   /**
    * Sets a CQL string to apply to the layer. A new query will be made to the WFS server.
    * @param {String} cql CQL to apply

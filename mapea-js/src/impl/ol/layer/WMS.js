@@ -90,6 +90,13 @@ class WMS extends LayerBase {
     this.getCapabilitiesPromise = null;
 
     /**
+     * Function to override the tile loading
+     * @private
+     * @type {Function}
+     */
+    this.tileLoadFunction = vendorOptions?.tileLoadFunction;
+
+    /**
      * get WMS extent promise
      * @private
      * @type {Promise}
@@ -200,7 +207,6 @@ class WMS extends LayerBase {
    */
   addTo(map) {
     this.map = map;
-    this.fire(EventType.ADDED_TO_MAP);
 
     // calculates the resolutions from scales
     if (!isNull(this.options) &&
@@ -227,6 +233,8 @@ class WMS extends LayerBase {
         SLD_VERSION: '1.1.0',
       });
     }
+    this.fire(EventType.ADDED_TO_MAP);
+    this.facadeLayer_?.fire(EventType.ADDED_TO_MAP);
   }
 
   /**
@@ -340,6 +348,7 @@ class WMS extends LayerBase {
         TRANSPARENT: this.transparent,
         FORMAT: 'image/png',
         STYLES: this.styles,
+        CQL_FILTER: this.cql,
       };
 
       if (!isNullOrEmpty(this.sldBody)) {
@@ -367,11 +376,15 @@ class WMS extends LayerBase {
           maxResolution,
           opacity,
           zIndex,
+          myparam: "aa",
         };
         if (!isUndefined(crossOrigin)) {
           opts.crossOrigin = crossOrigin;
         }
-        olSource = new TileWMS(opts);
+
+        opts.tileLoadFunction = this.tileLoadFunction;
+
+        olSource = new TileWMS(opts);        
         olSource.updateParams(layerParams);
       } else {
         const opts = {
@@ -427,6 +440,42 @@ class WMS extends LayerBase {
         baseLayersIdx += 1;
       });
     });
+  }
+
+  /**
+   * This function sets 
+   * the tileLoadFunction
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  setTileLoadFunction(func){
+    this.getOLLayer().getSource().setTileLoadFunction(func);
+  }
+
+  /**
+   * Sets the url of the layer
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  setURL(newURL) {
+    this.url = newURL;
+    this.recreateOlLayer();
+  }
+
+  /**
+   * Sets the name of the layer
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  setName(newName) {
+    this.name = newName;
+    this.recreateOlLayer();
   }
 
   /**
@@ -654,6 +703,22 @@ class WMS extends LayerBase {
     if (!isNullOrEmpty(ol3Layer)) {
       ol3Layer.getSource().updateParams({ time: Date.now() });
     }
+  }
+
+  /**
+   * Removes and creates the ol3layer
+   *
+   * @public
+   * @function
+   * @api stable
+   * @export
+   */
+  recreateOlLayer() {
+    const olMap = this.map.getMapImpl();
+    if (!isNullOrEmpty(this.ol3Layer)) {
+      olMap.removeLayer(this.ol3Layer);
+    }
+    this.addSingleLayer_();
   }
 
   /**

@@ -12,7 +12,31 @@ window.mapjs = map({
 const wms = new WMS({
   url: 'http://www.ideandalucia.es/wms/mta10v_2007?',
   name: 'Limites',
-});
+},
+// {},
+// {
+//   tileLoadFunction: (tile, src)=>{
+    
+//     const xhr = new XMLHttpRequest();
+//     xhr.responseType = 'blob';
+//     xhr.addEventListener('loadend', function (evt) {
+//       const data = this.response;
+//       if (data !== undefined) {
+//         tile.getImage().src = URL.createObjectURL(data);
+//       } else {
+//         tile.setState(TileState.ERROR);
+//       }
+//     });
+//     xhr.addEventListener('error', function () {
+//       tile.setState(TileState.ERROR);
+//     });
+//     xhr.open('GET', src);
+//     xhr.send();
+    
+//     console.log('tile cargada WMS');
+//   },
+// }
+);
 
 var wfs = new WFS({
   url: "http://geostematicos-sigc.juntadeandalucia.es/geoserver/tematicos/ows?",

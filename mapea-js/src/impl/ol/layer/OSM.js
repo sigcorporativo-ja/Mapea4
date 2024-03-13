@@ -59,6 +59,9 @@ class OSM extends Layer {
       this.visibility = false;
     }
 
+    // sets tileLoadFunction
+    this.tileLoadFunction = vendorOptions?.tileLoadFunction;
+
     this.zIndex_ = ImplMap.Z_INDEX[LayerType.OSM];
 
     // URL
@@ -110,7 +113,6 @@ class OSM extends Layer {
    */
   addTo(map) {
     this.map = map;
-    this.fire(EventType.ADDED_TO_MAP);
 
     this.ol3Layer = new OLLayerTile(extend({}, this.vendorOptions_, true));
     this.updateSource_();
@@ -154,6 +156,8 @@ class OSM extends Layer {
 
     // set the extent when the map changed
     this.map.on(EventType.CHANGE_PROJ, () => this.updateSource_());
+    this.fire(EventType.ADDED_TO_MAP);
+    this.facadeLayer_?.fire(EventType.ADDED_TO_MAP);
   }
 
   /**
@@ -191,13 +195,28 @@ class OSM extends Layer {
       if (!isUndefined(this.url_)) {
         newSource = new SourceXYZ({
           url: this.url_,
+          tileLoadFunction: this.tileLoadFunction,
         });
       } else {
-        newSource = new SourceOSM({});
+        newSource = new SourceOSM({
+          tileLoadFunction: this.tileLoadFunction,
+        });
       }
       this.ol3Layer.setSource(newSource);
       this.ol3Layer.setExtent(extent);
     }
+  }
+
+  /**
+   * This function sets 
+   * the tileLoadFunction
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  setTileLoadFunction(func){
+    this.getOLLayer().getSource().setTileLoadFunction(func);
   }
 
   /**

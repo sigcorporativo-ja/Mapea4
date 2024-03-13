@@ -121,10 +121,23 @@ class GeoJSON extends LayerVector {
     if (obj instanceof GeoJSON) {
       equals = this.name === obj.name;
       equals = equals && (this.extract === obj.extract);
+      equals = equals && (this.template === obj.template);
       equals = equals && (this.id === obj.id);
     }
 
     return equals;
+  }
+
+  /**
+   * Sets the url of the layer
+   *
+   * @function
+   * @public
+   * @param {String} newURL URL
+   * @api
+   */
+  setURL(newURL) {
+    this.getImpl().setURL(newURL);
   }
 
   /**
