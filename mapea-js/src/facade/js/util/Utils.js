@@ -14,7 +14,7 @@ import * as WKT from '../geom/WKT.js';
  * @api
  */
 export const getFeaturesExtent = (features, projectionCode) => {
-  return M.impl.getFeaturesExtent(features, projectionCode);
+  return M.utils.impl.getFeaturesExtent(features, projectionCode);
 };
 
 /**
