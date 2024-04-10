@@ -1,0 +1,16 @@
+<div>My custom popup</div>
+<div class="m-geojson-content">
+    {{#each features}}
+    <div id="{{id}}" class="result">
+        {{#each attributes}}
+        <ul>
+            <li class="key">{{key}}</li>
+            <ul>
+                <li class="value">{{{value}}}</li>
+            </ul>
+        </ul>
+        {{/each}}
+    </div>
+    <div class="m-separator"></div>
+    {{/each}}
+ </div>

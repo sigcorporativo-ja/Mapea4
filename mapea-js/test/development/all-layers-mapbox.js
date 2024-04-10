@@ -12,9 +12,12 @@ window.mapjs = map({
 });
 
 const wms = new WMS({
-  url: 'http://www.ideandalucia.es/wms/mta10v_2007?',
-  name: 'Limites',
-});
+  url: 'http://www.juntadeandalucia.es/institutodeestadisticaycartografia/geoserver-ieca/grid/wms?',
+  name: 'gridp_250',
+  namespace: "grid",
+}, {}, {
+  // cql: `cmun LIKE '%18%'`,
+},);
 
 const wfs = new WFS({
   namespace: 'ggis',

@@ -83,6 +83,7 @@ class WMC extends Layer {
   addTo(map) {
     this.map = map;
     this.fire(EventType.ADDED_TO_MAP);
+    this.facadeLayer_?.fire(EventType.ADDED_TO_MAP);
   }
 
   /**

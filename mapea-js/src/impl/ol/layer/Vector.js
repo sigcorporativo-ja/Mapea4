@@ -87,7 +87,6 @@ class Vector extends Layer {
    */
   addTo(map) {
     this.map = map;
-    this.fire(EventType.ADDED_TO_MAP);
     map.on(EventType.CHANGE_PROJ, this.setProjection_.bind(this), this);
 
     this.ol3Layer = new OLLayerVector(this.vendorOptions_);
@@ -99,6 +98,8 @@ class Vector extends Layer {
     this.setVisible(this.visibility);
     const olMap = this.map.getMapImpl();
     olMap.addLayer(this.ol3Layer);
+    this.fire(EventType.ADDED_TO_MAP);
+    this.facadeVector_?.fire(EventType.ADDED_TO_MAP);
   }
 
   /**
@@ -305,10 +306,17 @@ class Vector extends Layer {
         if (isFunction(clickFn)) {
           clickFn(evt, feature);
         } else {
-          const htmlAsText = compileTemplate(PopupTemplate, {
+          const popup_template = !isNullOrEmpty(this.template) ? this.template : PopupTemplate;
+
+          let htmlAsText = compileTemplate(popup_template, {
             vars: this.parseFeaturesForTemplate_(features),
             parseToHtml: false,
           });
+          if (this.name){
+            const layerNameHTML = `<div>${this.name}</div>`
+            htmlAsText = layerNameHTML + htmlAsText;
+          }
+          
           const featureTabOpts = {
             icon: 'g-cartografia-pin',
             title: this.name,
@@ -485,7 +493,12 @@ class Vector extends Layer {
         resolve(extent);
       } else {
         this.requestFeatures_().then((features) => {
-          const extent = ImplUtils.getFeaturesExtent(features, codeProj);
+          const features_arr = features.features
+            && !Array.isArray(features)
+            && Array.isArray(features.features)
+            ? features.features
+            : features;
+          const extent = ImplUtils.getFeaturesExtent(features_arr, codeProj);
           resolve(extent);
         });
       }

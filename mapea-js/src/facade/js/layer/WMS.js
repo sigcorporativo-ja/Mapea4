@@ -50,7 +50,9 @@ class WMS extends LayerBase {
     this.legend = parameters.legend;
 
     // cql
-    this.cql = parameters.cql;
+    if (vendorOptions?.cql) {
+      this.cql = vendorOptions.cql;
+    }
 
     // version
     this.version = parameters.version;
@@ -179,6 +181,44 @@ class WMS extends LayerBase {
 
   set options(newOptions) {
     this.getImpl().options = newOptions;
+  }
+
+  /**
+   * This function sets 
+   * the tileLoadFunction
+   * On the implementation
+   *
+   * @function
+   * @public
+   * @param {Function} func Function to override
+   * @api
+   */
+  setTileLoadFunction(func){
+    this.getImpl().setTileLoadFunction(func);
+  }
+
+  /**
+   * Sets the url of the layer
+   *
+   * @function
+   * @public
+   * @param {String} newURL URL
+   * @api
+   */
+  setURL(newURL) {
+    this.getImpl().setURL(newURL);
+  }
+
+  /**
+   * Sets the name of the layer
+   *
+   * @function
+   * @public
+   * @param {String} newName Name
+   * @api
+   */
+  setName(newName) {
+    this.getImpl().setName(newName);
   }
 
   /**

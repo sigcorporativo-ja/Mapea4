@@ -91,6 +91,12 @@ const geojson = (userParameters) => {
       attr: 'extract',
     })(GEOJSON_REGEX, 3);
 
+    const template = getParameter({
+      parameter: userParam,
+      type: 'boolean',
+      attr: 'template',
+    })(GEOJSON_REGEX, 3);
+
     const style = getParameter({
       parameter: userParam,
       type: 'string',
@@ -103,6 +109,7 @@ const geojson = (userParameters) => {
       url,
       extract,
       style,
+      template,
     };
   });
 

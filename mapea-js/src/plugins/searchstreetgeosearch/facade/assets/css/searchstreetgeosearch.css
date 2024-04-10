@@ -68,6 +68,10 @@
   }
 }
 
+.m-hidden {
+  display: none;
+}
+
 /****************************
  INTERNET EXPLORER HACKS
 ****************************/

@@ -56,6 +56,20 @@ class MVT extends Vector {
   }
 
   /**
+   * This function sets 
+   * the tileLoadFunction
+   * On the implementation
+   *
+   * @function
+   * @public
+   * @param {Function} func Function to override
+   * @api
+   */
+  setTileLoadFunction(func){
+    this.getImpl().setTileLoadFunction(func);
+  }
+
+  /**
    * This method calculates the maxExtent of this layer:
    * 1. Check if the user specified a maxExtent parameter
    * 2. Gets the map maxExtent

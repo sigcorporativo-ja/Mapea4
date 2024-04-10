@@ -72,6 +72,13 @@ class WMTS extends LayerBase {
       style: 'default',
       format: 'image/jpeg',
     };
+
+    /**
+     * Function to override the tile loading
+     * @private
+     * @type {Function}
+     */
+    this.tileLoadFunction = vendorOptions?.tileLoadFunction;
   }
 
   /**
@@ -84,7 +91,6 @@ class WMTS extends LayerBase {
    */
   addTo(map) {
     this.map = map;
-    this.fire(EventType.ADDED_TO_MAP);
 
     // calculates the resolutions from scales
     if (!isNull(this.options) &&
@@ -101,6 +107,8 @@ class WMTS extends LayerBase {
     } else {
       this.addLayer_(capabilitiesOpts);
     }
+    this.fire(EventType.ADDED_TO_MAP);
+    this.facadeLayer_?.fire(EventType.ADDED_TO_MAP);
   }
 
   /**
@@ -141,6 +149,8 @@ class WMTS extends LayerBase {
         if (!isUndefined(crossOrigin)) {
           opts.crossOrigin = crossOrigin;
         }
+
+        opts.tileLoadFunction = this.tileLoadFunction;
 
         const newSource = new OLSourceWMTS(opts);
         this.ol3Layer.setSource(newSource);
@@ -204,6 +214,7 @@ class WMTS extends LayerBase {
       //   matrixIds,
       // }),
       extent,
+      tileLoadFunction: this.tileLoadFunction,
     }, true));
 
     this.ol3Layer = new OLLayerTile(extend({
@@ -229,6 +240,7 @@ class WMTS extends LayerBase {
     this.ol3Layer.set('animated', true);
 
     this.fire(EventType.ADDED_TO_MAP, this);
+    this.facadeLayer_?.fire(EventType.ADDED_TO_MAP, this);
   }
 
   /**
@@ -274,6 +286,42 @@ class WMTS extends LayerBase {
     return this.capabilitiesOptionsPromise;
   }
 
+  /**
+   * This function sets 
+   * the tileLoadFunction
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  setTileLoadFunction(func){
+    this.getOLLayer().getSource().setTileLoadFunction(func);
+  }
+
+  /**
+   * Sets the url of the layer
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  setURL(newURL) {
+    this.url = newURL;
+    this.recreateOlLayer();
+  }
+
+  /**
+   * Sets the name of the layer
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  setName(newName) {
+    this.name = newName;
+    this.recreateOlLayer();
+  }
+  
   /**
    * TODO
    *
@@ -329,6 +377,28 @@ class WMTS extends LayerBase {
    */
   setFacadeObj(obj) {
     this.facadeLayer_ = obj;
+  }
+
+  /**
+   * Removes and creates the ol3layer
+   *
+   * @public
+   * @function
+   * @api stable
+   * @export
+   */
+  recreateOlLayer() {
+    const olMap = this.map.getMapImpl();
+    if (!isNullOrEmpty(this.ol3Layer)) {
+      olMap.removeLayer(this.ol3Layer);
+    }
+    
+    const capabilitiesOpts = this.getCapabilitiesOptions_();
+    if (capabilitiesOpts instanceof Promise) {
+      capabilitiesOpts.then(capabilitiesOptions => this.addLayer_(capabilitiesOptions));
+    } else {
+      this.addLayer_(capabilitiesOpts);
+    }
   }
 
   /**
