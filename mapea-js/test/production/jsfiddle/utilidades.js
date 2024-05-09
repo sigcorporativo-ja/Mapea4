@@ -1,4 +1,4 @@
-M.config.PROXY_POST_URL='https://sigc-dev.desarrollo.guadaltel.es/mapea6/proxyPost'
+M.config.PROXY_POST_URL='https://sigc-dev-ol.desarrollo.guadaltel.es/mapea6/proxyPost'
 //Creamos el mapa
 var mapajs = M.map({
   container: "map"
