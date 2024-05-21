@@ -32,7 +32,6 @@ export default class MeasureLength extends Measure {
     this.helpMsgContinue_ = HELP_KEEP_MESSAGE;
   }
 
-
   /**
    * This function add tooltip with measure distance
    * @public

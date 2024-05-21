@@ -34,6 +34,7 @@ class Navtoolbar extends ControlBase {
       Exception(getValue('exception').navtoolbar_method);
     }
   }
+
   /**
    * This function creates the view to the specified map
    *

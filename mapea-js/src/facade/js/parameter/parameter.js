@@ -1,7 +1,9 @@
 /**
  * @module M/parameter
  */
-import { isNullOrEmpty, isString, isNull, isFunction, normalize, isArray, isObject, isUrl, isUndefined } from '../util/Utils.js';
+import {
+  isNullOrEmpty, isString, isNull, isFunction, normalize, isArray, isObject, isUrl, isUndefined,
+} from '../util/Utils.js';
 import Exception from '../exception/exception.js';
 import * as LayerType from '../layer/Type.js';
 import Layer from '../layer/Layer.js';
@@ -272,15 +274,14 @@ export const maxExtent = (maxExtentParam) => {
       Exception(`El parámetro no es de un tipo soportado: ${typeof maxExtentParameter}`);
     }
 
-    if (Number.isNaN(maxExtentVar.x.min) || Number.isNaN(maxExtentVar.y.min) ||
-      Number.isNaN(maxExtentVar.x.max) || Number.isNaN(maxExtentVar.y.max)) {
+    if (Number.isNaN(maxExtentVar.x.min) || Number.isNaN(maxExtentVar.y.min)
+      || Number.isNaN(maxExtentVar.x.max) || Number.isNaN(maxExtentVar.y.max)) {
       Exception(getValue('exception').invalid_maxextent_param);
     }
   }
 
   return maxExtentVar;
 };
-
 
 /**
  * Parses the specified user projection parameter into an object
@@ -315,8 +316,8 @@ export const projection = (projectionParameter) => {
   } else if (isObject(projectionParameter)) {
     // object
     // y max
-    if (!isNull(projectionParameter.code) &&
-      !isNull(projectionParameter.units)) {
+    if (!isNull(projectionParameter.code)
+      && !isNull(projectionParameter.units)) {
       projectionVar.code = projectionParameter.code;
       projectionVar.units = normalize(projectionParameter.units.substring(0, 1));
     } else {
@@ -564,8 +565,8 @@ const getCQLWFS = (parameter) => {
       params = parameter.split(/\*/);
       cql = params[6].trim();
     }
-  } else if ((isObject(parameter) &&
-      !isNullOrEmpty(parameter.cql)) || (!isNullOrEmpty(parameter.ecql))) {
+  } else if ((isObject(parameter)
+      && !isNullOrEmpty(parameter.cql)) || (!isNullOrEmpty(parameter.ecql))) {
     cql = parameter.cql ? parameter.cql.trim() : parameter.ecql.trim();
   } else if (!isObject(parameter)) {
     Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
@@ -1087,7 +1088,6 @@ const getTransparentWMTS = (parameter) => {
   }
   return transparent;
 };
-
 
 /**
  * @public

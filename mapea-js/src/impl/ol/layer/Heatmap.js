@@ -86,8 +86,8 @@ class Heatmap extends OLLayerHeatmap {
     if (source !== null) {
       const features = source.getFeatures();
       if (features.length > 0) {
-        weights = features.map(feature => feature.get(options.weight))
-          .filter(weightVar => weightVar != null);
+        weights = features.map((feature) => feature.get(options.weight))
+          .filter((weightVar) => weightVar != null);
       }
     }
     return weights;

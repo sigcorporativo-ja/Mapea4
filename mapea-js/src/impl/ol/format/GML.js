@@ -13,11 +13,11 @@ class GML extends OLFormatGML {
    *
    * @constructor
    * @extends {ol.format.JSONFeature}
-   * @param {olx.format.GeoJSONOptions=} opt_options Options.
+   * @param {olx.format.GeoJSONOptions=} optOptions Options.
    * @api stable
    */
-  constructor(opt_options = {}) {
-    super(opt_options);
+  constructor(optOptions = {}) {
+    super(optOptions);
   }
 }
 

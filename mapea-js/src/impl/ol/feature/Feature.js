@@ -157,8 +157,11 @@ class Feature {
    * @api stable
    */
   static olRenderFeature2Facade(olRenderFeature, tileProjection, mapProjection) {
-    const olFeature =
-      ImplUtils.olRenderFeature2olFeature(olRenderFeature, tileProjection, mapProjection);
+    const olFeature = ImplUtils.olRenderFeature2olFeature(
+      olRenderFeature,
+      tileProjection,
+      mapProjection,
+    );
     return Feature.olFeature2Facade(olFeature);
   }
 

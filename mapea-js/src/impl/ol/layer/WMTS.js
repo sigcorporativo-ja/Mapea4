@@ -36,7 +36,7 @@ class WMTS extends LayerBase {
    * @param {Object} vendorOptions vendor options for the base library
    * @api stable
    */
-  constructor(options = {}, vendorOptions) {
+  constructor(options = {}, vendorOptions = {}) {
     // calls the super constructor
     super(options, vendorOptions);
 
@@ -93,8 +93,8 @@ class WMTS extends LayerBase {
     this.map = map;
 
     // calculates the resolutions from scales
-    if (!isNull(this.options) &&
-      !isNull(this.options.minScale) && !isNull(this.options.maxScale)) {
+    if (!isNull(this.options)
+      && !isNull(this.options.minScale) && !isNull(this.options.maxScale)) {
       const units = this.map.getMapImpl().getView().getProjection().getUnits();
       this.options.minResolution = getResolutionFromScale(this.options.minScale, units);
       this.options.maxResolution = getResolutionFromScale(this.options.maxScale, units);
@@ -103,7 +103,7 @@ class WMTS extends LayerBase {
     // adds layer from capabilities
     const capabilitiesOpts = this.getCapabilitiesOptions_();
     if (capabilitiesOpts instanceof Promise) {
-      capabilitiesOpts.then(capabilitiesOptions => this.addLayer_(capabilitiesOptions));
+      capabilitiesOpts.then((capabilitiesOptions) => this.addLayer_(capabilitiesOptions));
     } else {
       this.addLayer_(capabilitiesOpts);
     }
@@ -170,8 +170,8 @@ class WMTS extends LayerBase {
     if ((visibility === true) && (this.transparent !== true)) {
       // hides all base layers
       this.map.getBaseLayers()
-        .filter(layer => !layer.equals(this) && layer.isVisible())
-        .forEach(layer => layer.setVisible(false));
+        .filter((layer) => !layer.equals(this) && layer.isVisible())
+        .forEach((layer) => layer.setVisible(false));
 
       // set this layer visible
       if (!isNullOrEmpty(this.ol3Layer)) {
@@ -235,7 +235,6 @@ class WMTS extends LayerBase {
 
     this.setVisible(this.visibility);
 
-
     // activates animation always for WMTS layers
     this.ol3Layer.set('animated', true);
 
@@ -249,7 +248,6 @@ class WMTS extends LayerBase {
   setMaxExtent(maxExtent) {
     this.getOLLayer().setExtent(maxExtent);
   }
-
 
   /**
    * This function gets the capabilities
@@ -287,14 +285,14 @@ class WMTS extends LayerBase {
   }
 
   /**
-   * This function sets 
+   * This function sets
    * the tileLoadFunction
    *
    * @public
    * @function
    * @api stable
    */
-  setTileLoadFunction(func){
+  setTileLoadFunction(func) {
     this.getOLLayer().getSource().setTileLoadFunction(func);
   }
 
@@ -321,7 +319,7 @@ class WMTS extends LayerBase {
     this.name = newName;
     this.recreateOlLayer();
   }
-  
+
   /**
    * TODO
    *
@@ -392,10 +390,10 @@ class WMTS extends LayerBase {
     if (!isNullOrEmpty(this.ol3Layer)) {
       olMap.removeLayer(this.ol3Layer);
     }
-    
+
     const capabilitiesOpts = this.getCapabilitiesOptions_();
     if (capabilitiesOpts instanceof Promise) {
-      capabilitiesOpts.then(capabilitiesOptions => this.addLayer_(capabilitiesOptions));
+      capabilitiesOpts.then((capabilitiesOptions) => this.addLayer_(capabilitiesOptions));
     } else {
       this.addLayer_(capabilitiesOpts);
     }

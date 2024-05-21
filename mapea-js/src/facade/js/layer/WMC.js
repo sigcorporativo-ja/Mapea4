@@ -102,8 +102,8 @@ class WMC extends LayerBase {
   }
 
   set type(newType) {
-    if (!isUndefined(newType) &&
-      !isNullOrEmpty(newType) && (newType !== LayerType.WMC)) {
+    if (!isUndefined(newType)
+      && !isNullOrEmpty(newType) && (newType !== LayerType.WMC)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.WMC).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
     }
   }

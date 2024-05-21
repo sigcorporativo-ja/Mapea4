@@ -17,8 +17,8 @@ export default class Icon extends OLStyleIcon {
       anchorXUnits: options.anchorXUnits,
       anchorYUnits: options.anchorYUnits,
       crossOrigin: options.crossOrigin || null,
-      color: (options.color && options.color.slice) ?
-        options.color.slice() : options.color || undefined,
+      color: (options.color && options.color.slice)
+        ? options.color.slice() : options.color || undefined,
       src: options.src,
       offset: !options.offset ? undefined : options.offset.slice(),
       offsetOrigin: options.offsetOrigin,

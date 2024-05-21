@@ -1,8 +1,8 @@
 import chroma from 'chroma-js';
-import StylePoint from '../style/Point.js';
-import StyleLine from '../style/Line.js';
-import StylePolygon from '../style/Polygon.js';
-import StyleGeneric from '../style/Generic.js';
+import StylePoint from './Point.js';
+import StyleLine from './Line.js';
+import StylePolygon from './Polygon.js';
+import StyleGeneric from './Generic.js';
 
 /**
  * This functions returns random simple style

@@ -4,7 +4,18 @@
 import Exception from '../exception/exception.js';
 import * as parserParameter from '../parameter/parameter.js';
 import Base from '../Base.js';
-import { isNullOrEmpty, concatUrlPaths, isUndefined, normalize, isString, isFunction, generateRandom, isBoolean, isArray, isObject } from '../util/Utils.js';
+import {
+  isNullOrEmpty,
+  concatUrlPaths,
+  isUndefined,
+  normalize,
+  isString,
+  isFunction,
+  generateRandom,
+  isBoolean,
+  isArray,
+  isObject,
+} from '../util/Utils.js';
 import { getValue } from '../i18n/language.js';
 import * as EventType from '../event/eventtype';
 
@@ -282,7 +293,7 @@ class LayerBase extends Base {
    * @return {Promise} - Promise object represents the maxExtent of the layer
    */
   calculateMaxExtent() {
-    return new Promise(resolve => resolve(this.getMaxExtent()));
+    return new Promise((resolve) => { resolve(this.getMaxExtent()); });
   }
 
   /**
@@ -362,7 +373,6 @@ class LayerBase extends Base {
   setLayerGroup(layerGroup) {
     this.layerGroup_ = layerGroup;
   }
-
 
   /**
    * Returns whether the layer is visible or not.
@@ -517,6 +527,7 @@ class LayerBase extends Base {
     this.minScale_ = minScale;
     this.getImpl().setMinScale(minScale);
   }
+
   /**
    * This function gets the max-scale for this layer
    *

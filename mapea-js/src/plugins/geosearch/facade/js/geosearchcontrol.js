@@ -183,21 +183,21 @@ export default class GeosearchControl extends M.Control {
    * @api stabletrue
    */
   createImagesCache(html) {
-    const container = html.getElementsByClassName("img-cache-loader")[0];
+    const container = html.getElementsByClassName('img-cache-loader')[0];
 
     const urls = [
       '/img/m-pin-24.svg',
       '/img/m-pin-24-new.svg',
-      '/img/m-pin-24-sel.svg'
-    ]; 
+      '/img/m-pin-24-sel.svg',
+    ];
 
-    urls.forEach(url => {
-      let img = new Image();
+    urls.forEach((url) => {
+      const img = new Image();
       img.src = M.utils.concatUrlPaths([M.config.THEME_URL, url]);
       img.width = '24';
       img.height = '24';
       img.crossOrigin = 'anonymous';
-      container.append(img);    
+      container.append(img);
     });
   }
 
@@ -467,7 +467,7 @@ export default class GeosearchControl extends M.Control {
     for (let i = 0; i < newResults.length; i += 1) {
       const newResult = newResults.item(i);
       this.resultsScrollContainer_.appendChild(newResult);
-      newResult.addEventListener('click', e => this.resultClick_(e));
+      newResult.addEventListener('click', (e) => this.resultClick_(e));
     }
 
     // updates the found num elements
@@ -708,8 +708,8 @@ export default class GeosearchControl extends M.Control {
     } else {
       total = results.response.numFound;
     }
-    if ((this.results_.length === total) &&
-      (!M.utils.isNullOrEmpty(this.resultsScrollContainer_))) {
+    if ((this.results_.length === total)
+      && (!M.utils.isNullOrEmpty(this.resultsScrollContainer_))) {
       this.resultsScrollContainer_.removeEventListener('scroll', this.resultsScroll_);
     }
   }

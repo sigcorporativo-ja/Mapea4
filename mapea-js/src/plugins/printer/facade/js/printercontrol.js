@@ -269,7 +269,6 @@ export default class PrinterControl extends M.Control {
       selectFormat.dispatchEvent(changeEvent);
       checkboxForceScale.dispatchEvent(clickEvent);
 
-
       // clean queue
       Array.prototype.forEach.apply(this.queueContainer_.children, [(child) => {
         // unlisten events
@@ -285,7 +284,6 @@ export default class PrinterControl extends M.Control {
     this.queueContainer_ = this.element_.querySelector('.queue > ul.queue-container');
     M.utils.enableTouchScroll(this.queueContainer_);
   }
-
 
   /**
    * This function checks if an object is equals
@@ -429,7 +427,7 @@ export default class PrinterControl extends M.Control {
       if (this.options_.legend === true) {
         printData.legends = this.encodeLegends();
       }
-      if (projection.code !== 'EPSG:3857' && this.map_.getLayers().some(layer => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
+      if (projection.code !== 'EPSG:3857' && this.map_.getLayers().some((layer) => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
         printData.srs = 'EPSG:3857';
       }
       return printData;
@@ -445,8 +443,8 @@ export default class PrinterControl extends M.Control {
    */
   encodeLayers() {
     const layers = this.map_.getLayers().filter((layer) => {
-      return ((layer.isVisible() === true) && (layer.inRange() === true) &&
-        M.utils.isString(layer.name) && !layer.name.startsWith('cluster_cover'));
+      return ((layer.isVisible() === true) && (layer.inRange() === true)
+        && M.utils.isString(layer.name) && !layer.name.startsWith('cluster_cover'));
     });
     let numLayersToProc = layers.length;
 
@@ -491,7 +489,7 @@ export default class PrinterControl extends M.Control {
       if (this.forceScale_ === false) {
         const bbox = this.map_.getBbox();
         encodedPage.bbox = [bbox.x.min, bbox.y.min, bbox.x.max, bbox.y.max];
-        if (projection.code !== 'EPSG:3857' && this.map_.getLayers().some(layer => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
+        if (projection.code !== 'EPSG:3857' && this.map_.getLayers().some((layer) => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
           encodedPage.bbox = ol.proj.transformExtent(encodedPage.bbox, projection.code, 'EPSG:3857');
         }
       } else if (this.forceScale_ === true) {

@@ -142,7 +142,6 @@ export default class PrinterControl extends M.Control {
      */
     this.connectionTimeout_ = options.connectionTimeout || DEFAULT_CONNECTION_TIMEOUT;
 
-
     /**
      * Flag loading service
      * @private
@@ -162,9 +161,8 @@ export default class PrinterControl extends M.Control {
      * @private
      * @type {array<string>}
      */
-    this.outputFormats_ = Array.isArray(options.outputFormats) ?
-      options.outputFormats : ['pdf', 'png', 'jpg'];
-
+    this.outputFormats_ = Array.isArray(options.outputFormats)
+      ? options.outputFormats : ['pdf', 'png', 'jpg'];
 
     /**
      * Facade of the map
@@ -442,7 +440,6 @@ export default class PrinterControl extends M.Control {
       checkboxForceScale.dispatchEvent(clickEvent);
       inputTextWrap.dispatchEvent(changeEvent);
 
-
       // clean queue
       Array.prototype.forEach.apply(this.queueContainer_.children, [(child) => {
         // unlisten events
@@ -456,7 +453,6 @@ export default class PrinterControl extends M.Control {
     this.queueContainer_ = this.element_.querySelector('.queue > ul.queue-container');
     M.utils.enableTouchScroll(this.queueContainer_);
   }
-
 
   /**
    * This function checks if an object is equals
@@ -672,13 +668,13 @@ export default class PrinterControl extends M.Control {
         };
       }
 
-      if (projection !== 'EPSG:3857' && this.map_.getLayers().some(layer => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
+      if (projection !== 'EPSG:3857' && this.map_.getLayers().some((layer) => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
         printData.attributes.map.projection = 'EPSG:3857';
       }
       if (this.forceScale_ === false) {
         const bbox = this.map_.getBbox();
         printData.attributes.map.bbox = [bbox.x.min, bbox.y.min, bbox.x.max, bbox.y.max];
-        if (projection !== 'EPSG:3857' && this.map_.getLayers().some(layer => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
+        if (projection !== 'EPSG:3857' && this.map_.getLayers().some((layer) => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
           printData.attributes.map.bbox = this.getImpl().transformExt(printData.attributes.map.bbox, projection, 'EPSG:3857');
         }
       } else if (this.forceScale_ === true) {
@@ -698,8 +694,8 @@ export default class PrinterControl extends M.Control {
    */
   encodeLayers() {
     const layers = this.map_.getLayers().filter((layer) => {
-      return ((layer.isVisible() === true) && (layer.inRange() === true) &&
-        M.utils.isString(layer.name) && !layer.name.startsWith('cluster_cover'));
+      return ((layer.isVisible() === true) && (layer.inRange() === true)
+        && M.utils.isString(layer.name) && !layer.name.startsWith('cluster_cover'));
     });
     let numLayersToProc = layers.length;
 

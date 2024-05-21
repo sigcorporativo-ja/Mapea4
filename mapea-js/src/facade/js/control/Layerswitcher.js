@@ -137,7 +137,7 @@ class LayerSwitcher extends ControlBase {
       // gets base layers and overlay layers
       if (!isNullOrEmpty(map)) {
         const baseLayers = map.getBaseLayers()
-          .filter(layer => layer.displayInLayerSwitcher === true);
+          .filter((layer) => layer.displayInLayerSwitcher === true);
         const layerGroups = map.getLayerGroup();
         const orderedLayerGroups = LayerSwitcher.orderLayerGroups(layerGroups);
         const overlayLayers = map.getRootLayers().filter((layer) => {
@@ -153,11 +153,11 @@ class LayerSwitcher extends ControlBase {
         const overlayLayersPromise = Promise.all(overlayLayers
           .map(LayerSwitcher.parseLayerForTemplate));
         const layerGroupsPromise = Promise.all(orderedLayerGroups
-          .map(layerGroup => LayerSwitcher.parseGroupForTemplate(layerGroup, baseLayers))
-          .filter(g => !isNullOrEmpty(g)));
+          .map((layerGroup) => LayerSwitcher.parseGroupForTemplate(layerGroup, baseLayers))
+          .filter((g) => !isNullOrEmpty(g)));
         baseLayersPromise.then((parsedBaseLayers) => {
           layerGroupsPromise.then((parsedLayerGroups) => {
-            overlayLayersPromise.then(parsedOverlayLayers => success({
+            overlayLayersPromise.then((parsedOverlayLayers) => success({
               baseLayers: parsedBaseLayers,
               overlayLayers: parsedOverlayLayers,
               layerGroups: parsedLayerGroups,
@@ -248,9 +248,9 @@ class LayerSwitcher extends ControlBase {
 
       let visibleLevel = 0;
       const layers = groupLayer.getAllLayers();
-      if (layers.every(l => l.isVisible())) {
+      if (layers.every((l) => l.isVisible())) {
         visibleLevel = 2;
-      } else if (layers.some(l => l.isVisible())) {
+      } else if (layers.some((l) => l.isVisible())) {
         visibleLevel = 1;
       }
       varTemplate.visible = visibleLevel;

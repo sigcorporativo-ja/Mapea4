@@ -138,8 +138,8 @@ export default class PrinterControl extends M.impl.Control {
       const regExpImgDefault = new RegExp(`.*${M.Layer.LEGEND_DEFAULT}$`);
       const regExpImgError = new RegExp(`.*${M.Layer.LEGEND_ERROR}$`);
       const legendURL = layer.getLegendURL();
-      if (!M.utils.isNullOrEmpty(legendURL) && !regExpImgDefault.test(legendURL) &&
-        !regExpImgError.test(legendURL)) {
+      if (!M.utils.isNullOrEmpty(legendURL) && !regExpImgDefault.test(legendURL)
+        && !regExpImgError.test(legendURL)) {
         encodedLegend.classes[0] = {
           name: layer.name,
           icons: [layer.getLegendURL()],
@@ -231,9 +231,9 @@ export default class PrinterControl extends M.impl.Control {
             styleText = {
               type: 'text',
               label: M.utils.isNullOrEmpty(text.getText()) ? feature.get('name') : text.getText(),
-              fontColor: M.utils.isNullOrEmpty(text.getFill()) ? '' : M.utils.rgbToHex(M.utils.isArray(text.getFill().getColor()) ?
-                `rgba(${text.getFill().getColor().toString()})` :
-                text.getFill().getColor()),
+              fontColor: M.utils.isNullOrEmpty(text.getFill()) ? '' : M.utils.rgbToHex(M.utils.isArray(text.getFill().getColor())
+                ? `rgba(${text.getFill().getColor().toString()})`
+                : text.getFill().getColor()),
               fontSize: '11px',
               fontFamily: 'Helvetica, sans-serif',
               fontWeight: 'bold',
@@ -241,9 +241,9 @@ export default class PrinterControl extends M.impl.Control {
               labelAlign: text.getTextAlign(),
               labelXOffset: text.getOffsetX(),
               labelYOffset: text.getOffsetY(),
-              labelOutlineColor: M.utils.isNullOrEmpty(text.getStroke()) ? '' : M.utils.rgbToHex(M.utils.isArray(text.getStroke().getColor()) ?
-                `rgba(${text.getStroke().getColor().toString()})` :
-                text.getStroke().getColor()),
+              labelOutlineColor: M.utils.isNullOrEmpty(text.getStroke()) ? '' : M.utils.rgbToHex(M.utils.isArray(text.getStroke().getColor())
+                ? `rgba(${text.getStroke().getColor().toString()})`
+                : text.getStroke().getColor()),
               labelOutlineWidth: M.utils.isNullOrEmpty(text.getStroke()) ? '' : text.getStroke().getWidth(),
             };
             // Se deja la cifra hexadecimal en 6 dígitos para la integración con Mapea 4
@@ -252,8 +252,8 @@ export default class PrinterControl extends M.impl.Control {
             styleText = this.addAdditionalLabelOptions(styleText);
           }
           nameFeature = `draw${index}`;
-          if ((!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox)) ||
-            !M.utils.isNullOrEmpty(text)) {
+          if ((!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox))
+            || !M.utils.isNullOrEmpty(text)) {
             const styleStr = JSON.stringify(styleGeom);
             const styleTextStr = JSON.stringify(styleText);
             let styleName = stylesNames[styleStr];
@@ -261,8 +261,8 @@ export default class PrinterControl extends M.impl.Control {
             if (M.utils.isUndefined(styleName) || M.utils.isUndefined(styleNameText)) {
               const symbolizers = [];
               let flag = 0;
-              if (!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox) &&
-                M.utils.isUndefined(styleName)) {
+              if (!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox)
+                && M.utils.isUndefined(styleName)) {
                 styleName = indexGeom;
                 stylesNames[styleStr] = styleName;
                 flag = 1;
@@ -423,8 +423,8 @@ export default class PrinterControl extends M.impl.Control {
     let continuePrint = true;
     if (layer.getStyle() instanceof M.style.Chart) {
       continuePrint = false;
-    } else if (layer.getStyle() instanceof M.style.Cluster &&
-      layer.getStyle().getOldStyle() instanceof M.style.Chart) {
+    } else if (layer.getStyle() instanceof M.style.Cluster
+      && layer.getStyle().getOldStyle() instanceof M.style.Chart) {
       continuePrint = false;
     }
     if (continuePrint) {
@@ -474,13 +474,13 @@ export default class PrinterControl extends M.impl.Control {
         if (featureStyle instanceof Array) {
           // JGL20180118: prioridad al estilo que tiene SRC
           if (featureStyle.length > 1) {
-            styleIcon = !M.utils.isNullOrEmpty(featureStyle[1]) &&
-              !M.utils.isNullOrEmpty(featureStyle[1].getImage()) &&
-              featureStyle[1].getImage().getGlyph ?
-              featureStyle[1].getImage() : null;
-            featureStyle = (!M.utils.isNullOrEmpty(featureStyle[1].getImage()) &&
-                featureStyle[1].getImage().getSrc) ?
-              featureStyle[1] : featureStyle[0];
+            styleIcon = !M.utils.isNullOrEmpty(featureStyle[1])
+              && !M.utils.isNullOrEmpty(featureStyle[1].getImage())
+              && featureStyle[1].getImage().getGlyph
+              ? featureStyle[1].getImage() : null;
+            featureStyle = (!M.utils.isNullOrEmpty(featureStyle[1].getImage())
+                && featureStyle[1].getImage().getSrc)
+              ? featureStyle[1] : featureStyle[0];
           } else {
             featureStyle = featureStyle[0];
           }
@@ -504,10 +504,10 @@ export default class PrinterControl extends M.impl.Control {
           } else {
             parseType = feature.getGeometry().getType().toLowerCase();
           }
-          const stroke = M.utils.isNullOrEmpty(image) ?
-            featureStyle.getStroke() : (image.getStroke && image.getStroke());
-          const fill = M.utils.isNullOrEmpty(image) ?
-            featureStyle.getFill() : (image.getFill && image.getFill());
+          const stroke = M.utils.isNullOrEmpty(image)
+            ? featureStyle.getStroke() : (image.getStroke && image.getStroke());
+          const fill = M.utils.isNullOrEmpty(image)
+            ? featureStyle.getFill() : (image.getFill && image.getFill());
 
           let styleText;
           const pointRadius = M.utils.isNullOrEmpty(image) ? '' : (image.getRadius && image.getRadius());
@@ -515,11 +515,11 @@ export default class PrinterControl extends M.impl.Control {
           const styleGeom = {
             type: parseType,
             fillColor: M.utils.isNullOrEmpty(fill) ? '#000000' : M.utils.rgbaToHex(fill.getColor()).slice(0, 7),
-            fillOpacity: M.utils.isNullOrEmpty(fill) ?
-              0 : M.utils.getOpacityFromRgba(fill.getColor()),
+            fillOpacity: M.utils.isNullOrEmpty(fill)
+              ? 0 : M.utils.getOpacityFromRgba(fill.getColor()),
             strokeColor: M.utils.isNullOrEmpty(stroke) ? '#000000' : M.utils.rgbaToHex(stroke.getColor()),
-            strokeOpacity: M.utils.isNullOrEmpty(stroke) ?
-              0 : M.utils.getOpacityFromRgba(stroke.getColor()),
+            strokeOpacity: M.utils.isNullOrEmpty(stroke)
+              ? 0 : M.utils.getOpacityFromRgba(stroke.getColor()),
             strokeWidth: M.utils.isNullOrEmpty(stroke) ? 0 : (stroke.getWidth && stroke.getWidth()),
             pointRadius: M.utils.isNullOrEmpty(image) ? '' : (image.getRadius && image.getRadius()),
             externalGraphic: M.utils.isNullOrEmpty(image) ? '' : (image.getSrc && image.getSrc()),
@@ -532,8 +532,8 @@ export default class PrinterControl extends M.impl.Control {
             styleGeom.strokeOpacity = 0;
             styleGeom.pointRadius = 0;
           }
-          const imageIcon = !M.utils.isNullOrEmpty(styleIcon) &&
-            styleIcon.getImage ? styleIcon.getImage() : null;
+          const imageIcon = !M.utils.isNullOrEmpty(styleIcon)
+            && styleIcon.getImage ? styleIcon.getImage() : null;
           if (!M.utils.isNullOrEmpty(imageIcon)) {
             if (styleIcon.getRadius && styleIcon.getRadius()) {
               styleGeom.pointRadius = styleIcon.getRadius && styleIcon.getRadius();
@@ -543,7 +543,6 @@ export default class PrinterControl extends M.impl.Control {
             }
             styleGeom.externalGraphic = imageIcon.toDataURL();
           }
-
 
           if (!M.utils.isNullOrEmpty(text)) {
             let tAlign = text.getTextAlign();
@@ -609,8 +608,8 @@ export default class PrinterControl extends M.impl.Control {
           }
           nameFeature = `draw${index}`;
 
-          if ((!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox)) ||
-            !M.utils.isNullOrEmpty(text)) {
+          if ((!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox))
+            || !M.utils.isNullOrEmpty(text)) {
             const styleStr = JSON.stringify(styleGeom);
             const styleTextStr = JSON.stringify(styleText);
             let styleName = stylesNames[styleStr];
@@ -618,8 +617,8 @@ export default class PrinterControl extends M.impl.Control {
             if (M.utils.isUndefined(styleName) || M.utils.isUndefined(styleNameText)) {
               const symbolizers = [];
               let flag = 0;
-              if (!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox) &&
-                M.utils.isUndefined(styleName)) {
+              if (!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox)
+                && M.utils.isUndefined(styleName)) {
                 styleName = indexGeom;
                 stylesNames[styleStr] = styleName;
                 flag = 1;
@@ -665,7 +664,7 @@ export default class PrinterControl extends M.impl.Control {
             }
 
             let geoJSONFeature;
-            if (projection.code !== 'EPSG:3857' && this.facadeMap_.getLayers().some(layerParam => (layerParam.type === M.layer.type.OSM || layerParam.type === M.layer.type.Mapbox))) {
+            if (projection.code !== 'EPSG:3857' && this.facadeMap_.getLayers().some((layerParam) => (layerParam.type === M.layer.type.OSM || layerParam.type === M.layer.type.Mapbox))) {
               geoJSONFeature = geoJSONFormat.writeFeatureObject(feature, {
                 featureProjection: projection.code,
                 dataProjection: 'EPSG:3857',
@@ -713,8 +712,8 @@ export default class PrinterControl extends M.impl.Control {
     let continuePrint = true;
     if (layer.getStyle() instanceof M.style.Chart) {
       continuePrint = false;
-    } else if (layer.getStyle() instanceof M.style.Cluster &&
-      layer.getStyle().getOldStyle() instanceof M.style.Chart) {
+    } else if (layer.getStyle() instanceof M.style.Cluster
+      && layer.getStyle().getOldStyle() instanceof M.style.Chart) {
       continuePrint = false;
     }
     if (continuePrint) {
@@ -745,19 +744,22 @@ export default class PrinterControl extends M.impl.Control {
           featureStyle = layerStyle;
         }
         if (featureStyle instanceof Function) {
-          featureStyle =
-            featureStyle.call(featureStyle, feature.getImpl().getOLFeature(), resolution);
+          featureStyle = featureStyle.call(
+            featureStyle,
+            feature.getImpl().getOLFeature(),
+            resolution,
+          );
         }
         let styleIcon = null;
         if (featureStyle instanceof Array) {
           if (featureStyle.length > 1) {
-            styleIcon = !M.utils.isNullOrEmpty(featureStyle[1]) &&
-              !M.utils.isNullOrEmpty(featureStyle[1].getImage()) &&
-              featureStyle[1].getImage().getGlyph ?
-              featureStyle[1].getImage() : null;
-            featureStyle = (!M.utils.isNullOrEmpty(featureStyle[1].getImage()) &&
-                featureStyle[1].getImage().getSrc) ?
-              featureStyle[1] : featureStyle[0];
+            styleIcon = !M.utils.isNullOrEmpty(featureStyle[1])
+              && !M.utils.isNullOrEmpty(featureStyle[1].getImage())
+              && featureStyle[1].getImage().getGlyph
+              ? featureStyle[1].getImage() : null;
+            featureStyle = (!M.utils.isNullOrEmpty(featureStyle[1].getImage())
+                && featureStyle[1].getImage().getSrc)
+              ? featureStyle[1] : featureStyle[0];
           } else {
             featureStyle = featureStyle[0];
           }
@@ -780,20 +782,20 @@ export default class PrinterControl extends M.impl.Control {
           } else {
             parseType = geometry.getType().toLowerCase();
           }
-          const stroke = M.utils.isNullOrEmpty(image) ?
-            featureStyle.getStroke() : (image.getStroke && image.getStroke());
-          const fill = M.utils.isNullOrEmpty(image) ?
-            featureStyle.getFill() : (image.getFill && image.getFill());
+          const stroke = M.utils.isNullOrEmpty(image)
+            ? featureStyle.getStroke() : (image.getStroke && image.getStroke());
+          const fill = M.utils.isNullOrEmpty(image)
+            ? featureStyle.getFill() : (image.getFill && image.getFill());
           let styleText;
           const pointRadius = M.utils.isNullOrEmpty(image) ? '' : (image.getRadius && image.getRadius());
           const styleGeom = {
             type: parseType,
             fillColor: M.utils.isNullOrEmpty(fill) ? '#000000' : M.utils.rgbaToHex(fill.getColor()).slice(0, 7),
-            fillOpacity: M.utils.isNullOrEmpty(fill) ?
-              0 : M.utils.getOpacityFromRgba(fill.getColor()),
+            fillOpacity: M.utils.isNullOrEmpty(fill)
+              ? 0 : M.utils.getOpacityFromRgba(fill.getColor()),
             strokeColor: M.utils.isNullOrEmpty(stroke) ? '#000000' : M.utils.rgbaToHex(stroke.getColor()),
-            strokeOpacity: M.utils.isNullOrEmpty(stroke) ?
-              0 : M.utils.getOpacityFromRgba(stroke.getColor()),
+            strokeOpacity: M.utils.isNullOrEmpty(stroke)
+              ? 0 : M.utils.getOpacityFromRgba(stroke.getColor()),
             strokeWidth: M.utils.isNullOrEmpty(stroke) ? 0 : (stroke.getWidth && stroke.getWidth()),
             pointRadius: M.utils.isNullOrEmpty(image) ? '' : (image.getRadius && image.getRadius()),
             externalGraphic: M.utils.isNullOrEmpty(image) ? '' : (image.getSrc && image.getSrc()),
@@ -805,8 +807,8 @@ export default class PrinterControl extends M.impl.Control {
             styleGeom.strokeOpacity = 0;
             styleGeom.pointRadius = 0;
           }
-          const imageIcon = !M.utils.isNullOrEmpty(styleIcon) &&
-            styleIcon.getImage ? styleIcon.getImage() : null;
+          const imageIcon = !M.utils.isNullOrEmpty(styleIcon)
+            && styleIcon.getImage ? styleIcon.getImage() : null;
           if (!M.utils.isNullOrEmpty(imageIcon)) {
             if (styleIcon.getRadius && styleIcon.getRadius()) {
               styleGeom.pointRadius = styleIcon.getRadius && styleIcon.getRadius();
@@ -880,9 +882,9 @@ export default class PrinterControl extends M.impl.Control {
           }
           nameFeature = `draw${index}`;
           const extent = geometry.getExtent();
-          if ((!M.utils.isNullOrEmpty(geometry) &&
-              ol.extent.intersects(bbox, extent)) ||
-            !M.utils.isNullOrEmpty(text)) {
+          if ((!M.utils.isNullOrEmpty(geometry)
+              && ol.extent.intersects(bbox, extent))
+            || !M.utils.isNullOrEmpty(text)) {
             const styleStr = JSON.stringify(styleGeom);
             const styleTextStr = JSON.stringify(styleText);
             let styleName = stylesNames[styleStr];
@@ -890,8 +892,8 @@ export default class PrinterControl extends M.impl.Control {
             if (M.utils.isUndefined(styleName) || M.utils.isUndefined(styleNameText)) {
               const symbolizers = [];
               let flag = 0;
-              if (!M.utils.isNullOrEmpty(geometry) && ol.extent.intersects(bbox, extent) &&
-                M.utils.isUndefined(styleName)) {
+              if (!M.utils.isNullOrEmpty(geometry) && ol.extent.intersects(bbox, extent)
+                && M.utils.isUndefined(styleName)) {
                 styleName = indexGeom;
                 stylesNames[styleStr] = styleName;
                 flag = 1;
@@ -935,8 +937,13 @@ export default class PrinterControl extends M.impl.Control {
               }
             }
             let coordinates = geometry.getFlatCoordinates();
-            coordinates =
-              this.inflCoordArray(parseType, coordinates.slice(), 0, geometry.getEnds(), 2);
+            coordinates = this.inflCoordArray(
+              parseType,
+              coordinates.slice(),
+              0,
+              geometry.getEnds(),
+              2,
+            );
             if (coordinates.length > 0) {
               const geoJSONFeature = {
                 id: feature.getId(),
@@ -1020,8 +1027,7 @@ export default class PrinterControl extends M.impl.Control {
   }
 
   inflateMultiCoordinatesArray(flatCoordinates, offset, endss, stride, optCoordinatesss) {
-    const coordinatesss =
-      optCoordinatesss !== undefined ? optCoordinatesss : [];
+    const coordinatesss = optCoordinatesss !== undefined ? optCoordinatesss : [];
     let i = 0;
     // eslint-disable-next-line no-plusplus
     for (let j = 0, jj = endss.length; j < jj; ++j) {
@@ -1057,7 +1063,6 @@ export default class PrinterControl extends M.impl.Control {
     const layerSource = olLayer.getSource();
     const tileGrid = layerSource.getTileGrid();
     const style = !M.utils.isNullOrEmpty(layerSource.getStyle) ? layerSource.getStyle() : 'default';
-
 
     const layerUrl = layer.url;
     const layerName = layer.name;
@@ -1169,7 +1174,6 @@ export default class PrinterControl extends M.impl.Control {
 
     const tileSize = tileGrid.getTileSize();
     const resolutions = tileGrid.getResolutions();
-
 
     const customParams = {};
     customParams[M.config.MAPBOX_TOKEN_NAME] = M.config.MAPBOX_TOKEN_VALUE;

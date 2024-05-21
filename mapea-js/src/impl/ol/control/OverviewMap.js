@@ -1,7 +1,9 @@
 /**
  * @module M/impl/control/OverviewMap
  */
-import { isNullOrEmpty, classToggle, replaceNode, extend } from 'M/util/Utils';
+import {
+  isNullOrEmpty, classToggle, replaceNode, extend,
+} from 'M/util/Utils';
 import OLControlOverviewMap from 'ol/control/OverviewMap';
 import { get as getProj } from 'ol/proj';
 import OLLayerTile from 'ol/layer/Tile';
@@ -215,7 +217,7 @@ class OverviewMap extends OLControlOverviewMap {
 
     map.getMapImpl().addControl(this);
     this.ovmap_.setView(newView);
-    olLayers.forEach(layer => this.ovmap_.addLayer(layer));
+    olLayers.forEach((layer) => this.ovmap_.addLayer(layer));
     this.wasOpen_ = true;
   }
 

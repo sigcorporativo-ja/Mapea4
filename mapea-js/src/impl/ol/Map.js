@@ -217,6 +217,7 @@ class Map extends MObject {
       return interaction instanceof DragPan;
     });
   }
+
   /**
    * This function gets the layers added to the map
    *
@@ -235,7 +236,7 @@ class Map extends MObject {
     const mvtLayers = this.getMVT(filters);
     const unknowLayers = this.getUnknowLayers_(filters);
 
-    const externalLayers = GET_EXTERNAL_LAYER_FUNCTIONS.map(funct => this[funct](filters));
+    const externalLayers = GET_EXTERNAL_LAYER_FUNCTIONS.map((funct) => this[funct](filters));
 
     return wmcLayers
       .concat(kmlLayers).concat(wmsLayers).concat(wfsLayers)
@@ -284,14 +285,14 @@ class Map extends MObject {
     });
 
     this.addUnknowLayers_(unknowLayers);
-    this.facadeMap_.addWMC(knowLayers.filter(layer => (layer.type === LayerType.WMC)));
-    this.facadeMap_.addWMS(knowLayers.filter(layer => (layer.type === LayerType.WMS)));
-    this.facadeMap_.addWMTS(knowLayers.filter(layer => (layer.type === LayerType.WMTS)));
-    this.facadeMap_.addKML(knowLayers.filter(layer => (layer.type === LayerType.KML)));
-    this.facadeMap_.addWFS(knowLayers.filter(layer => (layer.type === LayerType.WFS)));
-    this.facadeMap_.addMVT(knowLayers.filter(layer => (layer.type === LayerType.MVT)));
+    this.facadeMap_.addWMC(knowLayers.filter((layer) => (layer.type === LayerType.WMC)));
+    this.facadeMap_.addWMS(knowLayers.filter((layer) => (layer.type === LayerType.WMS)));
+    this.facadeMap_.addWMTS(knowLayers.filter((layer) => (layer.type === LayerType.WMTS)));
+    this.facadeMap_.addKML(knowLayers.filter((layer) => (layer.type === LayerType.KML)));
+    this.facadeMap_.addWFS(knowLayers.filter((layer) => (layer.type === LayerType.WFS)));
+    this.facadeMap_.addMVT(knowLayers.filter((layer) => (layer.type === LayerType.MVT)));
 
-    ADD_EXTERNAL_LAYER_FUNCTIONS.forEach(funct => funct(unknowLayers));
+    ADD_EXTERNAL_LAYER_FUNCTIONS.forEach((funct) => funct(unknowLayers));
 
     return this;
   }
@@ -324,7 +325,7 @@ class Map extends MObject {
 
     if (unknowLayers.length > 0) {
       this.removeUnknowLayers_(unknowLayers);
-      REMOVE_EXTERNAL_LAYER_FUNCTIONS.forEach(funct => funct(unknowLayers));
+      REMOVE_EXTERNAL_LAYER_FUNCTIONS.forEach((funct) => funct(unknowLayers));
     }
 
     layers.forEach((layer) => {
@@ -372,8 +373,8 @@ class Map extends MObject {
       groupedLayers = layerGroups[0].getAllLayers();
     } else if (layerGroups.length > 1) {
       groupedLayers = layerGroups.reduce((a, v) => {
-        return Array.isArray(a) ? a.concat(v.getAllLayers()) :
-          a.getAllLayers().concat(v.getAllLayers());
+        return Array.isArray(a) ? a.concat(v.getAllLayers())
+          : a.getAllLayers().concat(v.getAllLayers());
       });
     }
 
@@ -516,12 +517,12 @@ class Map extends MObject {
       // TODO removing the WMC layer with ol3
       if (wmcLayer.selected === true && wmcLayer.isLoaded() === false) {
         wmcLayer.on(EventType.LOAD, () => {
-          this.layers_ = this.layers_.filter(layer => !layer.equals(wmcLayer));
+          this.layers_ = this.layers_.filter((layer) => !layer.equals(wmcLayer));
           this.facadeMap_.removeWMS(wmcLayer.layers);
           this.facadeMap_.refreshWMCSelectorControl();
         });
       } else {
-        this.layers_ = this.layers_.filter(layer => !layer.equals(wmcLayer));
+        this.layers_ = this.layers_.filter((layer) => !layer.equals(wmcLayer));
         this.facadeMap_.removeWMS(wmcLayer.layers);
       }
       this.facadeMap_.refreshWMCSelectorControl();
@@ -638,7 +639,7 @@ class Map extends MObject {
   removeKML(layers) {
     const kmlMapLayers = this.getKML(layers);
     kmlMapLayers.forEach((kmlLayer) => {
-      this.layers_ = this.layers_.filter(layer => !kmlLayer.equals(layer));
+      this.layers_ = this.layers_.filter((layer) => !kmlLayer.equals(layer));
       kmlLayer.getImpl().destroy();
       kmlLayer.fire(EventType.REMOVED_FROM_MAP, [kmlLayer]);
     }, this);
@@ -765,8 +766,8 @@ class Map extends MObject {
     });
     // calculate resolutions if layers were added and there is not any base layer
     // or if some base layer was added
-    const calculateResolutions = (addedLayers.length > 0 && !existsBaseLayer) ||
-      addedLayers.some(l => l.transparent !== true && l.isVisible());
+    const calculateResolutions = (addedLayers.length > 0 && !existsBaseLayer)
+      || addedLayers.some((l) => l.transparent !== true && l.isVisible());
     if (calculateResolutions) {
       this.updateResolutionsFromBaseLayer();
     }
@@ -784,7 +785,7 @@ class Map extends MObject {
   removeWMS(layers) {
     const wmsMapLayers = this.getWMS(layers);
     wmsMapLayers.forEach((wmsLayer) => {
-      this.layers_ = this.layers_.filter(layer => !wmsLayer.equals(layer));
+      this.layers_ = this.layers_.filter((layer) => !wmsLayer.equals(layer));
       wmsLayer.getImpl().destroy();
       wmsLayer.fire(EventType.REMOVED_FROM_MAP, [wmsLayer]);
       if (wmsLayer.transparent !== true) {
@@ -986,7 +987,7 @@ class Map extends MObject {
   removeWFS(layers) {
     const wfsMapLayers = this.getWFS(layers);
     wfsMapLayers.forEach((wfsLayer) => {
-      this.layers_ = this.layers_.filter(layer => !layer.equals(wfsLayer));
+      this.layers_ = this.layers_.filter((layer) => !layer.equals(wfsLayer));
       wfsLayer.getImpl().destroy();
       wfsLayer.fire(EventType.REMOVED_FROM_MAP, [wfsLayer]);
     });
@@ -1118,7 +1119,7 @@ class Map extends MObject {
   removeWMTS(layers) {
     const wmtsMapLayers = this.getWMTS(layers);
     wmtsMapLayers.forEach((wmtsLayer) => {
-      this.layers_ = this.layers_.filter(layer => !layer.equals(wmtsLayer));
+      this.layers_ = this.layers_.filter((layer) => !layer.equals(wmtsLayer));
       wmtsLayer.getImpl().destroy();
       wmtsLayer.fire(EventType.REMOVED_FROM_MAP, [wmtsLayer]);
       if (wmtsLayer.transparent !== true) {
@@ -1248,7 +1249,7 @@ class Map extends MObject {
     // removes unknow layers
     layers.forEach((layer) => {
       if (includes(this.layers_, layer)) {
-        this.layers_ = this.layers_.filter(layer2 => !layer2.equals(layer));
+        this.layers_ = this.layers_.filter((layer2) => !layer2.equals(layer));
         layer.getImpl().destroy();
         layer.fire(EventType.REMOVED_FROM_MAP, [layer]);
         if (layer.transparent !== true) {
@@ -1321,7 +1322,7 @@ class Map extends MObject {
   removeMVT(layers) {
     const mvtLayers = this.getMVT(layers);
     mvtLayers.forEach((mvtLayer) => {
-      this.layers_ = this.layers_.filter(layer => !layer.equals(mvtLayer));
+      this.layers_ = this.layers_.filter((layer) => !layer.equals(mvtLayer));
       mvtLayer.getImpl().destroy();
       mvtLayer.fire(EventType.REMOVED_FROM_MAP, [mvtLayer]);
     });
@@ -1358,8 +1359,8 @@ class Map extends MObject {
               layer.setZIndex(zIndex);
             }
           }
-          const calculateResolutions = (addedLayers.length > 0 && !existsBaseLayer) ||
-            addedLayers.some(l => l.transparent !== true && l.isVisible());
+          const calculateResolutions = (addedLayers.length > 0 && !existsBaseLayer)
+            || addedLayers.some((l) => l.transparent !== true && l.isVisible());
           if (calculateResolutions) {
             this.updateResolutionsFromBaseLayer();
           }
@@ -1383,7 +1384,7 @@ class Map extends MObject {
     let filtersVar = filters;
     let foundControls = [];
 
-    let panelControls = this.facadeMap_.getPanels().map(p => p.getControls());
+    let panelControls = this.facadeMap_.getPanels().map((p) => p.getControls());
     if (panelControls.length > 0) {
       panelControls = panelControls.reduce((acc, controls) => acc.concat(controls));
     }
@@ -1417,7 +1418,7 @@ class Map extends MObject {
     }
     const nonRepeatFoundControls = [];
     foundControls.forEach((control) => {
-      const controlNames = nonRepeatFoundControls.map(c => c.name);
+      const controlNames = nonRepeatFoundControls.map((c) => c.name);
       if (!controlNames.includes(control.name)) {
         nonRepeatFoundControls.push(control);
       }
@@ -1763,7 +1764,7 @@ class Map extends MObject {
           bbox.x.max,
           bbox.y.max,
         ], size);
-        const restDiff = resolutions.map(r => Math.abs(r - oldResolution));
+        const restDiff = resolutions.map((r) => Math.abs(r - oldResolution));
         const newResolutionIdx = restDiff.indexOf(Math.min(...restDiff));
         newResolution = resolutions[newResolutionIdx];
       } else {
@@ -1986,17 +1987,16 @@ class Map extends MObject {
       return bl.isVisible();
     })[0];
 
-
     // gets min/max resolutions from base layer
     let maxResolution = null;
     let minResolution = null;
     if (!isNullOrEmpty(baseLayer)) {
-      minResolution = baseLayer.getImpl().getMinResolution !== undefined ?
-        baseLayer.getImpl().getMinResolution() :
-        null;
-      maxResolution = baseLayer.getImpl().getMaxResolution !== undefined ?
-        baseLayer.getImpl().getMaxResolution() :
-        null;
+      minResolution = baseLayer.getImpl().getMinResolution !== undefined
+        ? baseLayer.getImpl().getMinResolution()
+        : null;
+      maxResolution = baseLayer.getImpl().getMaxResolution !== undefined
+        ? baseLayer.getImpl().getMaxResolution()
+        : null;
       zoomLevels = baseLayer.getImpl().getNumZoomLevels();
     }
 
@@ -2095,15 +2095,16 @@ class Map extends MObject {
     let arrayLabels = label;
     if (!isNullOrEmpty(this.label)) {
       if (isNullOrEmpty(label)) {
-        this.label.forEach(lbl => this.removePopup(lbl.getPopup()));
+        this.label.forEach((lbl) => this.removePopup(lbl.getPopup()));
         this.label = [];
       } else {
         if (!isArray(label)) {
           arrayLabels = [label];
         }
         arrayLabels.forEach((elm) => {
-          const labelAux =
-            this.label.findIndex(lbl => lbl.text === elm.text && lbl.coord === elm.coord);
+          const labelAux = this.label.findIndex(
+            (lbl) => lbl.text === elm.text && lbl.coord === elm.coord,
+          );
           if (labelAux !== -1) {
             this.removePopup(this.label[labelAux].getPopup());
             this.label.splice(labelAux, 1);
@@ -2266,7 +2267,7 @@ class Map extends MObject {
     };
 
     const collection = types[type];
-    const notIncluded = collection.find(e => e === name);
+    const notIncluded = collection.find((e) => e === name);
     if (notIncluded) {
       collection.push(name);
     }
@@ -2280,7 +2281,7 @@ class Map extends MObject {
    * @api
    */
   static registerBaseLayerType(type) {
-    const notIncluded = !BASE_LAYER_TYPES.find(e => e === type);
+    const notIncluded = !BASE_LAYER_TYPES.find((e) => e === type);
     if (notIncluded) {
       BASE_LAYER_TYPES.push(type);
     }
@@ -2325,6 +2326,7 @@ class Map extends MObject {
     const canvas = this.map_.getViewport().querySelectorAll('.ol-layer canvas, canvas.ol-layer')[0];
     let img = null;
     if (!isUndefined(canvas)) {
+      // eslint-disable-next-line no-useless-catch
       try {
         img = canvas.toDataURL();
       } catch (e) {

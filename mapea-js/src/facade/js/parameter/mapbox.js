@@ -1,7 +1,9 @@
 /**
  * @module M/parameter/mapbox
  */
-import { isNullOrEmpty, isString, normalize, isArray, isObject } from '../util/Utils.js';
+import {
+  isNullOrEmpty, isString, normalize, isArray, isObject,
+} from '../util/Utils.js';
 import Exception from '../exception/exception.js';
 import * as LayerType from '../layer/Type.js';
 import { getValue } from '../i18n/language.js';
@@ -21,13 +23,13 @@ const getParameter = ({
 }) => (regexp, position) => {
   let value;
   const parserType = {
-    boolean: param => /^1|(true)$/i.test(param),
-    string: param => param,
-    int: param => Number.parseInt(param, 10),
-    float: param => Number.parseFloat(param, 10),
-    array_number: param => param.split(separator || '')
-      .map(elem => elem.trim())
-      .map(n => Number.parseFloat(n)),
+    boolean: (param) => /^1|(true)$/i.test(param),
+    string: (param) => param,
+    int: (param) => Number.parseInt(param, 10),
+    float: (param) => Number.parseFloat(param, 10),
+    array_number: (param) => param.split(separator || '')
+      .map((elem) => elem.trim())
+      .map((n) => Number.parseFloat(n)),
   };
 
   if (isString(parameter) && regexp.test(parameter)) {
@@ -51,7 +53,6 @@ const getParameter = ({
   return value;
 };
 
-
 /**
  * Parses the parameter in order to get the layer name
  * @private
@@ -68,7 +69,6 @@ const getAccessTokenMapbox = (parameter) => {
   }
   return accessToken;
 };
-
 
 /**
  * Parses the specified user layer Mapbox parameters to a object

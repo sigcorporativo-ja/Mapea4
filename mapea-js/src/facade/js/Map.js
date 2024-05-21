@@ -399,7 +399,7 @@ class Map extends Base {
    * @api
    */
   getRootLayers(layersParamVar) {
-    const layers = this.getLayers(layersParamVar).filter(l => isNullOrEmpty(l.getLayerGroup()));
+    const layers = this.getLayers(layersParamVar).filter((l) => isNullOrEmpty(l.getLayerGroup()));
 
     return layers;
   }
@@ -508,8 +508,7 @@ class Map extends Base {
         // KML and WFS layers handler its features
         if (layer instanceof Vector
           /* && !(layer instanceof KML) */
-          &&
-          !(layer instanceof WFS)) {
+          && !(layer instanceof WFS)) {
           this.featuresHandler_.addLayer(layer);
         }
 
@@ -624,7 +623,6 @@ class Map extends Base {
     return this;
   }
 
-
   /**
    * This function gets the WMC layers added to the map
    *
@@ -708,7 +706,7 @@ class Map extends Base {
       /* checks if it should create the WMC control
          to select WMC */
       const addedWmcLayers = this.getWMC();
-      const wmcSelected = addedWmcLayers.filter(wmc => wmc.selected === true)[0];
+      const wmcSelected = addedWmcLayers.filter((wmc) => wmc.selected === true)[0];
       if (wmcSelected == null) {
         addedWmcLayers[0].select();
       }
@@ -731,7 +729,7 @@ class Map extends Base {
       this.getWMC()[0].select();
     } else if (this.getWMC().length > 1) {
       this.addControls(new WMCSelector());
-      const wmcSelected = this.getWMC().filter(wmc => wmc.selected === true)[0];
+      const wmcSelected = this.getWMC().filter((wmc) => wmc.selected === true)[0];
       if (wmcSelected == null) {
         this.getWMC()[0].select();
       }
@@ -1381,7 +1379,7 @@ class Map extends Base {
       controlName = control.name;
     }
     const controls = this.getControls();
-    const controlFiltered = controls.find(ctrl => ctrl.name === controlName);
+    const controlFiltered = controls.find((ctrl) => ctrl.name === controlName);
     const hasControl = !isNullOrEmpty(controlFiltered);
 
     return hasControl;
@@ -1436,9 +1434,9 @@ class Map extends Base {
   getMaxExtent() {
     let maxExtent = this.userMaxExtent;
     if (isNullOrEmpty(maxExtent)) {
-      const selectedWmc = this.getWMC().find(wmc => wmc.selected);
+      const selectedWmc = this.getWMC().find((wmc) => wmc.selected);
       if (isNullOrEmpty(selectedWmc)) {
-        maxExtent = getEnvolvedExtent(this.getLayers().filter(layer => layer.name !== '__draw__').map(l => l.getMaxExtent()));
+        maxExtent = getEnvolvedExtent(this.getLayers().filter((layer) => layer.name !== '__draw__').map((l) => l.getMaxExtent()));
       } else {
         maxExtent = selectedWmc.getMaxExtent();
       }
@@ -1463,9 +1461,9 @@ class Map extends Base {
     return new Promise((resolve) => {
       let maxExtent = this.userMaxExtent;
       if (isNullOrEmpty(maxExtent)) {
-        const selectedWmc = this.getWMC().find(wmc => wmc.selected);
+        const selectedWmc = this.getWMC().find((wmc) => wmc.selected);
         if (isNullOrEmpty(selectedWmc)) {
-          const calculateExtents = this.getLayers().filter(layer => layer.name !== '__draw__' && layer.isVisible()).map(l => l.calculateMaxExtent());
+          const calculateExtents = this.getLayers().filter((layer) => layer.name !== '__draw__' && layer.isVisible()).map((l) => l.calculateMaxExtent());
           Promise.all(calculateExtents).then((extents) => {
             maxExtent = getEnvolvedExtent(extents);
             if (isNullOrEmpty(maxExtent)) {
@@ -1485,7 +1483,6 @@ class Map extends Base {
       }
     });
   }
-
 
   /**
    * This function sets the maximum extent for this
@@ -2017,7 +2014,7 @@ class Map extends Base {
       // removes controls from their panels
       plugins.forEach((plugin) => {
         plugin.destroy();
-        this._plugins = this._plugins.filter(plugin2 => plugin.name !== plugin2.name);
+        this._plugins = this._plugins.filter((plugin2) => plugin.name !== plugin2.name);
       });
     }
 
@@ -2036,19 +2033,20 @@ class Map extends Base {
   getEnvolvedExtent() {
     return new Promise((resolve) => {
       // 1 check the WMC extent
-      const wmcLayer = this.getWMC().find(wmc => wmc.selected);
+      const wmcLayer = this.getWMC().find((wmc) => wmc.selected);
       if (!isNullOrEmpty(wmcLayer)) {
         wmcLayer.getMaxExtent(resolve);
       } else {
-        const visibleBaseLayer = this.getBaseLayers().find(layer => layer.isVisible());
+        const visibleBaseLayer = this.getBaseLayers().find((layer) => layer.isVisible());
         if (!isNullOrEmpty(visibleBaseLayer)) {
           visibleBaseLayer.getMaxExtent(resolve);
         } else {
-          const layers = this.getLayers().filter(layer => layer.name !== '__draw__');
-          Promise.all(layers.map(layer => layer.calculateMaxExtent()))
+          const layers = this.getLayers().filter((layer) => layer.name !== '__draw__');
+          Promise.all(layers.map((layer) => layer.calculateMaxExtent()))
             .then((extents) => {
-              const extentsToCalculate =
-                isNullOrEmpty(extents) ? [this.getProjection().getExtent()] : extents;
+              const extentsToCalculate = isNullOrEmpty(extents)
+                ? [this.getProjection().getExtent()]
+                : extents;
               const envolvedMaxExtent = getEnvolvedExtent(extentsToCalculate);
               resolve(envolvedMaxExtent);
             });
@@ -2194,9 +2192,9 @@ class Map extends Base {
     }
 
     arrayLabel.forEach((element, index) => {
-      const panMapIfOutOfView = element.panMapIfOutOfView === undefined ?
-        true :
-        labelParam.panMapIfOutOfView;
+      const panMapIfOutOfView = element.panMapIfOutOfView === undefined
+        ? true
+        : labelParam.panMapIfOutOfView;
 
       // object
       if (isObject(element)) {
@@ -2341,7 +2339,7 @@ class Map extends Base {
         panels = [panels];
       }
       panels.forEach((panel) => {
-        const isIncluded = this._panels.some(panel2 => panel2.equals(panel));
+        const isIncluded = this._panels.some((panel2) => panel2.equals(panel));
         if ((panel instanceof Panel) && !isIncluded) {
           this._panels.push(panel);
           const queryArea = 'div.m-area'.concat(panel.position);
@@ -2365,7 +2363,7 @@ class Map extends Base {
     }
     if (panel instanceof Panel) {
       panel.destroy();
-      this._panels = this._panels.filter(panel2 => !panel2.equals(panel));
+      this._panels = this._panels.filter((panel2) => !panel2.equals(panel));
     }
 
     return this;
@@ -2390,7 +2388,7 @@ class Map extends Base {
         names = [names];
       }
       names.forEach((name) => {
-        const filteredPanels = this._panels.filter(panel => panel.name === name);
+        const filteredPanels = this._panels.filter((panel) => panel.name === name);
         filteredPanels.forEach((panel) => {
           if (!isNullOrEmpty(panel)) {
             panels.push(panel);
@@ -2529,7 +2527,7 @@ class Map extends Base {
       this.popup_ = [];
     } else if (isArray(popup)) {
       popup.forEach((elm, index) => {
-        const findPopup = element => element.getId() === elm.getId();
+        const findPopup = (element) => element.getId() === elm.getId();
         const find = this.popup_.findIndex(findPopup);
         this.getImpl().removePopup(this.popup_[find]);
         this.popup_[find].destroy();
@@ -2562,7 +2560,6 @@ class Map extends Base {
 
     let arrayPopup = popup;
     let arrayCoordinate = coordinate;
-
 
     if (!isArray(popup)) {
       arrayPopup = [popup];
@@ -2637,7 +2634,7 @@ class Map extends Base {
     if (!isUndefined(this.getImpl().refresh) && isFunction(this.getImpl().refresh)) {
       this.getImpl().refresh();
     }
-    this.getLayers().forEach(layer => layer.refresh());
+    this.getLayers().forEach((layer) => layer.refresh());
     return this;
   }
 
@@ -2813,7 +2810,7 @@ class Map extends Base {
    * @api
    */
   getOverlayLayers() {
-    const layers = this.getLayers().filter(layer => layer.name !== '__draw__' && layer.transparent === true);
+    const layers = this.getLayers().filter((layer) => layer.name !== '__draw__' && layer.transparent === true);
     return layers;
   }
 

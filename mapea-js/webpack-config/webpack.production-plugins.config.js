@@ -71,7 +71,7 @@ module.exports = {
     new ESLintPlugin({
       extensions: [`js`, `jsx`],
       // files: 'src/**/*',
-      exclude: ['src/**/*', '**/node_modules/**', '/lib/', '/test/', '/dist/'],
+      exclude: ['**/src/index.js', '**/node_modules/**', '/lib/', '/test/', '/dist/'],
     }),
   ],
 };

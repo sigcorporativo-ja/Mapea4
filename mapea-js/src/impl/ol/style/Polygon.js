@@ -58,7 +58,8 @@ class Polygon extends Simple {
           lineDash: Simple.getValue(options.stroke.linedash, featureVariable, this.layer_),
           lineDashOffset: Simple.getValue(
             options.stroke.linedashoffset,
-            featureVariable, this.layer_,
+            featureVariable,
+            this.layer_,
           ),
           lineCap: Simple.getValue(options.stroke.linecap, featureVariable, this.layer_),
           lineJoin: Simple.getValue(options.stroke.linejoin, featureVariable, this.layer_),
@@ -69,16 +70,17 @@ class Polygon extends Simple {
         const textLabel = Simple.getValue(options.label.text, featureVariable, this.layer_);
         const align = Simple.getValue(options.label.align, featureVariable, this.layer_);
         const baseline = Simple.getValue(options.label.baseline, featureVariable, this.layer_);
-        const overflow =
-          isNullOrEmpty(options.label.overflow, this.layer_) ? true : options.label.overflow;
+        const overflow = isNullOrEmpty(options.label.overflow, this.layer_)
+          ? true
+          : options.label.overflow;
         style.setText(new OLStyleText({
           font: Simple.getValue(options.label.font, featureVariable, this.layer_),
           rotateWithView: Simple.getValue(options.label.rotate, featureVariable, this.layer_),
           scale: Simple.getValue(options.label.scale, featureVariable, this.layer_),
-          offsetX: Simple.getValue(options.label.offset ?
-            options.label.offset[0] : undefined, featureVariable, this.layer_),
-          offsetY: Simple.getValue(options.label.ofsset ?
-            options.label.offset[1] : undefined, featureVariable, this.layer_),
+          offsetX: Simple.getValue(options.label.offset
+            ? options.label.offset[0] : undefined, featureVariable, this.layer_),
+          offsetY: Simple.getValue(options.label.ofsset
+            ? options.label.offset[1] : undefined, featureVariable, this.layer_),
           fill: new OLStyleFill({
             color: Simple.getValue(options.label.color || '#000000', featureVariable, this.layer_),
           }),
@@ -97,11 +99,13 @@ class Polygon extends Simple {
             lineDash: Simple.getValue(options.label.stroke.linedash, featureVariable, this.layer_),
             lineDashOffset: Simple.getValue(
               options.label.stroke.linedashoffset,
-              featureVariable, this.layer_,
+              featureVariable,
+              this.layer_,
             ),
             miterLimit: Simple.getValue(
               options.label.stroke.miterlimit,
-              featureVariable, this.layer_,
+              featureVariable,
+              this.layer_,
             ),
           }));
         }
@@ -121,8 +125,11 @@ class Polygon extends Simple {
         if (!isNullOrEmpty(options.fill.pattern)) {
           let color = 'rgba(0,0,0,1)';
           if (!isNullOrEmpty(options.fill.pattern.color)) {
-            let opacity =
-              Simple.getValue(options.fill.pattern.opacity, featureVariable, this.layer_) || 1;
+            let opacity = Simple.getValue(
+              options.fill.pattern.opacity,
+              featureVariable,
+              this.layer_,
+            ) || 1;
             if (!opacity && opacity !== 0) {
               opacity = 1;
             }
@@ -135,8 +142,8 @@ class Polygon extends Simple {
 
             size: Simple.getValue(options.fill.pattern.size, featureVariable, this.layer_),
             spacing: Simple.getValue(options.fill.pattern.spacing, featureVariable, this.layer_),
-            image: (Simple.getValue(options.fill.pattern.name, featureVariable, this.layer_) === 'IMAGE') ?
-              new OLStyleIcon({
+            image: (Simple.getValue(options.fill.pattern.name, featureVariable, this.layer_) === 'IMAGE')
+              ? new OLStyleIcon({
                 src: Simple.getValue(options.fill.pattern.src, featureVariable, this.layer_),
               }) : undefined,
             angle: Simple.getValue(options.fill.pattern.rotation, featureVariable, this.layer_),

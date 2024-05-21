@@ -30,8 +30,8 @@ export const geojsonTo4326 = (featuresAsJSON, codeProjection) => {
   let jsonFeature = {};
   featuresAsJSON.forEach((featureAsJSON) => {
     const coordinates = [];
-    if (Array.isArray(featureAsJSON.geometry.coordinates[0]) &&
-      featuresAsJSON.length > 1) { // Type Polygon
+    if (Array.isArray(featureAsJSON.geometry.coordinates[0])
+      && featuresAsJSON.length > 1) { // Type Polygon
       featureAsJSON.geometry.coordinates.forEach((aCoordinates) => {
         if (!Number.isFinite(aCoordinates[0]) && Array.isArray(aCoordinates)) {
           coordinates.push(aCoordinates.map((cord) => {
@@ -79,7 +79,7 @@ export const geojsonTo4326 = (featuresAsJSON, codeProjection) => {
     } else if (featuresAsJSON.length === 1) { // the layer has only one feature line
       if (featureAsJSON.geometry.coordinates[0].length > 2) {
         const coordinatesPolygon = featureAsJSON.geometry.coordinates[0]
-          .map(coord => transformFunction(coord));
+          .map((coord) => transformFunction(coord));
         jsonFeature = {
           ...featureAsJSON,
           geometry: {
@@ -206,7 +206,6 @@ class Utils {
     return img;
   }
 
-
   /**
    * Get the height of an extent.
    * @public
@@ -260,8 +259,8 @@ class Utils {
    * @api stable
    */
   static getFeaturesExtent(features, projectionCode) {
-    const olFeatures = features.map(f => (f instanceof Feature ? f.getImpl().getOLFeature() : f));
-    let extents = olFeatures.map(feature => feature.getGeometry().getExtent().slice(0));
+    const olFeatures = features.map((f) => (f instanceof Feature ? f.getImpl().getOLFeature() : f));
+    let extents = olFeatures.map((feature) => feature.getGeometry().getExtent().slice(0));
     if (extents.length === 1) {
       const geometry = olFeatures[0].getGeometry();
       if (geometry.getType() === 'Point') {
@@ -280,7 +279,6 @@ class Utils {
     }
     return extents.length === 0 ? null : extents.reduce((ext1, ext2) => extend(ext1, ext2));
   }
-
 
   /**
    * Get the coordinate of centroid
@@ -432,8 +430,13 @@ class Utils {
     const clonedFlatCoordinates = [...flatCoordinates];
     const clonedProperties = Object.assign(properties);
     const clonedEnds = [...ends];
-    const clonedOLRenderFeature =
-      new RenderFeature(type, clonedFlatCoordinates, clonedEnds, clonedProperties, id);
+    const clonedOLRenderFeature = new RenderFeature(
+      type,
+      clonedFlatCoordinates,
+      clonedEnds,
+      clonedProperties,
+      id,
+    );
 
     return clonedOLRenderFeature;
   }

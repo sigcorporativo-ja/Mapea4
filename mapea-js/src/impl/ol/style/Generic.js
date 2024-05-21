@@ -1,7 +1,9 @@
 /**
  * @module M/impl/style/Generic
  */
-import { isFunction, isUndefined, isDynamic, drawDynamicStyle, concatUrlPaths, addParameters, getImageSize } from 'M/util/Utils';
+import {
+  isFunction, isUndefined, isDynamic, drawDynamicStyle, concatUrlPaths, addParameters, getImageSize,
+} from 'M/util/Utils';
 import OLFeature from 'ol/Feature';
 import RenderFeature from 'ol/render/Feature';
 import OLStyleIcon from 'ol/style/Icon';
@@ -64,149 +66,143 @@ class Generic extends Simple {
 
     // Polygon image
     if (!isUndefined(this.options_.polygon)) {
-      loadImagePoly = d =>
-        new Promise((resolve, reject) => {
-          const img = new Image();
+      loadImagePoly = (d) => new Promise((resolve, reject) => {
+        const img = new Image();
 
-          // onload / onerror
-          img.onload = () => resolve(img);
-          img.onerror = reject;
+        // onload / onerror
+        img.onload = () => resolve(img);
+        img.onerror = reject;
 
-          // img
+        // img
 
-          if (isDynamic(this.options_.polygon) === true) {
-            img.src = d;
-            img.width = imgSizeWidth;
-            img.height = imgSizeWidth;
-          } else {
-            const getterPolygon = GETTER_BY_GEOM.Polygon;
-            const stylesPolygon = getterPolygon(this.options_, this, this.layer_);
-            const canvasPolygon = document.createElement('canvas');
-            canvasPolygon.width = 30;
-            canvasPolygon.height = 10;
-            const contextPolygon = canvasPolygon.getContext('2d');
-            const vectorContextPol = toContextRender(contextPolygon);
-            vectorContextPol.setStyle(stylesPolygon[0], 0, 0);
-            const canvasSize = [20, 7];
-            const maxW = Math.floor(canvasSize[0]);
-            const maxH = Math.floor(canvasSize[1]);
-            const minW = (canvasSize[0] - maxW);
-            const minH = (canvasSize[1] - maxH);
-            vectorContextPol.drawGeometry(new OLGeomPolygon([
-              [
-                [minW + 1, minH + 1],
-                [maxW - 1, minH + 1],
-                [maxW - 1, maxH - 1],
-                [minW + 1, maxH - 1],
-                [minW + 1, minH + 1],
-              ],
-            ]));
-            img.src = canvasPolygon.toDataURL();
-          }
-        });
+        if (isDynamic(this.options_.polygon) === true) {
+          img.src = d;
+          img.width = imgSizeWidth;
+          img.height = imgSizeWidth;
+        } else {
+          const getterPolygon = GETTER_BY_GEOM.Polygon;
+          const stylesPolygon = getterPolygon(this.options_, this, this.layer_);
+          const canvasPolygon = document.createElement('canvas');
+          canvasPolygon.width = 30;
+          canvasPolygon.height = 10;
+          const contextPolygon = canvasPolygon.getContext('2d');
+          const vectorContextPol = toContextRender(contextPolygon);
+          vectorContextPol.setStyle(stylesPolygon[0], 0, 0);
+          const canvasSize = [20, 7];
+          const maxW = Math.floor(canvasSize[0]);
+          const maxH = Math.floor(canvasSize[1]);
+          const minW = (canvasSize[0] - maxW);
+          const minH = (canvasSize[1] - maxH);
+          vectorContextPol.drawGeometry(new OLGeomPolygon([
+            [
+              [minW + 1, minH + 1],
+              [maxW - 1, minH + 1],
+              [maxW - 1, maxH - 1],
+              [minW + 1, maxH - 1],
+              [minW + 1, minH + 1],
+            ],
+          ]));
+          img.src = canvasPolygon.toDataURL();
+        }
+      });
       promises.push(loadImagePoly(dinamic));
     }
 
     // Line image
     if (!isUndefined(this.options_.line)) {
-      loadImageLine = d =>
-        new Promise((resolve, reject) => {
-          const img = new Image();
+      loadImageLine = (d) => new Promise((resolve, reject) => {
+        const img = new Image();
 
+        // onload / onerror
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+
+        // img
+        if (isDynamic(this.options_.line) === true) {
+          img.src = d;
+          img.width = 30;
+          img.height = 30;
+        } else {
+          const getterLine = GETTER_BY_GEOM.LineString;
+          const stylesLine = getterLine(this.options_, this, this.layer_);
+          const canvasLine = document.createElement('canvas');
+          canvasLine.width = 30;
+          canvasLine.height = 15;
+          const contextLine = canvasLine.getContext('2d');
+          const vectorContextLin = toContextRender(contextLine);
+          vectorContextLin.setStyle(stylesLine[0], 0, 0);
+          const x = 20;
+          const y = 10;
+          const stroke = isUndefined(stylesLine[0].getStroke())
+            ? 1.5 : stylesLine[0].getStroke().getWidth();
+          vectorContextLin.drawGeometry(new OLGeomLineString([
+            [0 + (stroke / 2), 0 + (stroke / 2)],
+            [(x / 3), (y / 2) - (stroke / 2)],
+            [(2 * x) / 3, 0 + (stroke / 2)],
+            [x - (stroke / 2), (y / 2) - (stroke / 2)],
+          ]));
+          img.src = canvasLine.toDataURL();
+        }
+      });
+      promises.push(loadImageLine(dinamic));
+    }
+
+    // Point image
+    if (!isUndefined(this.options_.point)) {
+      loadImagePoint = (d) => new Promise((resolve, reject) => {
+        const img = new Image();
+        if (this.options_.point.icon) {
+          if (this.options_.point.icon.src) {
+            if (!this.options_.point.icon.src.startsWith(window.location.origin)) {
+              getImageSize(this.options_.point.icon.src).then((imgx) => {
+                img.onload = () => resolve(img);
+                img.onerror = reject;
+                const proxyImageURL = concatUrlPaths([M.config.PROXY_URL, '/image']);
+                img.crossOrigin = 'anonymous';
+                img.src = addParameters(proxyImageURL, {
+                  url: this.options_.point.icon.src,
+                });
+                img.width = imgSizeWidth;
+                img.height = imgSizeWidth;
+                const calc1 = (imgSizeWidth / (imgx.width / imgx.height));
+                img.height = imgx.width > imgx.height ? calc1 : img.height;
+                img.width = imgx.height > imgx.width ? (imgSizeWidth / (imgx.height / imgx.width))
+                  : img.width;
+              });
+            } else {
+              img.src = this.options_.point.icon.src;
+            }
+          } else if (this.options_.point.icon.form) { // es un FORM
+            img.onload = () => resolve(img);
+            img.width = imgSizeWidth;
+            img.height = imgSizeWidth;
+            const getterPoint = GETTER_BY_GEOM.Point;
+            const stylesPoint = getterPoint(this.options_, this, this.layer_);
+            const imageFormPoint = stylesPoint[1].getImage().getImage(1);
+            if (imageFormPoint != null && imageFormPoint) {
+              img.src = imageFormPoint.toDataURL();
+            }
+          }
+        } else {
           // onload / onerror
           img.onload = () => resolve(img);
           img.onerror = reject;
 
           // img
-          if (isDynamic(this.options_.line) === true) {
+          img.width = imgSizeHeight;
+          img.height = imgSizeHeight;
+
+          if (isDynamic(this.options_.point) === true) {
             img.src = d;
-            img.width = 30;
-            img.height = 30;
           } else {
-            const getterLine = GETTER_BY_GEOM.LineString;
-            const stylesLine = getterLine(this.options_, this, this.layer_);
-            const canvasLine = document.createElement('canvas');
-            canvasLine.width = 30;
-            canvasLine.height = 15;
-            const contextLine = canvasLine.getContext('2d');
-            const vectorContextLin = toContextRender(contextLine);
-            vectorContextLin.setStyle(stylesLine[0], 0, 0);
-            const x = 20;
-            const y = 10;
-            const stroke = isUndefined(stylesLine[0].getStroke()) ?
-              1.5 : stylesLine[0].getStroke().getWidth();
-            vectorContextLin.drawGeometry(new OLGeomLineString([
-              [0 + (stroke / 2), 0 + (stroke / 2)],
-              [(x / 3), (y / 2) - (stroke / 2)],
-              [(2 * x) / 3, 0 + (stroke / 2)],
-              [x - (stroke / 2), (y / 2) - (stroke / 2)],
-            ]));
-            img.src = canvasLine.toDataURL();
+            const getterPoint = GETTER_BY_GEOM.Point;
+            const stylesPoint = getterPoint(this.options_, this, this.layer_);
+            stylesPoint[0].getImage().setRadius(5);
+            const imageURLPoint = stylesPoint[0].getImage().getImage(1).toDataURL();
+            img.src = imageURLPoint;
           }
-        });
-      promises.push(loadImageLine(dinamic));
-    }
-
-
-    // Point image
-    if (!isUndefined(this.options_.point)) {
-      loadImagePoint = d =>
-        new Promise((resolve, reject) => {
-          const img = new Image();
-          if (this.options_.point.icon) {
-            if (this.options_.point.icon.src) {
-              if (!this.options_.point.icon.src.startsWith(window.location.origin)) {
-                getImageSize(this.options_.point.icon.src).then((imgx) => {
-                  img.onload = () => resolve(img);
-                  img.onerror = reject;
-                  const proxyImageURL = concatUrlPaths([M.config.PROXY_URL, '/image']);
-                  img.crossOrigin = 'anonymous';
-                  img.src = addParameters(proxyImageURL, {
-                    url: this.options_.point.icon.src,
-                  });
-                  img.width = imgSizeWidth;
-                  img.height = imgSizeWidth;
-                  const calc1 = (imgSizeWidth / (imgx.width / imgx.height));
-                  img.height =
-                    imgx.width > imgx.height ? calc1 : img.height;
-                  img.width =
-                    imgx.height > imgx.width ? (imgSizeWidth / (imgx.height / imgx.width))
-                      : img.width;
-                });
-              } else {
-                img.src = this.options_.point.icon.src;
-              }
-            } else if (this.options_.point.icon.form) { // es un FORM
-              img.onload = () => resolve(img);
-              img.width = imgSizeWidth;
-              img.height = imgSizeWidth;
-              const getterPoint = GETTER_BY_GEOM.Point;
-              const stylesPoint = getterPoint(this.options_, this, this.layer_);
-              const imageFormPoint = stylesPoint[1].getImage().getImage(1);
-              if (imageFormPoint != null && imageFormPoint) {
-                img.src = imageFormPoint.toDataURL();
-              }
-            }
-          } else {
-            // onload / onerror
-            img.onload = () => resolve(img);
-            img.onerror = reject;
-
-            // img
-            img.width = imgSizeHeight;
-            img.height = imgSizeHeight;
-
-            if (isDynamic(this.options_.point) === true) {
-              img.src = d;
-            } else {
-              const getterPoint = GETTER_BY_GEOM.Point;
-              const stylesPoint = getterPoint(this.options_, this, this.layer_);
-              stylesPoint[0].getImage().setRadius(5);
-              const imageURLPoint = stylesPoint[0].getImage().getImage(1).toDataURL();
-              img.src = imageURLPoint;
-            }
-          }
-        });
+        }
+      });
       promises.push(loadImagePoint(dinamic));
     }
 
@@ -322,6 +318,5 @@ class Generic extends Simple {
     return r;
   }
 }
-
 
 export default Generic;

@@ -3,7 +3,9 @@
  */
 import Handlebars from 'handlebars';
 import { get as remoteGet } from './Remote.js';
-import { extendsObj, isUndefined, isNullOrEmpty, stringToHtml } from './Utils.js';
+import {
+  extendsObj, isUndefined, isNullOrEmpty, stringToHtml,
+} from './Utils.js';
 import './handlebarshelpers';
 
 /**

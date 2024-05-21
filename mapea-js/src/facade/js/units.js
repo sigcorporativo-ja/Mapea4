@@ -1,3 +1,4 @@
+/* eslint-disable no-loss-of-precision */
 /**
  * @module M/units
  */

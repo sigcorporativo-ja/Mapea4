@@ -90,8 +90,8 @@ class Location extends Control {
       });
       this.geolocation_.on('change:position', (evt) => {
         const newCoord = evt.target.get(evt.key);
-        const newPosition = isNullOrEmpty(newCoord) ?
-          null : new OLGeomPoint(newCoord);
+        const newPosition = isNullOrEmpty(newCoord)
+          ? null : new OLGeomPoint(newCoord);
         this.positionFeature_.getImpl().getOLFeature().setGeometry(newPosition);
         this.facadeMap_.setCenter(newCoord);
         if (this.element.classList.contains('m-locating')) {

@@ -15,6 +15,7 @@ export default class MeasureArea extends Measure {
       M.Exception('La implementación usada no puede crear controles MeasureArea');
     }
   }
+
   /**
    * This function checks if an object is equals
    * to this control

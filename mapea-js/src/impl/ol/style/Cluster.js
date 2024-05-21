@@ -12,7 +12,9 @@ import OLGeomPolygon from 'ol/geom/Polygon';
 import OLGeomPoint from 'ol/geom/Point';
 import Generic from 'M/style/Generic';
 import FacadeCluster from 'M/style/Cluster';
-import { inverseColor, extendsObj, isFunction, isNullOrEmpty } from 'M/util/Utils';
+import {
+  inverseColor, extendsObj, isFunction, isNullOrEmpty,
+} from 'M/util/Utils';
 import * as EventType from 'M/event/eventtype';
 import ClusteredFeature from 'M/feature/Clustered';
 import Style from './Style';
@@ -49,7 +51,6 @@ class Cluster extends Style {
      * @expose
      */
     this.convexHullLayer_ = null;
-
 
     /**
      *
@@ -135,6 +136,7 @@ class Cluster extends Style {
   get selectClusterInteraction() {
     return this.selectClusterInteraction_;
   }
+
   /**
    * Apply the style cluster to layer vectorresolution
    *
@@ -145,7 +147,7 @@ class Cluster extends Style {
    * @export
    */
   clusterize_(features) {
-    const olFeatures = features.map(f => f.getImpl().getOLFeature());
+    const olFeatures = features.map((f) => f.getImpl().getOLFeature());
     this.clusterLayer_ = new AnimatedCluster({
       name: 'Cluster',
       source: new OLSourceCluster({
@@ -233,7 +235,6 @@ class Cluster extends Style {
     return cloneOptions;
   }
 
-
   /**
    * This function set a specified range
    *
@@ -249,7 +250,7 @@ class Cluster extends Style {
    */
   static updateRangeImpl(min, max, newRange, layer, cluster) {
     const element = cluster
-      .getOptions().ranges.find(el => (el.min === min && el.max === max)) || false;
+      .getOptions().ranges.find((el) => (el.min === min && el.max === max)) || false;
     if (element) {
       element.style = newRange;
     }
@@ -310,7 +311,7 @@ class Cluster extends Style {
     });
     this.selectClusterInteraction_.on('select', this.selectClusterFeature_.bind(this), this);
     map.getMapImpl().addInteraction(this.selectClusterInteraction_);
-    map.getMapImpl().on('change:view', evt => this.selectClusterInteraction_.refreshViewEvents(evt));
+    map.getMapImpl().on('change:view', (evt) => this.selectClusterInteraction_.refreshViewEvents(evt));
   }
 
   /**
@@ -356,7 +357,7 @@ class Cluster extends Style {
       });
 
       const coordinates = hoveredFeatures
-        .map(f => f.getImpl().getOLFeature().getGeometry().getCoordinates());
+        .map((f) => f.getImpl().getOLFeature().getGeometry().getCoordinates());
       const convexHull = coordinatesConvexHull(coordinates);
       if (convexHull.length > 2) {
         const convexOlFeature = new OLFeature(new OLGeomPolygon([convexHull]));
@@ -443,7 +444,9 @@ class Cluster extends Style {
       return new Centroid();
     }
     const numFeatures = clusterOlFeatures.length;
-    const range = this.options_.ranges.find(el => (el.min <= numFeatures && el.max >= numFeatures));
+    const range = this.options_.ranges.find(
+      (el) => (el.min <= numFeatures && el.max >= numFeatures),
+    );
     if (!isNullOrEmpty(range)) {
       let style = range.style.clone();
       if (!(style instanceof Generic)) {
@@ -506,6 +509,7 @@ class Cluster extends Style {
     this.options_.ranges = ranges;
     return ranges;
   }
+
   /**
    * Select feautes to get info.
    * the first feature is cluster (evt.selected)
@@ -601,7 +605,6 @@ class Cluster extends Style {
     }
   }
 
-
   /**
    * TODO
    * @public
@@ -625,7 +628,6 @@ class Cluster extends Style {
       }
     }
   }
-
 
   /**
    * TODO

@@ -1,7 +1,9 @@
 /**
  * @module M/Parameters
  */
-import { isString, isNullOrEmpty, getParameterValue, isObject, isUndefined } from '../util/Utils.js';
+import {
+  isString, isNullOrEmpty, getParameterValue, isObject, isUndefined,
+} from '../util/Utils.js';
 import Exception from '../exception/exception.js';
 import { getValue } from '../i18n/language.js';
 

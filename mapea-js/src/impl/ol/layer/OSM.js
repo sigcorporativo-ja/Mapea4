@@ -30,7 +30,7 @@ class OSM extends Layer {
    * @param {Object} vendorOptions vendor options for the base library
    * @api stable
    */
-  constructor(userParameters, options = {}, vendorOptions) {
+  constructor(userParameters, options = {}, vendorOptions = {}) {
     // calls the super constructor
     super(options, vendorOptions);
 
@@ -136,8 +136,12 @@ class OSM extends Layer {
     this.map.getMapImpl().updateSize();
     const size = this.map.getMapImpl().getSize();
     const units = this.map.getProjection().units;
-    this.resolutions_ =
-      generateResolutionsFromExtent(this.facadeLayer_.getMaxExtent(), size, 16, units);
+    this.resolutions_ = generateResolutionsFromExtent(
+      this.facadeLayer_.getMaxExtent(),
+      size,
+      16,
+      units,
+    );
 
     // sets its visibility if it is in range
     if (this.isVisible() && !this.inRange()) {
@@ -186,8 +190,12 @@ class OSM extends Layer {
       const size = this.map.getMapImpl().getSize();
       const units = this.map.getProjection().units;
       const zoomLevels = M.config.ZOOM_LEVELS;
-      this.resolutions_ =
-        generateResolutionsFromExtent(this.facadeLayer_.getMaxExtent(), size, zoomLevels, units);
+      this.resolutions_ = generateResolutionsFromExtent(
+        this.facadeLayer_.getMaxExtent(),
+        size,
+        zoomLevels,
+        units,
+      );
     }
     if (!isNullOrEmpty(this.ol3Layer) && isNullOrEmpty(this.vendorOptions_.source)) {
       const extent = this.facadeLayer_.getMaxExtent();
@@ -208,14 +216,14 @@ class OSM extends Layer {
   }
 
   /**
-   * This function sets 
+   * This function sets
    * the tileLoadFunction
    *
    * @public
    * @function
    * @api stable
    */
-  setTileLoadFunction(func){
+  setTileLoadFunction(func) {
     this.getOLLayer().getSource().setTileLoadFunction(func);
   }
 
