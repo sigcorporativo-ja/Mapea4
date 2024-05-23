@@ -2031,7 +2031,11 @@ class Map extends MObject {
               this._calculatedResolutions = true;
               this.fire(EventType.COMPLETED);
             }
-          }
+          } else
+            if (this._calculatedResolutions === false) {
+              this._calculatedResolutions = true;
+              this.fire(EventType.COMPLETED);
+            }
         }).catch((error) => {
           throw error;
         });
