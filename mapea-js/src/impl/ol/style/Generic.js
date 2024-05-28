@@ -77,6 +77,9 @@ class Generic extends Simple {
 
         const optionsMod = { ...this.options_ };
         delete optionsMod.label;
+        delete optionsMod.point?.label;
+        delete optionsMod.line?.label;
+        delete optionsMod.polygon?.label;
         if (isDynamic(optionsMod) === true) {
           img.src = d;
           img.width = imgSizeWidth;
