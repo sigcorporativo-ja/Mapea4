@@ -724,7 +724,7 @@ export default class PrinterControl extends M.Control {
 
           // se usa reverse() para invertir el orden de las capas, así la capa base queda abajo
           // y se visualiza el mapa correctamente.
-          success(encodedLayers.reverse());
+          success(encodedLayers.filter((layer) => layer !== undefined).reverse());
         })
         .catch(fail); // Handle any errors that occur during the encoding process
     }));
