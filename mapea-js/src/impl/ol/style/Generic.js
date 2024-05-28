@@ -75,7 +75,8 @@ class Generic extends Simple {
 
         // img
 
-        const optionsMod = { ...this.options_ };
+        // Deepclone
+        const optionsMod = JSON.parse(JSON.stringify(this.options_));
         delete optionsMod.label;
         delete optionsMod.point?.label;
         delete optionsMod.line?.label;
