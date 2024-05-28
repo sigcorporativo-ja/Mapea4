@@ -697,13 +697,12 @@ export default class PrinterControl extends M.Control {
       return ((layer.isVisible() === true) && (layer.inRange() === true)
         && M.utils.isString(layer.name) && !layer.name.startsWith('cluster_cover'));
     });
-    let numLayersToProc = layers.length;
 
     return (new Promise((success, fail) => {
-      let encodedLayers = [];
+      const encodedLayers = [];
       const encodedLayersVector = [];
-      layers.forEach((layer) => {
-        this.getImpl().encodeLayer(layer).then((encodedLayer) => {
+      const promises = layers.map((layer, index) => {
+        return this.getImpl().encodeLayer(layer).then((encodedLayer) => {
           // añade la capa y comprueba si es vector. Las capas que sean vector
           // tienen que quedar en último lugar para que no sean tapadas
           if (!M.utils.isNullOrEmpty(encodedLayer) && encodedLayer.type !== 'Vector') {
@@ -717,15 +716,19 @@ export default class PrinterControl extends M.Control {
               encodedLayersVector.push(encodedLayer);
             }
           }
-          numLayersToProc -= 1;
-          if (numLayersToProc === 0) {
-            encodedLayers = encodedLayers.concat(encodedLayersVector);
-            // se usa reverse() para invertir el orden de las capas, así la capa base queda abajo
-            // y se visualiza el mapa correctamente.
-            success(encodedLayers.reverse());
-          }
+          encodedLayers[index] = encodedLayer;
         });
       });
+      // Use Promise.all to wait for all the promises to resolve
+      Promise.all(promises)
+        .then(() => {
+        // Once all promises are resolved, reverse the order and resolve the main promise
+
+          // se usa reverse() para invertir el orden de las capas, así la capa base queda abajo
+          // y se visualiza el mapa correctamente.
+          success(encodedLayers.reverse());
+        })
+        .catch(fail); // Handle any errors that occur during the encoding process
     }));
   }
 
