@@ -98,7 +98,7 @@ class WMC extends Layer {
     if (this.selected === false) {
       // unselect layers
       this.map.getWMC().forEach((wmcLayer) => wmcLayer.unselect());
-      this.map.setCalculatedResolutions(false);
+      this.map.getImpl().setCalculatedResolutions(false);
 
       this.selected = true;
 
