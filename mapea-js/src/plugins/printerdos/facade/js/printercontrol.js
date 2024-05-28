@@ -705,7 +705,7 @@ export default class PrinterControl extends M.Control {
           // añade la capa y comprueba si es vector. Las capas que sean vector
           // tienen que quedar en último lugar para que no sean tapadas
           if (!M.utils.isNullOrEmpty(encodedLayer) && encodedLayer.type !== 'Vector') {
-            encodedLayers.push(encodedLayer);
+            encodedLayers[index] = encodedLayer;
           } else {
             // Se comprueba que las capas vectoriales estén en el rango del mapa.
             const resolution = this.map_.getMapImpl().getView().getResolution();
