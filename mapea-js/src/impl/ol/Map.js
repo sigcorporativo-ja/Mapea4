@@ -2351,6 +2351,18 @@ class Map extends MObject {
   setToClosestScale(resolution) {
     this.getMapImpl().getView().setResolution(resolution);
   }
+
+  /**
+   * This function set _calculatedResolutions
+   *
+   * @function
+   * @public
+   * @api
+   * @param { Number }
+   */
+  setCalculatedResolutions(_calculatedResolutions) {
+    this._calculatedResolutions = _calculatedResolutions;
+  }
 }
 
 /**
