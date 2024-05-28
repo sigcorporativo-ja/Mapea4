@@ -124,7 +124,11 @@ class Generic extends Simple {
         img.onerror = reject;
 
         // img
-        if (isDynamic(this.options_.line) === true) {
+
+        const optionsMod = JSON.parse(JSON.stringify(this.options_));
+        delete optionsMod.label;
+        delete optionsMod.line?.label;
+        if (isDynamic(optionsMod.line) === true) {
           img.src = d;
           img.width = 30;
           img.height = 30;
@@ -198,7 +202,10 @@ class Generic extends Simple {
           img.width = imgSizeHeight;
           img.height = imgSizeHeight;
 
-          if (isDynamic(this.options_.point) === true) {
+          const optionsMod = JSON.parse(JSON.stringify(this.options_));
+          delete optionsMod.label;
+          delete optionsMod.point?.label;
+          if (isDynamic(optionsMod.point) === true) {
             img.src = d;
           } else {
             const getterPoint = GETTER_BY_GEOM.Point;
