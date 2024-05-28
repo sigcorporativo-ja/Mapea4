@@ -700,7 +700,6 @@ export default class PrinterControl extends M.Control {
 
     return (new Promise((success, fail) => {
       const encodedLayers = [];
-      const encodedLayersVector = [];
       const promises = layers.map((layer, index) => {
         return this.getImpl().encodeLayer(layer).then((encodedLayer) => {
           // añade la capa y comprueba si es vector. Las capas que sean vector
@@ -713,10 +712,9 @@ export default class PrinterControl extends M.Control {
             const maxResolution = layer.getImpl().getOL3Layer().getMaxResolution();
             const minResolution = layer.getImpl().getOL3Layer().getMinResolution();
             if (((resolution >= minResolution) && (resolution <= maxResolution))) {
-              encodedLayersVector.push(encodedLayer);
+              encodedLayers[index] = encodedLayer;
             }
           }
-          encodedLayers[index] = encodedLayer;
         });
       });
       // Use Promise.all to wait for all the promises to resolve
