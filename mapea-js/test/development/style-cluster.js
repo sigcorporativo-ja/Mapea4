@@ -15,7 +15,7 @@ const wfs = new WFS({
   geometry: 'Point',
 });
 
-mapjs.addLayers([wfs]);
+window.mapjs.addLayers([wfs]);
 
 const stylecluster = new StyleCluster();
 

@@ -1,5 +1,5 @@
 import { map as Mmap } from 'M/mapea';
-import MBTiles from 'M/layer/MBTiles';
+import MBTiles from 'M/layer/MBTiles'; // Reemplazado con "M.layer.MBTiles" da error de "M.layer is undefined"
 
 const mapjs = Mmap({
   container: 'map',

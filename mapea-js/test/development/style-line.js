@@ -8,13 +8,8 @@ const mapjs = map({
 });
 
 const styleline = new StyleLine({
-  fill: {
-    color: 'red',
-  },
-  stroke: {
-    color: 'black',
-    width: 3,
-  },
+  fill: { color: 'red' },
+  stroke: { color: 'black', width: 3 },
 });
 
 const wfs = new WFS({

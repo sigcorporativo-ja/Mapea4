@@ -37,7 +37,7 @@ const domEls = {
 const getGradients = () => {
   const colors = document.querySelectorAll('.color>input');
   let values = [];
-  colors.forEach(f => values.push(f.value));
+  colors.forEach((f) => values.push(f.value));
   if (domEls.radioButton1.checked) {
     values = null;
   }
@@ -98,10 +98,8 @@ const eventHandlers = {
   clearStyle: () => wfs.clearStyle(),
 };
 
-
 domEls.addColor.onclick = eventHandlers.addColor;
 domEls.removeColor.onclick = eventHandlers.removeColor;
-
 
 domEls.radioButton1.onclick = () => {
   domEls.gradient.classList.add('hidden');

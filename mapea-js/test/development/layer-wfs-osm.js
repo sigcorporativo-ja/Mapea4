@@ -6,15 +6,14 @@ const mapjs = map({
   layers: ['OSM'],
   projection: 'EPSG:3857*m',
   controls: ['layerswitcher'],
+  center: [-349550, 4617450],
+  zoom: 3,
 });
 
 const wfs = new WFS({
-  namespace: 'ggis',
-  name: 'Colegios',
-  url: 'http://clientes.guadaltel.es/desarrollo/geossigc/ows?',
-  legend: 'Prestaciones - Ámbito municipal',
+  url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/tematicos/wfs?',
+  name: 'tematicos:Provincias',
 });
-
 
 mapjs.addLayers([wfs]);
 window.mapjs = mapjs;

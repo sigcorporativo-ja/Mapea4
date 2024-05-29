@@ -1,23 +1,26 @@
 import Printerdos from 'plugins/printerdos/facade/js/printerdos';
-import WMS from 'M/layer/WMS';
-import GeoJSON from 'M/layer/GeoJSON';
-import LayerGroup from 'M/layer/LayerGroup';
+// import WMS from 'M/layer/WMS';
+// import GeoJSON from 'M/layer/GeoJSON';
+// import LayerGroup from 'M/layer/LayerGroup';
 import WFS from 'M/layer/WFS';
 import KML from 'M/layer/KML';
-import WMTS from 'M/layer/WMTS';
-import Point from 'M/style/Point';
-import Cluster from 'M/style/Cluster';
+// import WMTS from 'M/layer/WMTS';
+// import Point from 'M/style/Point';
+// import Cluster from 'M/style/Cluster';
 
 const mapjs = M.map({
   container: 'map',
   controls: ['layerswitcher'],
 });
+window.mapjs = mapjs;
 
+/* / Prueba capa mapbox
 const mapbox = new M.layer.Mapbox({
   url: 'https://api.mapbox.com',
   name: 'mapbox.emerald',
   legend: 'Calles',
 });
+mapjs.addLayers(mapbox); // */
 
 // Se crea el plugin del printer
 const printer = new Printerdos({
@@ -41,7 +44,7 @@ const printer = new Printerdos({
   },
 });
 
-// Capa con los ríos de Andalucía
+/* / Capa con los ríos de Andalucía
 const rios = new M.layer.WFS({
   url: 'http://herramienta-centralizada-sigc.desarrollo.guadaltel.es/geoserver/Guadaltel/wms?',
   namespace: 'Guadaltel',
@@ -50,38 +53,11 @@ const rios = new M.layer.WFS({
   extract: true,
 });
 
-const rojop = new M.style.Line({
-  stroke: {
-    color: '#FF0000',
-    width: '5',
-  },
-});
-
-const moradop = new M.style.Line({
-  stroke: {
-    color: '#FF00FF',
-    width: '3',
-  },
-});
-
-const amarillop = new M.style.Line({
-  stroke: {
-    color: '#FFF056',
-  },
-});
-
-const verdep = new M.style.Line({
-  stroke: {
-    color: '#00FF00',
-  },
-});
-
-const azulp = new M.style.Line({
-  stroke: {
-    color: '#0000FF',
-  },
-});
-
+const rojop = new M.style.Line({ stroke: { color: '#FF0000', width: '5' } });
+const moradop = new M.style.Line({ stroke: { color: '#FF00FF', width: '3' } });
+const amarillop = new M.style.Line({ stroke: { color: '#FFF056' } });
+const verdep = new M.style.Line({ stroke: { color: '#00FF00' } });
+const azulp = new M.style.Line({ stroke: { color: '#0000FF' } });
 // Estilo para los ríos, categoría
 const styleHidro = new M.style.Category('cod_ent', {
   H1: rojop,
@@ -93,6 +69,7 @@ const styleHidro = new M.style.Category('cod_ent', {
 
 // Se añade el estilo a la capa
 rios.setStyle(styleHidro);
+mapjs.addWFS(rios); // */
 
 // Capa con campamentos de andalucía
 const campamentos = new M.layer.WFS({
@@ -104,13 +81,8 @@ const campamentos = new M.layer.WFS({
 
 const estiloBase = new M.style.Point({
   radius: 5,
-  fill: {
-    color: 'yellow',
-    opacity: 0.5,
-  },
-  stroke: {
-    color: '#FF0000',
-  },
+  fill: { color: 'yellow', opacity: 0.5 },
+  stroke: { color: '#FF0000' },
 });
 
 // Se agrupan los campamentos en clusters
@@ -118,6 +90,7 @@ const estiloCluster = new M.style.Cluster();
 
 campamentos.setStyle(estiloBase);
 campamentos.setStyle(estiloCluster);
+mapjs.addLayers(campamentos); // */
 
 // Capa con estilo para las provincias de Córdoba y Granada
 const provinciasCordobaGranada = new WFS({
@@ -128,6 +101,7 @@ const provinciasCordobaGranada = new WFS({
   geometry: 'MPOLYGON',
   ids: '3,4',
 });
+mapjs.addWFS(provinciasCordobaGranada); // */
 
 // Capa con árboles de Andalucía
 const arboleda = new KML({
@@ -135,16 +109,18 @@ const arboleda = new KML({
   name: 'Arboleda',
   extract: true,
 });
+mapjs.addKML(arboleda); // */
 
-// Capa WMTS
+/* / Capa WMTS
 const toporaster = new WMTS({
   url: 'http://www.ideandalucia.es/geowebcache/service/wmts',
   name: 'toporaster',
   matrixSet: 'EPSG:25830',
   legend: 'Toporaster',
 });
+mapjs.addWMTS(toporaster); // */
 
-// Capa con los menores de 15 años por provincia
+/* / Capa con los menores de 15 años por provincia
 const estructuraJA = new M.layer.WFS({
   url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows?',
   namespace: 'sepim',
@@ -163,25 +139,15 @@ const provincias = new M.layer.WFS({
 
 // Estilo para bordear las provincias de color rojo
 const estiloProvincias = new M.style.Polygon({
-  stroke: {
-    color: '#FF0000',
-    width: 1,
-  },
+  stroke: { color: '#FF0000', width: 1 },
 });
-
 provincias.setStyle(estiloProvincias);
 
 const styleProp = new M.style.Proportional('id', 5, 15, new M.style.Point({
-  fill: {
-    color: '#000000',
-  },
-  stroke: {
-    color: '#FFFFFF',
-    width: 2,
-  },
+  fill: { color: '#000000' },
+  stroke: { color: '#FFFFFF', width: 2 },
   label: {
     text: '{{id}}',
-
     offset: [0, 20],
     stroke: {
       color: 'yellow', // Color de relleno del halo
@@ -190,15 +156,6 @@ const styleProp = new M.style.Proportional('id', 5, 15, new M.style.Point({
   },
 }));
 estructuraJA.setStyle(styleProp);
+mapjs.addLayers([estructuraJA, provincias]); // */
 
-// mapjs.addLayers(mapbox);
-mapjs.addLayers(campamentos);
-// mapjs.addWFS(rios);
-mapjs.addKML(arboleda);
-// mapjs.addLayers([estructuraJA, provincias]);
-// mapjs.addWMTS(toporaster);
-mapjs.addWFS(provinciasCordobaGranada);
-// mapjs.addWFS(provinciasCordobaGranada);
 mapjs.addPlugin(printer);
-
-window.mapjs = mapjs;

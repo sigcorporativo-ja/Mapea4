@@ -1,5 +1,5 @@
 import { map } from 'M/mapea';
-import WMS from 'M/layer/WMS';
+// import WMS from 'M/layer/WMS';
 import LayerGroup from 'M/layer/LayerGroup';
 // import * as EventType from 'M/event/eventtype';
 // import GeoJSON from 'M/layer/GeoJSON';
@@ -35,7 +35,6 @@ const provinciasWMS = new WFS({
   legend: 'provinciasWMS',
   tiled: true,
 });
-
 
 // const wms = new WMS({
 //   url: 'http://www.callejerodeandalucia.es/servicios/base/wms?',
@@ -75,7 +74,7 @@ btn.addEventListener('click', () => {
 
 const btn2 = document.getElementById('btnAddLayer1');
 btn2.addEventListener('click', () => {
-  const lgToDelete = mapa.getLayerGroup().find(lg => lg.title === 'Grupo1');
+  const lgToDelete = mapa.getLayerGroup().find((lg) => lg.title === 'Grupo1');
   mapa.removeLayerGroup(lgToDelete);
   const nLayerGroup = new LayerGroup();
   nLayerGroup.title = lgToDelete.title;
@@ -86,7 +85,7 @@ btn2.addEventListener('click', () => {
 
 const btn3 = document.getElementById('btnAddLayer2');
 btn3.addEventListener('click', () => {
-  const lgToDelete = mapa.getLayerGroup().find(lg => lg.title === 'Grupo1');
+  const lgToDelete = mapa.getLayerGroup().find((lg) => lg.title === 'Grupo1');
   mapa.removeLayerGroup(lgToDelete);
   const nLayerGroup = new LayerGroup();
   nLayerGroup.title = lgToDelete.title;
@@ -98,9 +97,8 @@ btn3.addEventListener('click', () => {
 
 const btn4 = document.getElementById('btnAddLayer3');
 btn4.addEventListener('click', () => {
-  const lgToDelete = mapa.getLayerGroup().find(lg => lg.title === 'Grupo1');
+  const lgToDelete = mapa.getLayerGroup().find((lg) => lg.title === 'Grupo1');
   mapa.removeLayerGroup(lgToDelete);
 });
-
 
 window.map = mapa;
