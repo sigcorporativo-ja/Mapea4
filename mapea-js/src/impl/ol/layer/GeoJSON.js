@@ -216,7 +216,7 @@ class GeoJSON extends Vector {
             },
           }));
         }
-        this.facadeVector_.addFeatures(features, false, false);
+        // this.facadeVector_.addFeatures(features, false, false);
       });
     }
   }
