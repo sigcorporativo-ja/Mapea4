@@ -202,31 +202,26 @@ class GeoJSON extends Vector {
    * @function
    */
   updateSource_() {
+    const removeAndRedraw = (features) => {
+      this.ol3Layer.setSource(new OLSourceVector({
+        loader: (extent, resolution, projection) => {
+          this.loaded_ = true;
+          // removes previous features
+          this.facadeVector_.clear();
+          this.facadeVector_.addFeatures(features, false, false);
+          this.redraw();
+          this.fire(EventType.LOAD, [features]);
+        },
+      }));
+    };
+
     if (isNullOrEmpty(this.vendorOptions_.source)) {
       this.requestFeatures_().then((features) => {
         if (this.ol3Layer) {
-          this.ol3Layer.setSource(new OLSourceVector({
-            loader: (extent, resolution, projection) => {
-              this.loaded_ = true;
-              // removes previous features
-              this.facadeVector_.clear();
-              this.facadeVector_.addFeatures(features, false, false);
-              this.redraw();
-              this.fire(EventType.LOAD, [features]);
-            },
-          }));
+          removeAndRedraw(features);
         } else {
           this.on(M.evt.LOAD, () => {
-            this.ol3Layer.setSource(new OLSourceVector({
-              loader: (extent, resolution, projection) => {
-                this.loaded_ = true;
-                // removes previous features
-                this.facadeVector_.clear();
-                this.facadeVector_.addFeatures(features, false, false);
-                this.redraw();
-                this.fire(EventType.LOAD, [features]);
-              },
-            }));
+            removeAndRedraw(features);
           });
         }
         // this.facadeVector_.addFeatures(features, false, false);
