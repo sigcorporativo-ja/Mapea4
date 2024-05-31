@@ -252,25 +252,19 @@ class Vector extends Layer {
         olSource = olSource.getSource();
       }
 
-      if (!isNullOrEmpty(olSource)) {
-        if (style instanceof StyleCluster) {
-          style.getImpl().deactivateChangeEvent();
-        }
+      if (style instanceof StyleCluster) {
+        style.getImpl().deactivateChangeEvent();
+      }
 
-        // remove all features from ol vector
-        const olFeatures = [...olSource.getFeatures()];
-        olFeatures.forEach(olSource.removeFeature, olSource);
+      // remove all features from ol vector
+      const olFeatures = [...olSource.getFeatures()];
+      olFeatures.forEach(olSource.removeFeature, olSource);
 
-        const features = this.facadeVector_.getFeatures();
+      const features = this.facadeVector_.getFeatures();
+      olSource.addFeatures(features.map(Feature.facade2OLFeature));
 
-        olSource.addFeatures(features.map(Feature.facade2OLFeature));
-        if (style instanceof StyleCluster) {
-          style.getImpl().activateChangeEvent();
-        }
-      } else {
-        this.on(M.evt.LOAD, () => {
-          this.redraw();
-        });
+      if (style instanceof StyleCluster) {
+        style.getImpl().activateChangeEvent();
       }
     }
   }
