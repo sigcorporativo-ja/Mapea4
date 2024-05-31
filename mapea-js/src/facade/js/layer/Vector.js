@@ -125,10 +125,10 @@ class Vector extends LayerBase {
    * @api
    */
   addFeatures(featuresParam, update = false, checkDuplicate = true) {
-    if (!isNullOrEmpty(this.getImpl()
+    if (!isNullOrEmpty(this.getImpl())
       && !isNullOrEmpty(this.getImpl().getOLLayer())
       && !isNullOrEmpty(this.getImpl().getOLLayer().getSource())
-      && this.getImpl().isLoaded())) {
+      && this.getImpl().isLoaded()) {
       let features = featuresParam;
       if (!isNullOrEmpty(features)) {
         if (!isArray(features)) {
