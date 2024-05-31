@@ -252,7 +252,7 @@ class Vector extends Layer {
         olSource = olSource.getSource();
       }
 
-      const removeAndAdd = () => {
+      if (!isNullOrEmpty(olSource)) {
         if (style instanceof StyleCluster) {
           style.getImpl().deactivateChangeEvent();
         }
@@ -267,13 +267,9 @@ class Vector extends Layer {
         if (style instanceof StyleCluster) {
           style.getImpl().activateChangeEvent();
         }
-      };
-
-      if (!isNullOrEmpty(olSource)) {
-        removeAndAdd();
       } else {
         this.on(M.evt.LOAD, () => {
-          removeAndAdd();
+          this.redraw();
         });
       }
     }
