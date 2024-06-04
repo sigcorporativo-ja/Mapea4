@@ -125,7 +125,9 @@ class Vector extends LayerBase {
    * @api
    */
   addFeatures(featuresParam, update = false, checkDuplicate = true) {
-    if (!isNullOrEmpty(this.getImpl())
+    if (this.url === ''
+      && isNullOrEmpty(this.url)
+      && !isNullOrEmpty(this.getImpl())
       && !isNullOrEmpty(this.getImpl().getOLLayer())
       && !isNullOrEmpty(this.getImpl().getOLLayer().getSource())
       && this.getImpl().isLoaded()) {
