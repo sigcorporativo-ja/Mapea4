@@ -9,7 +9,7 @@ const mapjs = Mmap({
 });
 
 const wfs = new WFS({
-  url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows?',
+  url: 'https://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows?',
   namespace: 'sepim',
   name: 'campamentos',
   legend: 'Campamentos',

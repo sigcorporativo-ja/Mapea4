@@ -16,9 +16,10 @@ const mapa = map({ container: 'map', controls: ['layerswitcher'] });
 
 // layers
 const centrosMedicos = new WFS({
-  url: 'https://herramienta-centralizada-sigc.desarrollo.guadaltel.es/geoserver/Global/wfs?*',
-  name: 'centros_medicos_2da3a991_a621_4a01_b4c0_a9c7f90d1f00',
-  legend: 'Centros Medicos',
+  url: 'https://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows',
+  name: 'campamentos',
+  namespace: 'sepim',
+  legend: 'sepim:campamentos',
   tiled: true,
 });
 
@@ -30,9 +31,10 @@ const nucleo = new WFS({
 });
 
 const provinciasWMS = new WFS({
-  url: 'https://herramienta-centralizada-sigc.desarrollo.guadaltel.es/geoserver/guadaltel_prod/wfs?*',
-  name: 'u2_red_nacional_de_p_1ac4a9b2_dde9_4a83_9569_93ef5cfb1f60',
-  legend: 'provinciasWMS',
+  url: 'https://geostematicos-sigc.juntadeandalucia.es/geoserver/tematicos/ows?*',
+  name: 'Provincias',
+  legend: 'Provincias',
+  namespace: 'tematicos',
   tiled: true,
 });
 

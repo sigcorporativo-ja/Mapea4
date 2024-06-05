@@ -10,7 +10,7 @@ url: 'https://www.ideandalucia.es/services/DERA_g9_transport_com/wfs?service=WFS
 
 const wfs = new M.layer.GeoJSON({
 name: 'Campamentos',
-url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows?service=WFS&version=1.0.0&request=GetFeature&typename=sepim%3Acampamentos&outputFormat=application%2Fjson&srsname=EPSG%3A25830'
+url: 'https://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows?service=WFS&version=1.0.0&request=GetFeature&typename=sepim%3Acampamentos&outputFormat=application%2Fjson&srsname=EPSG%3A25830'
 });
 
 /*const wfs = new M.layer.GeoJSON({

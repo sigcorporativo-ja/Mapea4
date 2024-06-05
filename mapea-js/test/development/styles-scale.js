@@ -25,7 +25,7 @@ window.polygons = new MlayerWFS({
   }),
 });
 window.points = new MlayerWFS({
-  url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows',
+  url: 'https://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows',
   name: 'sepim:campamentos',
   legend: 'Campamentos',
   geometry: 'POINT',
