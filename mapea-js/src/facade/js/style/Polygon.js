@@ -37,7 +37,7 @@ class Polygon extends Simple {
    * @private
    */
   getDeserializedMethod_() {
-    return "((serializedParameters) => M.style.Simple.deserialize(serializedParameters, 'M.style.Polygon'))";
+    return "((serializedParameters) => M.style ? M.style.Simple.deserialize(serializedParameters, 'M.style.Polygon') : console.error('M.style is not defined'))";
   }
 }
 
