@@ -9,6 +9,7 @@ const mapjs = Mmap({
   // bbox: [-734643.6701675085, 4803884.403272196, -576286.1226744428, 4882155.920236216]
 });
 
+// En esta url se pueden descargar ficheros mbtiles: https://centrodedescargas.cnig.es/CentroDescargas/loadMapMovExt
 fetch('./monfrague.mbtiles').then((response) => {
   const mbtile = new MBTiles({
     name: 'mbtile',

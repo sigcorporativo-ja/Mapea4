@@ -6,6 +6,6 @@ import { map as Mmap } from 'M/mapea';
 const mapa = Mmap({
   container: 'map',
   // controls: ['layerswitcher'],
-  layers: ['WMTS*https://www.ideandalucia.es/geowebcache/service/wmts?*orto_2010-11*false'],
+  layers: ['WMTS*http://www.ign.es/wmts/pnoa-ma?*OI.OrthoimageCoverage*false'],
 });
 window.map = mapa;
