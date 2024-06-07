@@ -264,8 +264,8 @@ export default class GeosearchLayer extends M.impl.layer.Vector {
    */
   wrapComplexFeature_(feature) {
     const featureGeom = feature.getGeometry();
-    if ((featureGeom.getType() === M.geom.wkt.type.POLYGON) ||
-      (featureGeom.getType() === M.geom.wkt.type.MULTI_POLYGON)) {
+    if ((featureGeom.getType() === M.geom.wkt.type.POLYGON)
+      || (featureGeom.getType() === M.geom.wkt.type.MULTI_POLYGON)) {
       let centroid;
       if (featureGeom.getType() === M.geom.wkt.type.POLYGON) {
         centroid = featureGeom.getInteriorPoint();
@@ -370,7 +370,6 @@ export default class GeosearchLayer extends M.impl.layer.Vector {
     }
     return centroid;
   }
-
 
   /**
    * This function destroys this layer, clearing the HTML

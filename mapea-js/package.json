@@ -1,6 +1,6 @@
 {
   "name": "mapea",
-  "version": "6.6.0",
+  "version": "6.7.0",
   "description": "Herramienta para desarrollo de mapas interactivos de forma sencilla",
   "keywords": [
     "map",
@@ -61,7 +61,7 @@
     "handlebars": "4.5.2",
     "jsdoc": "^3.6.4",
     "jsts": "^2.0.2",
-    "ol": "8.1",
+    "ol": "9.1.0",
     "proj4": "2.8.1"
   },
   "overrides": {

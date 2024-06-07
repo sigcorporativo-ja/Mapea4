@@ -13,32 +13,32 @@ module.exports = {
     browser
       .url(URL)
       .pause(3000).execute(`
-        var campamentos = new M.layer.WFS({
-          name: "Campamentos",
-          url: "http://geostematicos-sigc.juntadeandalucia.es/geoserver/wfs",
-          namespace: "sepim",
-          name: "campamentos",
+        const campamentos = new M.layer.WFS({
+          name: 'campamentos',
+          url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/wfs',
+          namespace: 'sepim',
+
           geometry: 'POINT',
-          extract: true
+          extract: true,
         });
         mapjs.addLayers(campamentos);
-        let reserva_st = new M.style.Polygon({
+        const reservaST = new M.style.Polygon({
           fill: {
-            color: 'rgb(223, 115, 255)'
-          }
+            color: 'rgb(223, 115, 255)',
+          },
         });
-        var reservas = new M.layer.WFS({
-          name: "reservas_biosfera",
-          namespace: "reservas_biosfera",
-          legend: "Reservas biosferas",
-          geometry: "POLYGON",
-          url: "https://www.juntadeandalucia.es/medioambiente/mapwms/REDIAM_WFS_Patrimonio_Natural?",
-          version: "1.1.0"
+        const reservas = new M.layer.WFS({
+          name: 'reservas_biosfera',
+          namespace: 'reservas_biosfera',
+          legend: 'Reservas biosferas',
+          geometry: 'POLYGON',
+          url: 'https://www.juntadeandalucia.es/medioambiente/mapwms/REDIAM_WFS_Patrimonio_Natural?',
+          version: '1.1.0',
         }, {
           getFeatureOutputFormat: 'geojson',
-          describeFeatureTypeOutputFormat: 'geojson'
+          describeFeatureTypeOutputFormat: 'geojson',
         });
-        reservas.setStyle(reserva_st);
+        reservas.setStyle(reservaST);
         reservas.on(M.evt.LOAD, () => {
           const divElem = document.createElement('div');
           divElem.id = 'reservasLoaded';
@@ -47,7 +47,7 @@ module.exports = {
         });
         mapjs.addLayers(reservas);
         mapjs.getFeatureHandler().removeLayer(reservas);
-        campamentos.on(M.evt.SELECT_FEATURES, function(features, evt) {
+        campamentos.on(M.evt.SELECT_FEATURES, (features, evt) => {
           if (features[0] instanceof M.ClusteredFeature) {
             console.log('Es un cluster:', features[0].getAttribute('features'));
           } else {
@@ -55,90 +55,93 @@ module.exports = {
           }
         });
 
-        //Estilos para categorización
-        let primera = new M.style.Point({
+        /* / Estilos para categorización
+        const primera = new M.style.Point({
           icon: {
-            src: 'https://image.flaticon.com/icons/svg/34/34697.svg',
-            scale: 0.1
+            // src: 'https://image.flaticon.com/icons/svg/34/34697.svg',
+            src: 'https://raw.githubusercontent.com/VectorLogoZone/vectorlogozone/b16a80dc8527670a8bc79fe4f80ff33435b8606c/www/logos/google/google-icon.svg',
+            scale: 0.1,
           },
         });
-        let segunda = new M.style.Point({
+        const segunda = new M.style.Point({
           icon: {
-            src: 'https://image.flaticon.com/icons/svg/34/34651.svg',
-            scale: 0.1
+            // src: 'https://image.flaticon.com/icons/svg/34/34651.svg',
+            src: 'https://raw.githubusercontent.com/VectorLogoZone/vectorlogozone/b16a80dc8527670a8bc79fe4f80ff33435b8606c/www/logos/adobe/adobe-icon.svg',
+            scale: 0.1,
           },
         });
-        let tercera = new M.style.Point({
+        const tercera = new M.style.Point({
           icon: {
-            src: 'https://image.flaticon.com/icons/svg/34/34654.svg',
-            scale: 0.1
+            // src: 'https://image.flaticon.com/icons/svg/34/34654.svg',
+            src: 'https://raw.githubusercontent.com/VectorLogoZone/vectorlogozone/b16a80dc8527670a8bc79fe4f80ff33435b8606c/www/logos/apple/apple-icon.svg',
+            scale: 0.1,
           },
         });
-        let categoryStyle = new M.style.Category("categoria", {
-          "Primera": primera,
-          "Segunda": segunda,
-          "Tercera": tercera
-        });
+        const categoryStyle = new M.style.Category('categoria', {
+          Primera: primera,
+          Segunda: segunda,
+          Tercera: tercera,
+        }); // */
 
-        //Estilo para cluster
-        let clusterOptions = {
+        // Estilo para cluster
+        const clusterOptions = {
           ranges: [{
             min: 2,
             max: 4,
             style: new M.style.Point({
               stroke: {
-                color: '#5789aa'
+                color: '#5789aa',
               },
               fill: {
                 color: '#99ccff',
               },
-              radius: 20
-            })
+              radius: 20,
+            }),
           }, {
             min: 5,
             max: 9,
             style: new M.style.Point({
               stroke: {
-                color: '#5789aa'
+                color: '#5789aa',
               },
               fill: {
                 color: '#3399ff',
               },
-              radius: 30
-            })
+              radius: 30,
+            }),
           }, {
             min: 10,
             max: 15,
             style: new M.style.Point({
               stroke: {
-                color: '#5789aa'
+                color: '#5789aa',
               },
               fill: {
                 color: '#004c99',
               },
-              radius: 40
-            })
+              radius: 40,
+            }),
           }],
           animated: true,
           hoverInteraction: true,
           displayAmount: true,
           distance: 80,
-          maxFeaturesToSelect: 7
+          maxFeaturesToSelect: 7,
         };
-        let vendorParameters = {
+        const vendorParameters = {
           distanceSelectFeatures: 25,
           convexHullStyle: {
             fill: {
               color: '#000000',
-              opacity: 0.5
+              opacity: 0.5,
             },
             stroke: {
               color: '#000000',
-              width: 1
-            }
-          }
-        }
-        let clusterStyle = new M.style.Cluster(clusterOptions, vendorParameters);
+              width: 1,
+            },
+          },
+        };
+        const clusterStyle = new M.style.Cluster(clusterOptions, vendorParameters);
         campamentos.setStyle(clusterStyle);
     `, []);
   },

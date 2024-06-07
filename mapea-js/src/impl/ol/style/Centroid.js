@@ -12,11 +12,11 @@ class Centroid extends OLStyle {
    *
    * @constructor
    * @struct
-   * @param {olx.style.StyleOptions=} opt_options Style options.
+   * @param {olx.style.StyleOptions=} optOptions Style options.
    * @api
    */
-  constructor(opt_options = {}) {
-    super(opt_options);
+  constructor(optOptions = {}) {
+    super(optOptions);
   }
 
   /**

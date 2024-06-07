@@ -107,7 +107,7 @@ class AnimatedCluster extends OLLayerVector {
       const clusterFeatures = cluster.get('features');
       let result;
       if (!isNullOrEmpty(clusterFeatures)) {
-        result = clusterFeatures.find(clusterFeature => clusterFeature === feature);
+        result = clusterFeatures.find((clusterFeature) => clusterFeature === feature);
       }
       return result;
     });
@@ -127,8 +127,8 @@ class AnimatedCluster extends OLLayerVector {
     if (!duration) return;
 
     // Start a new animation, if change resolution and source has changed
-    if (this.animation_.resolution !== eventVariable.frameState.viewState.resolution &&
-      this.sourceChanged) {
+    if (this.animation_.resolution !== eventVariable.frameState.viewState.resolution
+      && this.sourceChanged) {
       const resolution = eventVariable.frameState.viewState.resolution;
       const extent = eventVariable.frameState.extent;
       this.animation_.reverse = this.animation_.resolution >= resolution;

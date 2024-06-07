@@ -10,7 +10,7 @@
    * @private
    * @type {Number}
    */
-  M.config('MOBILE_WIDTH', ${mobile.width});
+  M.config('MOBILE_WIDTH', parseInt('${mobile.width}', 10));
 
   /**
    * The Mapea URL

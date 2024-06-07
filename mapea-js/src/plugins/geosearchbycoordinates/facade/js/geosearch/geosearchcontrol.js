@@ -439,7 +439,7 @@ export default class GeosearchControl extends M.Control {
     for (let i = 0; i < newResults.length; i += 1) {
       const newResult = newResults.item(i);
       this.resultsScrollContainer_.appendChild(newResult);
-      newResult.addEventListener('click', e => this.resultClick_(e));
+      newResult.addEventListener('click', (e) => this.resultClick_(e));
     }
 
     // updates the found num elements
@@ -680,8 +680,8 @@ export default class GeosearchControl extends M.Control {
     } else {
       total = results.response.numFound;
     }
-    if ((this.results_.length === total) &&
-      (!M.utils.isNullOrEmpty(this.resultsScrollContainer_))) {
+    if ((this.results_.length === total)
+      && (!M.utils.isNullOrEmpty(this.resultsScrollContainer_))) {
       this.resultsScrollContainer_.removeEventListener('scroll', this.resultsScroll_);
     }
   }

@@ -5,7 +5,9 @@ import ChartImpl from 'impl/style/Chart.js';
 import StyleFeature from './Feature.js';
 import ChartVariable from '../chart/Variable.js';
 import * as ChartTypes from '../chart/types.js';
-import { isNullOrEmpty, extendsObj, isArray, stringifyFunctions, defineFunctionFromString } from '../util/Utils.js';
+import {
+  isNullOrEmpty, extendsObj, isArray, stringifyFunctions, defineFunctionFromString,
+} from '../util/Utils.js';
 
 /**
  * @classdesc
@@ -49,7 +51,7 @@ class Chart extends StyleFeature {
     if (!isNullOrEmpty(variables)) {
       if (variables instanceof Array) {
         options.variables = variables
-          .filter(variable => variable != null).map(variable => Chart.formatVariable(variable));
+          .filter((variable) => variable != null).map((variable) => Chart.formatVariable(variable));
       } else if (typeof variables === 'string' || typeof variables === 'object') {
         options.variables = [Chart.formatVariable(variables)];
       } else {
@@ -64,15 +66,15 @@ class Chart extends StyleFeature {
       // if is a string we will check if its custom (take values from variables) or a existing theme
     } else if (typeof options.scheme === 'string') {
       // NOTICE THAT } else if (options.scheme instanceof String) { WONT BE TRUE
-      const someNotNull = options.variables.some(variable => variable.fillColor != null);
+      const someNotNull = options.variables.some((variable) => variable.fillColor != null);
       if (options.scheme === ChartTypes.schemes.Custom && someNotNull) {
         options.scheme = options.variables
-          .map(variable => (variable.fillColor ? variable.fillColor : ''));
+          .map((variable) => (variable.fillColor ? variable.fillColor : ''));
       } else {
         options.scheme = ChartTypes.schemes[options.scheme] || Chart.DEFAULT.scheme;
       }
       // if is an array of string we will set it directly
-    } else if (!(options.scheme instanceof Array && options.scheme.every(el => typeof el === 'string'))) {
+    } else if (!(options.scheme instanceof Array && options.scheme.every((el) => typeof el === 'string'))) {
       options.scheme = Chart.DEFAULT.scheme;
     }
 
@@ -95,7 +97,7 @@ class Chart extends StyleFeature {
     let constructorOptions = {};
     if (variableOb instanceof ChartVariable) {
       return variableOb;
-    } else if (typeof variableOb === 'string') {
+    } if (typeof variableOb === 'string') {
       constructorOptions = {
         attribute: variableOb,
       };
@@ -123,7 +125,7 @@ class Chart extends StyleFeature {
    */
   apply(layer) {
     this.layer_ = layer;
-    layer.getFeatures().forEach(feature => feature.setStyle(this.clone()));
+    layer.getFeatures().forEach((feature) => feature.setStyle(this.clone()));
     this.updateCanvas();
   }
 
@@ -189,8 +191,9 @@ class Chart extends StyleFeature {
    */
   static deserialize([serializedOptions]) {
     const options = serializedOptions;
-    options.variables = serializedOptions.variables.map(variableOpt =>
-      new ChartVariable(defineFunctionFromString(variableOpt)));
+    options.variables = serializedOptions.variables.map(
+      (variableOpt) => new ChartVariable(defineFunctionFromString(variableOpt)),
+    );
     /* eslint-disable */
     const styleFn = new Function(['options'], `return new M.style.Chart(options)`);
     /* eslint-enable */

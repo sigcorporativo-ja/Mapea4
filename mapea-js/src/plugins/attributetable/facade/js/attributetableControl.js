@@ -136,7 +136,7 @@ export default class AttributeTableControl extends M.Control {
         };
         if (this.layer_) {
           const feats = this.layer_.getFeatures()
-            .filter(f => this.featuresSeleccionados.includes(f.getId()));
+            .filter((f) => this.featuresSeleccionados.includes(f.getId()));
           feats.forEach((f) => {
             f.setStyle(this.originalStyles[f.getId()]);
           });
@@ -194,7 +194,7 @@ export default class AttributeTableControl extends M.Control {
    */
   toGeoJSON(layer) {
     const code = this.map_.getProjection().code;
-    const featuresAsJSON = layer.getFeatures().map(feature => feature.getGeoJSON());
+    const featuresAsJSON = layer.getFeatures().map((feature) => feature.getGeoJSON());
     return { type: 'FeatureCollection', features: this.geojsonTo4326(featuresAsJSON, code) };
   }
 
@@ -290,7 +290,6 @@ export default class AttributeTableControl extends M.Control {
       },
     };
   }
-
 
   /**
    * This function refresh the panel info
@@ -397,7 +396,7 @@ export default class AttributeTableControl extends M.Control {
 
   // TODO: LOGICA DE MARCADO/DESMARCADO CHECK
   markSelected(evt) {
-    const feats = this.layer_.getFeatures().filter(f => f.getId() === evt.target.value);
+    const feats = this.layer_.getFeatures().filter((f) => f.getId() === evt.target.value);
     if (evt.target.checked) {
       this.featuresSeleccionados.push(evt.target.value);
       if (feats.length > 0) {
@@ -422,8 +421,8 @@ export default class AttributeTableControl extends M.Control {
    */
   hasLayer_(layerSearch) {
     const layersFind = [];
-    if (M.utils.isNullOrEmpty(layerSearch) || (!M.utils.isArray(layerSearch) &&
-        !M.utils.isString(layerSearch) && !(layerSearch instanceof M.Layer))) {
+    if (M.utils.isNullOrEmpty(layerSearch) || (!M.utils.isArray(layerSearch)
+        && !M.utils.isString(layerSearch) && !(layerSearch instanceof M.Layer))) {
       M.dialog.error('El parametro para el método hasLayer no es correcto.', 'Error');
       return layersFind;
     }
@@ -526,8 +525,8 @@ export default class AttributeTableControl extends M.Control {
    */
   nextPage_() {
     if (this.pages_.total > this.pages_.actual) {
-      this.pages_.actual = this.pages_.actual + 1;
-      this.pages_.element = this.pages_.element + this.numPages_;
+      this.pages_.actual += 1;
+      this.pages_.element += this.numPages_;
       this.renderPanel_();
       if (this.renderPanel_()) {
         this.hasNext_();
@@ -544,14 +543,15 @@ export default class AttributeTableControl extends M.Control {
    */
   previousPage_() {
     if (this.pages_.total >= this.pages_.actual) {
-      this.pages_.actual = this.pages_.actual - 1;
-      this.pages_.element = this.pages_.element - this.numPages_;
+      this.pages_.actual -= 1;
+      this.pages_.element -= this.numPages_;
       this.renderPanel_();
       if (this.renderPanel_()) {
         this.hasPrevious_();
       }
     }
   }
+
   /**
    * This function adds / deletes classes if you have next results
    *
@@ -619,7 +619,6 @@ export default class AttributeTableControl extends M.Control {
     return attributesSort;
   }
 
-
   /**
    * This function open/close the layers/table panel
    *
@@ -641,7 +640,6 @@ export default class AttributeTableControl extends M.Control {
     this.rePosition_();
   }
 
-
   /**
    * This function activates the draggable function to the plugin
    *
@@ -660,7 +658,6 @@ export default class AttributeTableControl extends M.Control {
     this.draggable_.enable();
   }
 
-
   /**
    * This function deactivates the draggable function to the plugin
    *
@@ -673,7 +670,6 @@ export default class AttributeTableControl extends M.Control {
     panel.style.position = 'relative';
     this.draggable_.disable();
   }
-
 
   /**
    * This function adjusts the panel position

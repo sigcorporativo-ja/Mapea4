@@ -23,7 +23,6 @@ export default class GeosearchbylocationControl extends GeosearchControl {
     // calls super
     super(url, core, handler);
 
-
     // implementation of this control
     this.impl_ = new GeosearchbylocationImpl(this.searchUrl_);
 
@@ -89,7 +88,6 @@ export default class GeosearchbylocationControl extends GeosearchControl {
       M.Exception('La implementación usada no puede crear controles Geosearchbylocation');
     }
 
-
     // name for this control
     this.name = GeosearchbylocationControl.NAME;
   }
@@ -139,21 +137,21 @@ export default class GeosearchbylocationControl extends GeosearchControl {
    * @api stabletrue
    */
   createImagesCache(html) {
-    const container = html.getElementsByClassName("img-cache-loader")[0];
+    const container = html.getElementsByClassName('img-cache-loader')[0];
 
     const urls = [
       '/img/m-pin-24.svg',
       '/img/m-pin-24-new.svg',
-      '/img/m-pin-24-sel.svg'
-    ]; 
+      '/img/m-pin-24-sel.svg',
+    ];
 
-    urls.forEach(url => {
-      let img = new Image();
+    urls.forEach((url) => {
+      const img = new Image();
       img.src = M.utils.concatUrlPaths([M.config.THEME_URL, url]);
       img.width = '24';
       img.height = '24';
       img.crossOrigin = 'anonymous';
-      container.append(img);    
+      container.append(img);
     });
   }
 
@@ -210,7 +208,6 @@ export default class GeosearchbylocationControl extends GeosearchControl {
   drawLocation_(coor) {
     this.getImpl().drawLocation(coor);
   }
-
 
   /**
    * This function performs search

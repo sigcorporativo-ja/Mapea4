@@ -86,8 +86,8 @@ class KML extends OLFormatKML {
       const icon = screenOverlay.querySelector(iconAttr);
 
       // Icon src of ScreenOverlay
-      const src = icon !== null ?
-        icon.querySelector(hrefAttr).innerHTML : KML.DEFAULT_NO_IMAGE_STYLE;
+      const src = icon !== null
+        ? icon.querySelector(hrefAttr).innerHTML : KML.DEFAULT_NO_IMAGE_STYLE;
 
       // overlayXY (offset)
       let overlayXY;

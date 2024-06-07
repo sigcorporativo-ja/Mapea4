@@ -124,7 +124,9 @@ export default class GeosearchByCoordinates extends M.Plugin {
       this.handler_,
       this.distance_,
       this.spatialField_,
-      this.rows_);
+      // eslint-disable-next-line comma-dangle
+      this.rows_
+    );
     this.controlGeo_.on(M.evt.ADDED_TO_MAP, () => {
       this.fire(M.evt.ADDED_TO_MAP);
     });
@@ -213,7 +215,6 @@ export default class GeosearchByCoordinates extends M.Plugin {
     return this.metadata_;
   }
 }
-
 
 /**
  * Name of this control

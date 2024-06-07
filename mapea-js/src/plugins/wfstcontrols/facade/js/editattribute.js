@@ -31,7 +31,6 @@ export default class EditAttribute extends M.Control {
     }
   }
 
-
   /**
    * This function creates the view to the specified map
    *

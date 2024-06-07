@@ -59,9 +59,9 @@ class Composite extends StyleBase {
     if (!isArray(styles)) {
       styles = [styles];
     }
-    styles = styles.filter(style => style.constructor !== this.constructor);
+    styles = styles.filter((style) => style.constructor !== this.constructor);
     styles.forEach((style) => {
-      this.styles_ = this.styles_.filter(s => s.constructor !== style.constructor);
+      this.styles_ = this.styles_.filter((s) => s.constructor !== style.constructor);
     });
     this.styles_ = this.styles_.concat(styles);
     if (!isNullOrEmpty(layer)) {
@@ -88,7 +88,7 @@ class Composite extends StyleBase {
     if (!isNullOrEmpty(this.layer_)) {
       this.unapplyInternal(this.layer_);
     }
-    this.styles_ = this.styles_.filter(style => !styles.includes(style));
+    this.styles_ = this.styles_.filter((style) => !styles.includes(style));
     layer.setStyle(this.oldStyle_, true);
     layer.setStyle(this);
   }
@@ -134,8 +134,9 @@ class Composite extends StyleBase {
    * @api
    */
   unapplyInternal(layer) {
-    const styles = this.styles_.concat(this).sort((style, style2) =>
-      styleComparator(style2, style));
+    const styles = this.styles_.concat(this).sort(
+      (style, style2) => styleComparator(style2, style),
+    );
     styles.forEach((style) => {
       if (style instanceof Composite) {
         style.unapplySoft(layer);
@@ -173,8 +174,9 @@ class Composite extends StyleBase {
    */
 
   updateInternal_(layer) {
-    const styles = this.styles_.concat(this).sort((style, style2) =>
-      styleComparator(style, style2));
+    const styles = this.styles_.concat(this).sort(
+      (style, style2) => styleComparator(style, style2),
+    );
     styles.forEach((style) => {
       if (style instanceof Composite) {
         style.applyInternal(layer);

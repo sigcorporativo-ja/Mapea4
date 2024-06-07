@@ -2,7 +2,9 @@
  * @module M/Style
  */
 import Base from '../Base.js';
-import { isNullOrEmpty, isArray, isObject, extendsObj, stringifyFunctions } from '../util/Utils.js';
+import {
+  isNullOrEmpty, isArray, isObject, extendsObj, stringifyFunctions,
+} from '../util/Utils.js';
 import * as EventType from '../event/eventtype.js';
 
 /**
@@ -159,7 +161,7 @@ class Style extends Base {
       if (isArray(value)) {
         value = [...value];
       } else if (isObject(value)) {
-        value = Object.assign({}, value);
+        value = { ...value };
       }
       obj[key] = value;
     } else if (keyLength > 1) { // recursive case
@@ -194,6 +196,7 @@ class Style extends Base {
       }
     }
   }
+
   /**
    * This functions gets the options style.
    *
@@ -217,8 +220,8 @@ class Style extends Base {
     let styleImgB64;
 
     if (isNullOrEmpty(this.updateCanvasPromise_)) {
-      if (!isNullOrEmpty(this.options_.icon) &&
-        !isNullOrEmpty(this.options_.icon.src)) {
+      if (!isNullOrEmpty(this.options_.icon)
+        && !isNullOrEmpty(this.options_.icon.src)) {
         const image = new Image();
         image.crossOrigin = 'Anonymous';
         const can = this.canvas_;

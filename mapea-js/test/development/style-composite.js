@@ -18,13 +18,8 @@ const wfs = new WFS({
 
 const styleBase = new StylePoint({
   radius: 5,
-  fill: {
-    color: 'yellow',
-    opacity: 0.3,
-  },
-  stroke: {
-    color: 'green',
-  },
+  fill: { color: 'yellow', opacity: 0.3 },
+  stroke: { color: 'green' },
 });
 
 const styleCluster = new StyleCluster();

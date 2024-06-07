@@ -224,11 +224,11 @@ export default class OLChart extends OLStyleRegularShape {
   getChecksum() {
     let fillChecksum;
     const strokeChecksum = (this.stroke_ !== null) ? this.stroke_.getChecksum() : '-';
-    const recalculate = (this.checksums_ === null) ||
-      (strokeChecksum !== this.checksums_[1]) ||
-      (fillChecksum !== this.checksums_[2]) ||
-      (this.radius_ !== this.checksums_[3]) ||
-      (this.data_.join('|') !== this.checksums_[4]);
+    const recalculate = (this.checksums_ === null)
+      || (strokeChecksum !== this.checksums_[1])
+      || (fillChecksum !== this.checksums_[2])
+      || (this.radius_ !== this.checksums_[3])
+      || (this.data_.join('|') !== this.checksums_[4]);
 
     if (recalculate) {
       const radiusCheck = this.radius_ ? this.radius_.toString() : '-';

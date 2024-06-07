@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { map } from 'M/mapea';
 import WFS from 'M/layer/WFS';
 import GeoJSON from 'M/layer/GeoJSON';
@@ -46,7 +47,7 @@ lyProvincias.on(SELECT_FEATURES, (features) => {
         [objEnv._minx, objEnv._miny],
         [objEnv._minx, objEnv._maxy],
         [objEnv._maxx, objEnv._maxy],
-        [objEnv._maxx, objEnv._miny]
+        [objEnv._maxx, objEnv._miny],
       ]],
     },
     geometry_name: 'the_geom',

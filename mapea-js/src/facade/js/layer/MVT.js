@@ -27,7 +27,7 @@ export const mode = {
  * @api
  */
 class MVT extends Vector {
-  constructor(parameters = {}, options = {}, vendorOptions = {}, implParam) {
+  constructor(parameters = {}, options = {}, vendorOptions = {}, implParam = undefined) {
     const impl = implParam || new MVTTileImpl(parameters, options, vendorOptions);
     super(parameters, options, vendorOptions, impl);
 
@@ -49,14 +49,14 @@ class MVT extends Vector {
    * @api
    */
   set type(newType) {
-    if (!isUndefined(newType) &&
-      !isNullOrEmpty(newType) && (newType !== MVTType)) {
+    if (!isUndefined(newType)
+      && !isNullOrEmpty(newType) && (newType !== MVTType)) {
       Exception('El tipo de capa debe ser \''.concat(MVTType).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
     }
   }
 
   /**
-   * This function sets 
+   * This function sets
    * the tileLoadFunction
    * On the implementation
    *
@@ -65,7 +65,7 @@ class MVT extends Vector {
    * @param {Function} func Function to override
    * @api
    */
-  setTileLoadFunction(func){
+  setTileLoadFunction(func) {
     this.getImpl().setTileLoadFunction(func);
   }
 
@@ -100,7 +100,7 @@ class MVT extends Vector {
    * @api
    */
   calculateMaxExtent() {
-    return new Promise(resolve => resolve(this.getMaxExtent()));
+    return new Promise((resolve) => { resolve(this.getMaxExtent()); });
   }
 
   /**
@@ -155,7 +155,7 @@ class MVT extends Vector {
   getFeatures() {
     const features = this.getImpl().getFeatures();
 
-    return features.map(olFeature => RenderFeatureImpl.olFeature2Facade(olFeature));
+    return features.map((olFeature) => RenderFeatureImpl.olFeature2Facade(olFeature));
   }
 
   /**
@@ -170,10 +170,15 @@ class MVT extends Vector {
   }
 
   setFilter() {}
+
   addFeatures() {}
+
   removeFeatures() {}
+
   refresh() {}
+
   redraw() {}
+
   toGeoJSON() {}
 }
 
@@ -214,6 +219,5 @@ MVT.DEFAULT_OPTIONS_STYLE = {
     ...MVT.DEFAULT_PARAMS_STYLE,
   },
 };
-
 
 export default MVT;

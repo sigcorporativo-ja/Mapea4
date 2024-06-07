@@ -17,24 +17,15 @@ const wfs = new WFS({
 });
 
 mapjs.addLayers([wfs]);
-const stylecategory = new StyleCategory('nombre', {
-  'Río Cacín': new StyleLine({
-    fill: {
-      color: 'red',
-    },
-    stroke: {
-      color: 'black',
-      width: 5,
-    },
+const stylecategory = new StyleCategory('destino', {
+  Osuna: new StyleLine({
+    fill: { color: 'red' },
+    stroke: { color: 'red', width: 5 },
   }),
   other: new StyleLine({
-    stroke: {
-      color: 'white',
-      width: 5,
-    },
-    fill: {
-      color: 'black',
-    },
+    fill: { color: 'black' },
+    stroke: { color: 'black', width: 2 },
+
   }),
 });
 wfs.setStyle(stylecategory);

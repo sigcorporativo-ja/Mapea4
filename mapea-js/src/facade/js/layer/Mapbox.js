@@ -126,14 +126,14 @@ class Mapbox extends LayerBase {
   }
 
   set type(newType) {
-    if (!isUndefined(newType) &&
-      !isNullOrEmpty(newType) && (newType !== LayerType.Mapbox)) {
+    if (!isUndefined(newType)
+      && !isNullOrEmpty(newType) && (newType !== LayerType.Mapbox)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.Mapbox).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
     }
   }
 
   /**
-   * This function sets 
+   * This function sets
    * the tileLoadFunction
    * On the implementation
    *
@@ -142,7 +142,7 @@ class Mapbox extends LayerBase {
    * @param {Function} func Function to override
    * @api
    */
-  setTileLoadFunction(func){
+  setTileLoadFunction(func) {
     this.getImpl().setTileLoadFunction(func);
   }
 

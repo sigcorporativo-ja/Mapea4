@@ -16,7 +16,7 @@ function load() {
     });
     map.addLayers(mbtiles);
   } else {
-    M.dialog.info('No hay fichero adjuntado.')
+    M.dialog.info('No hay fichero adjuntado.');
   }
 }
 

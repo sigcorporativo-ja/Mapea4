@@ -26,7 +26,6 @@ export default class GeosearchIntegrated extends GeosearchControl {
     }
   }
 
-
   /**
    * This function replaces createView of Geosearch, not to add the template control, add events
    *
@@ -78,6 +77,7 @@ export default class GeosearchIntegrated extends GeosearchControl {
     this.searchingResult_ = this.element_.querySelector('div#m-geosearch-results > div#m-searching-result-geosearch');
     // goog.dom.removeChildren(this.resultsContainer_, this.searchingResult_);
   }
+
   /**
    * This function add new results panel Geosearch when done scroll
    * to this control
@@ -99,13 +99,12 @@ export default class GeosearchIntegrated extends GeosearchControl {
     for (let i = 0; i < newResults.length; i += 1) {
       const newResult = newResults.item(i);
       this.resultsScrollContainer_.appendChild(newResult);
-      newResult.addEventListener('click', e => this.resultClick_(e));
+      newResult.addEventListener('click', (e) => this.resultClick_(e));
     }
 
     // updates the found num elements
     const spanNumFound = this.resultsContainer_.getElementsByTagName('span')['m-geosearch-page-found'];
     spanNumFound.innerHTML = this.results_.length;
-
 
     this.element_.classList.remove(GeosearchControl.SEARCHING_CLASS);
     this.resultsContainer_.removeChild(this.searchingResult_);
@@ -129,7 +128,6 @@ export default class GeosearchIntegrated extends GeosearchControl {
       this.resultsContainer_.parentElement.classList.toggle('hidden');
     }
   }
-
 
   /**
    * This function return impl control

@@ -33,10 +33,10 @@ const extend = (targetVar, ...sourceObs) => {
   }
 
   const to = Object(target);
-  sourceObs.filter(source => source != null).forEach(source => Object.keys(source)
+  sourceObs.filter((source) => source != null).forEach((source) => Object.keys(source)
     .forEach((sourceKey) => {
-      if (Object.prototype.hasOwnProperty.call(source, sourceKey) &&
-        !Object.prototype.hasOwnProperty.call(target, sourceKey)) {
+      if (Object.prototype.hasOwnProperty.call(source, sourceKey)
+        && !Object.prototype.hasOwnProperty.call(target, sourceKey)) {
         target[sourceKey] = source[sourceKey];
       }
     }));
@@ -101,7 +101,7 @@ const generateTextBarChart = (stylesParam, styleOptions, feature) => {
       }),
     });
   }));
-  const filteredStyles = styles.filter(style => style != null);
+  const filteredStyles = styles.filter((style) => style != null);
   height = Math.max(height, 1);
   const anchorX = -(stylesParam[0].getImage().getImage().width / 2) + 10 + styleOptions.offsetX;
   const anchorY = (stylesParam[0].getImage().getImage().height / 2) + styleOptions.offsetY;
@@ -172,7 +172,7 @@ const generateTextCircleChart = (stylesParam, styleOptions, feature) => {
       text: olText,
     });
   }));
-  const filteredStyles = styles.filter(style => style != null);
+  const filteredStyles = styles.filter((style) => style != null);
   return filteredStyles;
 };
 
@@ -379,16 +379,16 @@ class Chart extends Feature {
       };
       this.variables_.forEach((variable, i) => {
         const label = !isNullOrEmpty(variable.legend) ? variable.legend : variable.attribute;
-        const color = !isNullOrEmpty(variable.fillColor) ?
-          variable.fillColor : (this.colorsScheme_[i % this.colorsScheme_.length] ||
-            this.colorsScheme_[0]);
+        const color = !isNullOrEmpty(variable.fillColor)
+          ? variable.fillColor : (this.colorsScheme_[i % this.colorsScheme_.length]
+            || this.colorsScheme_[0]);
         [x0, y0] = drawVariable([x0, y0], label, color);
         x0 = percentages.left_right_content;
       });
       y0 += fixedProps.top_content;
       context.canvas.setAttribute('height', y0);
       context.save();
-      drawStackActions.forEach(drawAction => drawAction());
+      drawStackActions.forEach((drawAction) => drawAction());
       context.restore();
     }
   }
@@ -417,8 +417,8 @@ class Chart extends Feature {
         let featureData = feature.get(variable.attribute);
         // TODO revisar
         featureData = parseFloat(featureData);
-        data = data.concat(featureData instanceof Array ?
-          featureData : [featureData]).filter(fData => fData != null);
+        data = data.concat(featureData instanceof Array
+          ? featureData : [featureData]).filter((fData) => fData != null);
       });
 
       if (data.length === 0) {

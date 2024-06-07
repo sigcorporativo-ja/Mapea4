@@ -68,6 +68,7 @@ public class ActionsWS {
       actions.put("/themes");
       actions.put("/projection");
       actions.put("/plugins");
+      actions.put("/versions");
 
       actions.put("/../../doc");
 
@@ -339,5 +340,66 @@ public class ActionsWS {
 		return response;
 
 	}
+
+   /**
+    * Provides legacy versions available of the current
+    * build
+    *
+    * @param callbackFn the name of the javascript
+    * function to execute as callback
+    *
+    * @return the javascript code
+    */
+   @GET
+   @Path("/versions")
+   public String showVersions (@QueryParam("callback") String callbackFn) {
+
+      JSONObject versionsJSON = new JSONObject();
+
+      String versionsRaw = configProperties.getString("versions");
+      String[] versions = versionsRaw.split(",");
+
+      for (String version : versions) {
+         String versionJS = "/js/mapea";
+         String versionConfig = "/js/configuration";
+         String versionCSS = "/assets/css/mapea";
+
+         // Versions file names overrides
+         if (version.equals("legacy")) {
+            versionJS += ".ol";
+            versionConfig += "";
+            versionCSS += ".ol";
+         } else if (version.equals("legacy-ol3")) {
+            versionJS += ".ol3";
+            versionConfig += "";
+            versionCSS += ".ol3";
+         } else if (version.equals("4.0.3-ol3")) {
+            versionJS += "-4.0.3.ol3";
+            versionConfig += "-4.0.3";
+            versionCSS += "-4.0.3.ol";
+         } else if (version.equals("latest")) {
+            versionJS += "-" + versions[versions.length - 2] + ".ol";
+            versionConfig += "-" + versions[versions.length - 2] + "";
+            versionCSS += "-" + versions[versions.length - 2] + ".ol";
+         } else {
+            versionJS += "-" + version + ".ol";
+            versionConfig += "-" + version + "";
+            versionCSS += "-" + version + ".ol";
+         }
+         versionJS += ".min.js";
+         versionConfig += ".js";
+         versionCSS += ".min.css";
+
+         JSONObject versionJSON = new JSONObject();
+
+         versionJSON.put("js", versionJS);
+         versionJSON.put("config", versionConfig);
+         versionJSON.put("css", versionCSS);
+
+         versionsJSON.put(version, versionJSON);
+      }
+
+      return JSBuilder.wrapCallback(versionsJSON, callbackFn);
+   }
 
 }

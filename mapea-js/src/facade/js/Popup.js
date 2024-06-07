@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 /**
  * @module M/Popup
  */
@@ -19,9 +20,9 @@ let id = 0;
  */
 const getUrlFromPlatform = (platform, coords) => {
   const platformURL = {
-    android: coord => `geo:${coord[1]}},${coord[0]}?q=${coord[1]},${coord[0]}`,
-    ios: coord => `maps://?ll=${coord[1]},${coord[0]}`,
-    unknown: coord => `http://maps.google.com?q=${coord[1]},${coord[0]}`,
+    android: (coord) => `geo:${coord[1]}},${coord[0]}?q=${coord[1]},${coord[0]}`,
+    ios: (coord) => `maps://?ll=${coord[1]},${coord[0]}`,
+    unknown: (coord) => `http://maps.google.com?q=${coord[1]},${coord[0]}`,
   };
   return platformURL[platform](coords);
 };
@@ -152,7 +153,7 @@ class Popup extends Base {
         tabRemove = tab;
       }
     });
-    this.tabs_ = this.tabs_.filter(tab => tab.content !== tabToRemove.content);
+    this.tabs_ = this.tabs_.filter((tab) => tab.content !== tabToRemove.content);
     this.fire(EventType.POPUP_REMOVED_TAB, [tabRemove]);
     this.update();
   }
@@ -290,11 +291,11 @@ class Popup extends Base {
     listeners.forEach((listener) => {
       if (listener.all === true) {
         html.querySelectorAll(listener.selector).forEach((element) => {
-          element.addEventListener(listener.type, e => listener.callback(e));
+          element.addEventListener(listener.type, (e) => listener.callback(e));
         });
       } else {
         html.querySelector(listener.selector)
-          .addEventListener(listener.type, e => listener.callback(e));
+          .addEventListener(listener.type, (e) => listener.callback(e));
       }
     });
   }

@@ -4,7 +4,9 @@
 import GeoJSONImpl from 'impl/layer/GeoJSON.js';
 import LayerVector from './Vector.js';
 import { GeoJSON as GeoJSONType } from './Type.js';
-import { isString, isNullOrEmpty, isUndefined, isArray } from '../util/Utils.js';
+import {
+  isString, isNullOrEmpty, isUndefined, isArray,
+} from '../util/Utils.js';
 import Exception from '../exception/exception.js';
 import { getValue } from '../i18n/language.js';
 
@@ -24,7 +26,7 @@ class GeoJSON extends LayerVector {
    * @param {Object} vendorOptions vendor options for the base library
    * @api
    */
-  constructor(parameters, options = {}, vendorOptions) {
+  constructor(parameters, options = {}, vendorOptions = undefined) {
     /**
      * Implementation of this layer
      * @public
@@ -89,8 +91,8 @@ class GeoJSON extends LayerVector {
   }
 
   set type(newType) {
-    if (!isUndefined(newType) &&
-      !isNullOrEmpty(newType) && (newType !== GeoJSONType)) {
+    if (!isUndefined(newType)
+      && !isNullOrEmpty(newType) && (newType !== GeoJSONType)) {
       Exception('El tipo de capa debe ser \''.concat(GeoJSONType).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
     }
   }

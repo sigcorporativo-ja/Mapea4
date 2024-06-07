@@ -99,16 +99,14 @@ window.filters = {
     pruebaPun.setCQL(filtro.toCQL());
   },
 
-
-  // //DISJOINT CON CQL
+  // DISJOINT CON CQL
   filterDisjointCQL() {
     const filtro = spatial.DISJOINT(pruebaPol.getFeatures()[1].getGeometry());
     pruebaPol.getFeatures()[1].setStyle(estiloPolSel);
     pruebaLin.setCQL(filtro.toCQL());
   },
-  //
-  //
-  // //CONTAIN CON CQL
+
+  // CONTAIN CON CQL
   // Filtra aquellos puntos que contienen al poligono inf-izq (ninguno cumplira esto)
   filterContainCQL() {
     const filtro = spatial.CONTAIN(pruebaPol.getFeatures()[8].getGeometry());
@@ -116,21 +114,15 @@ window.filters = {
     pruebaPun.setCQL(filtro.toCQL());
   },
 
-
-  //
-  //
-  // //WITHIN CON CQL
+  // WITHIN CON CQL
   // Filtramos la capa puntos que esten contenidos en el poligono superior izquierda
   filterWithinCQL() {
     const filtro = spatial.WITHIN(pruebaPol.getFeatures()[1].getGeometry());
     pruebaPol.getFeatures()[1].setStyle(estiloPolSel);
     pruebaPun.setCQL(filtro.toCQL());
   },
-  //
 
-  //
-  //
-  // //FEATURE COMO PARAMETRO
+  // FEATURE COMO PARAMETRO
   // Esta funcion es para testear que no haga falta pasarle la geometría a la función
   filterFeatureComoParametro() {
     const filtro = spatial.INTERSECT(pruebaPol.getFeatures()[1]);
@@ -138,24 +130,21 @@ window.filters = {
     pruebaPun.setCQL(filtro.toCQL());
   },
 
-  //
-  // //ARRAY DE FEATURES COMO PARAMETRO
+  // ARRAY DE FEATURES COMO PARAMETRO
   // Igual que antes pero pasandole una array de features (que siga funcionando igual)
   filterArrayComoParametro() {
     const filtro = spatial.INTERSECT(pruebaPol.getFeatures());
     pruebaPun.setCQL(filtro.toCQL());
   },
-  //
-  //
-  // //CAPA COMO PARAMETRO
+
+  // CAPA COMO PARAMETRO
   // Igual que antes pero pasandole una capa como parametro (que siga funcionando igual)
   filterCapaComoParametro() {
     const filtro = spatial.INTERSECT(pruebaPol);
     pruebaPun.setCQL(filtro.toCQL());
   },
 
-
-  // //FILTRO AND CON INTERSECT
+  // FILTRO AND CON INTERSECT
   // lineas que intersecan con el poligono sup-izq e inf-izq
   filterIntersectAnd() {
     const filtro1 = spatial.INTERSECT(pruebaPol.getFeatures()[1].getGeometry());
@@ -167,11 +156,9 @@ window.filters = {
 
     pruebaLin.setCQL(filtroAND.toCQL());
   },
-  //
-  //
-  // //FILTRO OR CON INTERSECT
 
-  // // Puntos que intersecan con el poligono sup-izq ó inf-izq
+  // FILTRO OR CON INTERSECT
+  // Puntos que intersecan con el poligono sup-izq ó inf-izq
   filterIntersectOr() {
     const filtro1 = spatial.INTERSECT(pruebaPol.getFeatures()[1].getGeometry());
     const filtro2 = spatial.INTERSECT(pruebaPol.getFeatures()[8].getGeometry());
@@ -182,9 +169,8 @@ window.filters = {
     const filtroOR = OR([filtro1, filtro2]);
     pruebaPun.setCQL(filtroOR.toCQL());
   },
-  //
-  //
-  // //FILTRO NOT CON INTERSECT
+
+  // FILTRO NOT CON INTERSECT
   // Filtrará aquellas lineas que no intersequen con el poligono inf-dech
   filterIntersectNot() {
     const filtro = spatial.INTERSECT(pruebaPol.getFeatures()[1].getGeometry());

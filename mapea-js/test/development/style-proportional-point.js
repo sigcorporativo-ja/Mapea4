@@ -9,22 +9,17 @@ const mapjs = map({
 });
 
 const wfs = new WFS({
-  url: "http://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows",
-  name: "sepim:campamentos",
-  legend: "Campamentos",
+  url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows',
+  name: 'sepim:campamentos',
+  legend: 'Campamentos',
   geometry: 'POINT',
-  extract: true
+  extract: true,
 });
 
 mapjs.addLayers([wfs]);
 const stylepoint = new StylePoint({
-  fill: {
-    color: 'red',
-  },
-  stroke: {
-    color: 'white',
-    stroke: 4,
-  },
+  fill: { color: 'red' },
+  stroke: { color: 'white', stroke: 4 },
 });
 const styleproportional = new StyleProportional('yutm', 15, 30);
 styleproportional.add(stylepoint);

@@ -47,7 +47,7 @@ class WMS extends LayerBase {
    * @param {Object} vendorOptions vendor options for the base library
    * @api stable
    */
-  constructor(options = {}, vendorOptions) {
+  constructor(options = {}, vendorOptions = {}) {
     // calls the super constructor
     super(options, vendorOptions);
 
@@ -166,8 +166,8 @@ class WMS extends LayerBase {
       if ((visibility === true) && (this.transparent !== true)) {
         // hides all base layers
         this.map.getBaseLayers()
-          .filter(layer => !layer.equals(this) && layer.isVisible())
-          .forEach(layer => layer.setVisible(false));
+          .filter((layer) => !layer.equals(this) && layer.isVisible())
+          .forEach((layer) => layer.setVisible(false));
 
         // set this layer visible
         if (!isNullOrEmpty(this.ol3Layer)) {
@@ -209,8 +209,8 @@ class WMS extends LayerBase {
     this.map = map;
 
     // calculates the resolutions from scales
-    if (!isNull(this.options) &&
-      !isNull(this.options.minScale) && !isNull(this.options.maxScale)) {
+    if (!isNull(this.options)
+      && !isNull(this.options.minScale) && !isNull(this.options.maxScale)) {
       const units = this.map.getProjection().units;
       this.options.minResolution = getResolutionFromScale(this.options.minScale, units);
       this.options.maxResolution = getResolutionFromScale(this.options.maxScale, units);
@@ -376,7 +376,7 @@ class WMS extends LayerBase {
           maxResolution,
           opacity,
           zIndex,
-          myparam: "aa",
+          myparam: 'aa',
         };
         if (!isUndefined(crossOrigin)) {
           opts.crossOrigin = crossOrigin;
@@ -384,7 +384,7 @@ class WMS extends LayerBase {
 
         opts.tileLoadFunction = this.tileLoadFunction;
 
-        olSource = new TileWMS(opts);        
+        olSource = new TileWMS(opts);
         olSource.updateParams(layerParams);
       } else {
         const opts = {
@@ -443,14 +443,14 @@ class WMS extends LayerBase {
   }
 
   /**
-   * This function sets 
+   * This function sets
    * the tileLoadFunction
    *
    * @public
    * @function
    * @api stable
    */
-  setTileLoadFunction(func){
+  setTileLoadFunction(func) {
     this.getOLLayer().getSource().setTileLoadFunction(func);
   }
 
@@ -651,15 +651,14 @@ class WMS extends LayerBase {
       let url = '';
       let layer = getCapabilities.capabilities.Capability.Layer.Layer;
       if (layer.length > 1) {
-        layer =
-          layer.find(elm => elm.Name === this.name);
+        layer = layer.find((elm) => elm.Name === this.name);
       } else if (layer.length === 1 && layer[0].Name !== this.name) {
-        layer = layer[0].Layer.find(elm => elm.Name === this.name);
+        layer = layer[0].Layer.find((elm) => elm.Name === this.name);
       } else {
         layer = layer[0];
       }
-      if (!isUndefined(layer.Style) && !isUndefined(layer.Style[0].LegendURL) &&
-        !isUndefined(layer.Style[0].LegendURL[0].OnlineResource)) {
+      if (!isUndefined(layer.Style) && !isUndefined(layer.Style[0].LegendURL)
+        && !isUndefined(layer.Style[0].LegendURL[0].OnlineResource)) {
         url = layer.Style[0].LegendURL[0].OnlineResource;
       }
       return url;

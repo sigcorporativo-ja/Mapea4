@@ -3,7 +3,16 @@
  */
 import HeatmapImpl from 'impl/style/Heatmap.js';
 import Style from './Style.js';
-import { isString, isFunction, isArray, inverseColor, isNullOrEmpty, generateIntervals, extendsObj, defineFunctionFromString } from '../util/Utils.js';
+import {
+  isString,
+  isFunction,
+  isArray,
+  inverseColor,
+  isNullOrEmpty,
+  generateIntervals,
+  extendsObj,
+  defineFunctionFromString,
+} from '../util/Utils.js';
 import Exception from '../exception/exception.js';
 import { getValue } from '../i18n/language.js';
 
@@ -45,14 +54,13 @@ class Heatmap extends Style {
       options.gradient.push(inverseColorParam);
     }
 
-    options.blur = isNullOrEmpty(options.blur) ?
-      Heatmap.DEFAULT_OPTIONS.blur : parseFloat(options.blur);
-    options.radius = isNullOrEmpty(options.radius) ?
-      Heatmap.DEFAULT_OPTIONS.radius : parseFloat(options.radius);
+    options.blur = isNullOrEmpty(options.blur)
+      ? Heatmap.DEFAULT_OPTIONS.blur : parseFloat(options.blur);
+    options.radius = isNullOrEmpty(options.radius)
+      ? Heatmap.DEFAULT_OPTIONS.radius : parseFloat(options.radius);
     options.weight = attribute;
-    vendorOptions.opacity = Number.isNaN(parseFloat(vendorOptions.opacity)) ?
-      1 : parseFloat(vendorOptions.opacity);
-
+    vendorOptions.opacity = Number.isNaN(parseFloat(vendorOptions.opacity))
+      ? 1 : parseFloat(vendorOptions.opacity);
 
     const impl = new HeatmapImpl(attribute, options, vendorOptions);
 

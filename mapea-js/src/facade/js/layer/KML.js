@@ -3,7 +3,9 @@
  */
 import KMLImpl from 'impl/layer/KML.js';
 import LayerVector from './Vector.js';
-import { isNullOrEmpty, isUndefined, normalize, isString } from '../util/Utils.js';
+import {
+  isNullOrEmpty, isUndefined, normalize, isString,
+} from '../util/Utils.js';
 import Exception from '../exception/exception.js';
 import * as LayerType from './Type.js';
 import * as parameter from '../parameter/parameter.js';
@@ -75,8 +77,8 @@ class KML extends LayerVector {
   }
 
   set type(newType) {
-    if (!isUndefined(newType) &&
-      !isNullOrEmpty(newType) && (newType !== LayerType.KML)) {
+    if (!isUndefined(newType)
+      && !isNullOrEmpty(newType) && (newType !== LayerType.KML)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.KML).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
     }
   }

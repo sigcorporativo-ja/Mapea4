@@ -76,18 +76,18 @@ class Feature {
   getFeaturesByLayer(evt, layer) {
     const features = [];
 
-    if (!isNullOrEmpty(layer) && layer.isVisible() &&
-      !isNullOrEmpty(layer.getImpl().getOLLayer())) {
+    if (!isNullOrEmpty(layer) && layer.isVisible()
+      && !isNullOrEmpty(layer.getImpl().getOLLayer())) {
       const olLayer = layer.getImpl().getOLLayer();
       this.map_.getMapImpl().forEachFeatureAtPixel(evt.pixel, (feature, layerFrom) => {
         if ((layerFrom instanceof AnimatedCluster) && !isNullOrEmpty(feature.get('features'))) {
-          const clusteredFeatures = feature.get('features').map(f => getFacadeFeature(f, layer));
+          const clusteredFeatures = feature.get('features').map((f) => getFacadeFeature(f, layer));
           if (clusteredFeatures.length === 1) {
             features.push(clusteredFeatures[0]);
           } else {
             let styleCluster = layer.getStyle();
             if (!(styleCluster instanceof Cluster)) {
-              styleCluster = styleCluster.getStyles().find(style => style instanceof Cluster);
+              styleCluster = styleCluster.getStyles().find((style) => style instanceof Cluster);
             }
             features.push(new ClusteredFeature(clusteredFeatures, {
               ranges: styleCluster.getRanges(),
@@ -102,8 +102,8 @@ class Feature {
       }, {
         layerFilter: (l) => {
           let passFilter = false;
-          if (layer.getStyle() instanceof Cluster &&
-            layer.getStyle().getOptions().selectInteraction) {
+          if (layer.getStyle() instanceof Cluster
+            && layer.getStyle().getOptions().selectInteraction) {
             passFilter = (l === layer.getStyle().getImpl().selectClusterInteraction.getLayer());
           }
           passFilter = passFilter || l === olLayer;

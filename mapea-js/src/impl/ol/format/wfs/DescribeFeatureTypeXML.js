@@ -137,7 +137,6 @@ class DescribeFeatureTypeXML extends XML {
     this.runChildNodes(context, node);
   }
 
-
   /**
    * @private
    * @function

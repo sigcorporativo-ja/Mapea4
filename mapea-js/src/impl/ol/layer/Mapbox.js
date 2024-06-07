@@ -192,7 +192,6 @@ class Mapbox extends Layer {
         });
     }
 
-    
     const extent = this.facadeLayer_.getMaxExtent();
     this.ol3Layer = new OLLayerTile(extend({
       source: new OLSourceXYZ({
@@ -251,7 +250,7 @@ class Mapbox extends Layer {
     this.name = newName;
     this.recreateOlLayer();
   }
-  
+
   /**
    * This function sets the resolutions for this layer
    *
@@ -278,14 +277,14 @@ class Mapbox extends Layer {
   }
 
   /**
-   * This function sets 
+   * This function sets
    * the tileLoadFunction
    *
    * @public
    * @function
    * @api stable
    */
-  setTileLoadFunction(func){
+  setTileLoadFunction(func) {
     this.getOLLayer().getSource().setTileLoadFunction(func);
   }
 
@@ -313,7 +312,6 @@ class Mapbox extends Layer {
       },
     };
   }
-
 
   /**
    * TODO

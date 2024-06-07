@@ -140,7 +140,8 @@ class GeoJSON extends Vector {
    * @export
    */
   recreateOlLayer() {
-    this.loader_.url_ = this.url
+    // eslint-disable-next-line no-underscore-dangle
+    this.loader_.url_ = this.url;
     this.loadFeaturesPromise_ = undefined;
     this.updateSource_();
   }

@@ -1,19 +1,22 @@
-import { proxy, map, proxyExceptions, addProxyException } from 'M/mapea';
+import {
+  // proxy,
+  map,
+  // proxyExceptions,
+  addProxyException,
+} from 'M/mapea';
 import { get } from 'M/util/Remote';
 
 map({
-  container: 'myMap'
+  container: 'myMap',
 });
 
-// proxy(false);
-addProxyException("http://localhost:8080");
+// proxy(false); // Al descomentar causa que la llamada a google, falle con "code:0"
+addProxyException('http://localhost:8080'); // Al comentar, la llamada siguiente de este sufre error 404
 
-get("http://localhost:8080/test/development/proxy-exceptions.html").then((data) => {
-  console.log("Llamada a URL local: ");
-  console.log(data);
+get('http://localhost:8080/test/development/proxy-exceptions.html').then((data) => {
+  console.log('Llamada a URL local: ', data);
 });
 
-get("http://www.google.es").then((data) => {
-  console.log("Llamada a URL externa: ");
-  console.log(data);
+get('http://www.google.es').then((data) => {
+  console.log('Llamada a URL externa: ', data);
 });

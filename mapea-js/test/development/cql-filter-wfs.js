@@ -7,17 +7,17 @@ const mapjs = Mmap({
   container: 'map',
 });
 
-var layer = new WFS({
-  url: "http://www.juntadeandalucia.es/institutodeestadisticaycartografia/geoserver-ieca/grid/wfs?",
-  namespace: "grid",
-  name: "gridp_250",
-  legend: "Grid",
+const layer = new WFS({
+  url: 'http://www.juntadeandalucia.es/institutodeestadisticaycartografia/geoserver-ieca/grid/wfs?',
+  namespace: 'grid',
+  name: 'gridp_250',
+  legend: 'Grid',
   geometry: 'MPOLYGON',
   version: '2.0',
-  cql: "cmun LIKE '%18005%'"
+  cql: "cmun LIKE '%18005%'",
 });
 
-layer.on(LoadEvt, function() {
+layer.on(LoadEvt, () => {
   mapjs.setBbox(layer.getFeaturesExtent());
 });
 
@@ -29,10 +29,9 @@ window.setCQL = () => {
 };
 
 window.filtrar = () => {
-  let filterEqual = GTE("pob_tot", 50);
+  const filterEqual = GTE('pob_tot', 50);
   layer.setFilter(filterEqual);
   mapjs.setBbox(layer.getFeaturesExtent());
-
 };
 
 window.limpiar = () => {

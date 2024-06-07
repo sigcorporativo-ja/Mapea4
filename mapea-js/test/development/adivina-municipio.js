@@ -1,7 +1,7 @@
 import { map as Mmap } from 'M/mapea';
 import WFS from 'M/layer/WFS';
 import Polygon from 'M/style/Polygon';
-import Category from 'M/style/Category';
+// import Category from 'M/style/Category';
 import { LOAD as LoadEvt, SELECT_FEATURES as SelectFeaturesEvt } from 'M/event/eventtype';
 
 const mapajs = Mmap({
@@ -13,13 +13,9 @@ const mapajs = Mmap({
 
 window.mapjs = mapajs;
 
-
 const layer = new WFS({
-  url: 'https://clientes.guadaltel.es/desarrollo/geossigc/wfs?',
-  namespace: 'mapea',
-  name: 'da_municipio_pol',
-  legend: 'Municipios - Plantilla Símbolo',
-  geometry: 'POLYGON',
+  url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/tematicos/wfs?',
+  name: 'tematicos:Provincias', // name: 'tematicos:Municipios',
 });
 
 mapajs.addLayers([layer]);
@@ -102,15 +98,13 @@ layer.on(SelectFeaturesEvt, (features) => {
   anteriores.push(features[0]);
 });
 
-
-function resetea() {
+window.resetea = () => {
   anteriores = [];
   layer.setStyle(incognita);
   layer.redraw();
-}
+};
 
-
-// Colores para categorizar
+/* / Colores para categorizar
 const verdep = new Polygon({
   fill: {
     color: 'green',
@@ -128,7 +122,6 @@ const verdep = new Polygon({
     },
   },
 });
-
 
 const amarillop = new Polygon({
   fill: {
@@ -165,7 +158,6 @@ const rojop = new Polygon({
     },
   },
 });
-
 
 const azulp = new Polygon({
   fill: {
@@ -266,4 +258,4 @@ const categoryStylep = new Category('nom_provincia', {
   MALAGA: azulp,
   SEVILLA: rojop,
   HUELVA: moradop,
-});
+}); // */

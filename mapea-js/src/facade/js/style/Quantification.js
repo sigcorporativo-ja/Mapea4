@@ -107,11 +107,11 @@ const getMatrices = (data, numberClasses) => {
           // will increase its variance beyond the limit, break
           // the class at this point, setting the lowerClassLimit
           // at this point.
-          if (varianceCombinations[l][j] >=
-            (variance + varianceCombinations[i4][j - 1])) {
+          if (varianceCombinations[l][j]
+            >= (variance + varianceCombinations[i4][j - 1])) {
             lowerClassLimits[l][j] = lowerClassLimit;
-            varianceCombinations[l][j] = variance +
-              varianceCombinations[i4][j - 1];
+            varianceCombinations[l][j] = variance
+              + varianceCombinations[i4][j - 1];
           }
         }
       }

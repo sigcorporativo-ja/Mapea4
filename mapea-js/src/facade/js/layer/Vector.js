@@ -3,7 +3,9 @@
  */
 import VectorImpl from 'impl/layer/Vector.js';
 import { geojsonTo4326 } from 'impl/util/Utils.js';
-import { isUndefined, isArray, isNullOrEmpty, isString, normalize } from '../util/Utils.js';
+import {
+  isUndefined, isArray, isNullOrEmpty, isString, normalize,
+} from '../util/Utils.js';
 import Exception from '../exception/exception.js';
 import LayerBase from './Layer.js';
 import * as LayerType from './Type.js';
@@ -30,7 +32,7 @@ class Vector extends LayerBase {
    * @param {Object} vendorOptions vendor options for the base library
    * @api
    */
-  constructor(parameters = {}, options = {}, vendorOptions = {}, implParam) {
+  constructor(parameters = {}, options = {}, vendorOptions = {}, implParam = undefined) {
     // calls the super constructor
     const impl = implParam || new VectorImpl(options, vendorOptions);
     super(parameters, impl);
@@ -65,7 +67,7 @@ class Vector extends LayerBase {
 
     this.setStyle(options.style);
 
-    impl.on(EventType.LOAD, features => this.fire(EventType.LOAD, [features]));
+    impl.on(EventType.LOAD, (features) => this.fire(EventType.LOAD, [features]));
   }
 
   /**
@@ -77,8 +79,8 @@ class Vector extends LayerBase {
   }
 
   set type(newType) {
-    if (!isUndefined(newType) &&
-      !isNullOrEmpty(newType) && (newType !== LayerType.Vector)) {
+    if (!isUndefined(newType)
+      && !isNullOrEmpty(newType) && (newType !== LayerType.Vector)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.Vector).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
     }
   }
@@ -123,12 +125,22 @@ class Vector extends LayerBase {
    * @api
    */
   addFeatures(featuresParam, update = false, checkDuplicate = true) {
-    let features = featuresParam;
-    if (!isNullOrEmpty(features)) {
-      if (!isArray(features)) {
-        features = [features];
+    if (!isNullOrEmpty(this.url)
+      || (!isNullOrEmpty(this.getImpl())
+        && !isNullOrEmpty(this.getImpl().getOLLayer())
+        && !isNullOrEmpty(this.getImpl().getOLLayer().getSource())
+        && this.getImpl().isLoaded())) {
+      let features = featuresParam;
+      if (!isNullOrEmpty(features)) {
+        if (!isArray(features)) {
+          features = [features];
+        }
+        this.getImpl().addFeatures(features, update, checkDuplicate);
       }
-      this.getImpl().addFeatures(features, update, checkDuplicate);
+    } else {
+      this.on(M.evt.LOAD, () => {
+        this.addFeatures(featuresParam, update, checkDuplicate);
+      });
     }
   }
 
@@ -398,7 +410,7 @@ class Vector extends LayerBase {
    */
   clearStyle() {
     this.setStyle(null);
-    this.getFeatures().forEach(feature => feature.clearStyle());
+    this.getFeatures().forEach((feature) => feature.clearStyle());
   }
 
   /**
@@ -411,8 +423,8 @@ class Vector extends LayerBase {
    */
   getLegendURL() {
     let legendUrl = this.getImpl().getLegendURL();
-    if (legendUrl.indexOf(LayerBase.LEGEND_DEFAULT) !== -1 &&
-      legendUrl.indexOf(LayerBase.LEGEND_ERROR) === -1 && this.style_ instanceof Style) {
+    if (legendUrl.indexOf(LayerBase.LEGEND_DEFAULT) !== -1
+      && legendUrl.indexOf(LayerBase.LEGEND_ERROR) === -1 && this.style_ instanceof Style) {
       if (this.style_ instanceof StyleCluster && this.style_.getStyles().length > 0) {
         legendUrl = this.style_.getStyles()[0].toImage();
       } else {
@@ -470,7 +482,7 @@ class Vector extends LayerBase {
    */
   toGeoJSON() {
     const code = this.map_.getProjection().code;
-    const featuresAsJSON = this.getFeatures().map(feature => feature.getGeoJSON());
+    const featuresAsJSON = this.getFeatures().map((feature) => feature.getGeoJSON());
     return { type: 'FeatureCollection', features: geojsonTo4326(featuresAsJSON, code) };
   }
 }

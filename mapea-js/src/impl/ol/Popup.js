@@ -137,7 +137,6 @@ class Popup extends OLOverlay {
     return html.querySelector('div.m-body');
   }
 
-
   /**
    * @private
    */

@@ -42,7 +42,6 @@ class LayerGroup extends MObject {
       parameters.order = 0;
     }
 
-
     /**
      * Implementation of this layer
      * @public
@@ -67,7 +66,6 @@ class LayerGroup extends MObject {
      * @api
      */
     this.title = parameters.title;
-
 
     /**
      * 'true' to display the group collapsed in the TOC, 'false' to display it expanded
@@ -145,7 +143,7 @@ class LayerGroup extends MObject {
    * @api
    */
   setVisible(visibility) {
-    this.getAllLayers().forEach(l => (l.transparent === true) && l.setVisible(visibility));
+    this.getAllLayers().forEach((l) => (l.transparent === true) && l.setVisible(visibility));
   }
 
   /**
@@ -200,8 +198,8 @@ class LayerGroup extends MObject {
     } else if (child instanceof LayerBase) {
       child.setLayerGroup(this);
       child.setZIndex(zIndex);
-      if (!isNullOrEmpty(this.map) &&
-        !this.map.getRootLayers().some(rootLayer => rootLayer.equals(child))) {
+      if (!isNullOrEmpty(this.map)
+        && !this.map.getRootLayers().some((rootLayer) => rootLayer.equals(child))) {
         this.map.addLayers(child);
         if (child instanceof LayerGroup) {
           this.map.addLayerGroup(child);
@@ -318,11 +316,11 @@ class LayerGroup extends MObject {
   static findGroupById(groupId, layerGroups) {
     let group = null;
     if (isArray(layerGroups) && layerGroups.length > 0) {
-      group = layerGroups.find(g => g instanceof LayerGroup && g.id === groupId);
+      group = layerGroups.find((g) => g instanceof LayerGroup && g.id === groupId);
       if (group == null) {
-        const childGroups = layerGroups.map(g => g.getChildren())
+        const childGroups = layerGroups.map((g) => g.getChildren())
           .reduce((current, next) => current.concat(next), [])
-          .filter(g => g instanceof LayerGroup);
+          .filter((g) => g instanceof LayerGroup);
         group = LayerGroup.findGroupById(groupId, childGroups);
       }
     }
