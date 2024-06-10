@@ -4,8 +4,7 @@ import WFS from 'M/layer/WFS';
 import GeoJSON from 'M/layer/GeoJSON';
 import { SELECT_FEATURES } from 'M/event/eventtype';
 import Feature from 'M/feature/Feature';
-
-const jsts = require('jsts/dist/jsts.js');
+import { GeoJSONReader } from 'jsts/org/locationtech/jts/io';
 
 const mapajs = map({
   container: 'map',
@@ -34,7 +33,7 @@ const lyEnvelope = new GeoJSON({
 });
 
 lyProvincias.on(SELECT_FEATURES, (features) => {
-  const parser = new jsts.io.GeoJSONReader();
+  const parser = new GeoJSONReader();
   const f = parser.read(features[0].getGeoJSON());
   const objEnv = f.geometry.getEnvelopeInternal();
 

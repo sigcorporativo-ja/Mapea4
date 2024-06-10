@@ -8,7 +8,7 @@ const mapjs = map({
 
 // GeoJSON local
 const layer = new GeoJSON({
-  url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=sepim:EstructuraJA&maxFeatures=50&outputFormat=application%2Fjson',
+  url: 'https://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=sepim:EstructuraJA&maxFeatures=50&outputFormat=application%2Fjson',
   name: 'prueba',
 });
 

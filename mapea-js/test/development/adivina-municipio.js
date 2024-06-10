@@ -99,6 +99,9 @@ layer.on(SelectFeaturesEvt, (features) => {
 });
 
 window.resetea = () => {
+  anteriores.forEach((feat) => {
+    feat.setStyle(undefined);
+  });
   anteriores = [];
   layer.setStyle(incognita);
   layer.redraw();

@@ -11,9 +11,9 @@ const m = Mmap({
   controls: ['layerswitcher', 'panzoom', 'navtoolbar'],
   wmcfiles: ['callejero'],
   layers: [
-    'WFST*CapaWFS_POL*https://clientes.guadaltel.es/desarrollo/geossigc/wfs?*callejero:mapea_filtros_no_tocar*MPOLYGON',
-    'WFST*CapaWFS_POINT*https://clientes.guadaltel.es/desarrollo/geossigc/wfs?*ggis:TEST_Geor_Inventario_cavidades*MPOINT',
-    'WFS*Lineas*https://clientes.guadaltel.es/desarrollo/geossigc/wfs?*mapea:hs1_100_simplificada*MLINE',
+    'WFST*CapaWFS_POL*https://geostematicos-sigc.juntadeandalucia.es/geoserver/tematicos/ows?*tematicos:Provincias*MPOLYGON',
+    'WFST*CapaWFS_POINT*https://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows*sepim:campamentos*POINT',
+    'WFS*Lineas*https://geostematicos-sigc.juntadeandalucia.es/geoserver/tematicos/ows?*tematicos:Provincias*MLINE',
   ],
 });
 

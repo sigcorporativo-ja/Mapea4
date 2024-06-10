@@ -5,7 +5,7 @@ let map = M.map({
 // Capa puntual de Campamentos
 var campamentos = new M.layer.GeoJSON({
   name: "Provincias",
-  url: "http://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=campamentos&outputFormat=application/json",
+  url: "https://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=campamentos&outputFormat=application/json",
   extract: true
 });
 

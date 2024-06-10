@@ -2,8 +2,8 @@ import Printerdos from 'plugins/printerdos/facade/js/printerdos';
 // import WMS from 'M/layer/WMS';
 // import GeoJSON from 'M/layer/GeoJSON';
 // import LayerGroup from 'M/layer/LayerGroup';
-import WFS from 'M/layer/WFS';
 import KML from 'M/layer/KML';
+import WFS from 'M/layer/WFS';
 // import WMTS from 'M/layer/WMTS';
 // import Point from 'M/style/Point';
 // import Cluster from 'M/style/Cluster';
@@ -73,7 +73,7 @@ mapjs.addWFS(rios); // */
 
 // Capa con campamentos de andalucía
 const campamentos = new M.layer.WFS({
-  url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows?',
+  url: 'https://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows?',
   name: 'campamentos',
   legend: 'Campamentos',
   geometry: 'MPOINT',
@@ -122,7 +122,7 @@ mapjs.addWMTS(toporaster); // */
 
 /* / Capa con los menores de 15 años por provincia
 const estructuraJA = new M.layer.WFS({
-  url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows?',
+  url: 'https://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows?',
   namespace: 'sepim',
   name: 'EstructuraJA',
   legend: 'Menores de 15 años por provincia',

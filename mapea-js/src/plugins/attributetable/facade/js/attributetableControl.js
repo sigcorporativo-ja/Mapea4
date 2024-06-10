@@ -152,15 +152,20 @@ export default class AttributeTableControl extends M.Control {
 
   zoomToSelected(evt) {
     const zoomTo = [];
-    this.layer_.getFeatures().forEach((feature) => {
-      if (this.featuresSeleccionados.includes(feature.getId())) {
-        zoomTo.push(feature);
+    if (this.layer_) {
+      this.layer_.getFeatures().forEach((feature) => {
+        if (this.featuresSeleccionados.includes(feature.getId())) {
+          zoomTo.push(feature);
+        }
+      });
+      const pcode = this.facadeMap_.getProjection().code;
+      const extent = M.impl.utils.getFeaturesExtent(zoomTo, pcode);
+      if (!M.utils.isNullOrEmpty(extent)) {
+        this.facadeMap_.setBbox(extent);
       }
-    });
-    const pcode = this.facadeMap_.getProjection().code;
-    const extent = M.impl.utils.getFeaturesExtent(zoomTo, pcode);
-    if (!M.utils.isNullOrEmpty(extent)) {
-      this.facadeMap_.setBbox(extent);
+    } else {
+      // eslint-disable-next-line no-console
+      console.error('No hay mapa asociado al control de tabla de atributos.');
     }
   }
 

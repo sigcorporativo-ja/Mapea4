@@ -45,7 +45,7 @@ class Point extends Simple {
    * @private
    */
   getDeserializedMethod_() {
-    return "((serializedParameters) => M.style.Simple.deserialize(serializedParameters, 'M.style.Point'))";
+    return "((serializedParameters) => M.style ? M.style.Simple.deserialize(serializedParameters, 'M.style.Point') : console.error('M.style is not defined'))";
   }
 }
 
