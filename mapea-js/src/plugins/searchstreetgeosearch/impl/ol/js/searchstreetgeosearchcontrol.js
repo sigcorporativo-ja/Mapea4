@@ -61,7 +61,7 @@ export default class SearchstreetGeosearch extends M.impl.Control {
    * @api stable
    */
   zoomResults() {
-    const control = this.facadeMap_.getControls().find(c => c.name === 'searchstreetgeosearch');
+    const control = this.facadeMap_.getControls().find((c) => c.name === 'searchstreetgeosearch');
     const bbox = control.ctrlGeosearch.getImpl().getLayer().getFeaturesExtent();
     if (!M.utils.isNullOrEmpty(bbox)) {
       this.facadeMap_.setBbox(bbox);

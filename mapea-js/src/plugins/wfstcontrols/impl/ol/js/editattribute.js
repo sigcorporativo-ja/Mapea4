@@ -100,7 +100,7 @@ export default class EditAttribute extends M.impl.Control {
           selector: '#m-button-editattributeSave',
           all: true,
           type: 'click',
-          callback: e => this.saveAttributes_(e),
+          callback: (e) => this.saveAttributes_(e),
         }],
       };
       this.popup_ = this.facadeMap_.getPopup();
@@ -140,7 +140,6 @@ export default class EditAttribute extends M.impl.Control {
     const popupContentHtml = this.popup_.getContent();
     const popupButton = evt.target;
     const featureProps = this.editFeature.getProperties();
-
 
     popupButton.classList.add('m-savefeature-saving');
 

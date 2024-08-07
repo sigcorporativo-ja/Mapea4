@@ -73,10 +73,10 @@ class LayerSwitcher extends Control {
       const layerID = evt.target.getAttribute('data-layer-name');
       if (!isNullOrEmpty(layerID)) {
         evt.stopPropagation();
-        let layer = this.facadeMap_.getLayers().filter(l => l.id === layerID)[0];
+        let layer = this.facadeMap_.getLayers().filter((l) => l.id === layerID)[0];
         if (isNullOrEmpty(layer) && !isNullOrEmpty(groupId)) {
           group = LayerGroup.findGroupById(groupId, this.facadeMap_.getLayerGroup());
-          layer = group.getChildren().find(l => ((l instanceof Layer) && (l.id === layerID)));
+          layer = group.getChildren().find((l) => ((l instanceof Layer) && (l.id === layerID)));
         }
         // checkbox
         if (evt.target.classList.contains('m-check')) {
@@ -121,10 +121,10 @@ class LayerSwitcher extends Control {
       const layerID = evt.target.getAttribute('data-layer-name');
       if (!isNullOrEmpty(layerID)) {
         evt.stopPropagation();
-        let layer = this.facadeMap_.getLayers().filter(l => l.id === layerID)[0];
+        let layer = this.facadeMap_.getLayers().filter((l) => l.id === layerID)[0];
         if (isNullOrEmpty(layer) && !isNullOrEmpty(groupId)) {
           group = LayerGroup.findGroupById(groupId, this.facadeMap_.getLayerGroup());
-          layer = group.getChildren().find(l => ((l instanceof Layer) && (l.id === layerID)));
+          layer = group.getChildren().find((l) => ((l instanceof Layer) && (l.id === layerID)));
         }
         // checkbox
         if (evt.target.classList.contains('m-check')) {
@@ -185,7 +185,7 @@ class LayerSwitcher extends Control {
   renderPanel() {
     LayerSwitcherFacade.getTemplateVariables(this.facadeMap_).then((templateVars) => {
       if (this.activeEmptyLayer) {
-        const emptyLayer = Object.assign({}, LayerSwitcherFacade.EMPTYLAYER);
+        const emptyLayer = { ...LayerSwitcherFacade.EMPTYLAYER };
         emptyLayer.visible = this.statusEmptyLayer;
         templateVars.baseLayers.unshift(emptyLayer);
       }
@@ -310,7 +310,7 @@ class LayerSwitcher extends Control {
       imgElem.addEventListener('error', (evt) => {
         const layerIDs = evt.target.getAttribute('data-layer-name');
         const legendErrorUrl = concatUrlPaths([M.config.THEME_URL, Layer.LEGEND_ERROR]);
-        const layer = this.facadeMap_.getLayers().filter(l => l.id === layerIDs)[0];
+        const layer = this.facadeMap_.getLayers().filter((l) => l.id === layerIDs)[0];
         if (!isNullOrEmpty(layer)) {
           layer.setLegendURL(legendErrorUrl);
         }

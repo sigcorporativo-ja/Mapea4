@@ -14,5 +14,4 @@ const reproject = (coordinates, sourceProj, destProj) => {
   return transform(coordinates, source, dest);
 };
 
-
 export default reproject;

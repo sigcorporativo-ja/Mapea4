@@ -17,7 +17,6 @@ export default class GeosearchByCoordinatesControl extends GeosearchControlImpl 
       layerName: GeosearchByCoordinatesControl.NAME,
     });
 
-
     /**
      * Popup showed
      * @private
@@ -39,13 +38,13 @@ export default class GeosearchByCoordinatesControl extends GeosearchControlImpl 
     this.positionFeature_ = new M.Feature();
     this.positionFeature_.setStyle(new M.style.Point({
       fill: {
-        color: '#3399CC'
+        color: '#3399CC',
       },
       radius: 6,
       stroke: {
         color: '#fff',
         width: 3,
-      }
+      },
     }));
   }
 

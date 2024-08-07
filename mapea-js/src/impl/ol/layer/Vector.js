@@ -3,7 +3,9 @@
  */
 import ClusteredFeature from 'M/feature/Clustered';
 import StyleCluster from 'M/style/Cluster';
-import { isNullOrEmpty, isFunction, beautifyAttributeName, includes } from 'M/util/Utils';
+import {
+  isNullOrEmpty, isFunction, beautifyAttributeName, includes,
+} from 'M/util/Utils';
 import * as EventType from 'M/event/eventtype';
 import Style from 'M/style/Style';
 import { compileSync as compileTemplate } from 'M/util/Template';
@@ -142,7 +144,7 @@ class Vector extends Layer {
   addFeatures(features, update, checkDuplicate = true) {
     if (checkDuplicate === true) {
       features.forEach((newFeature) => {
-        const feature = this.features_.find(feature2 => feature2.equals(newFeature));
+        const feature = this.features_.find((feature2) => feature2.equals(newFeature));
         if (isNullOrEmpty(feature)) {
           this.features_.push(newFeature);
         }
@@ -162,7 +164,6 @@ class Vector extends Layer {
       this.redraw();
     }
   }
-
 
   /**
    * This function add features to layer and redraw with a layer style
@@ -185,7 +186,6 @@ class Vector extends Layer {
       }
     }
   }
-
 
   /**
    * This function returns all features or discriminating by the filter
@@ -214,7 +214,7 @@ class Vector extends Layer {
    * @api stable
    */
   getFeatureById(id) {
-    return this.features_.filter(feature => feature.getId() === id)[0];
+    return this.features_.filter((feature) => feature.getId() === id)[0];
   }
 
   /**
@@ -226,7 +226,7 @@ class Vector extends Layer {
    * @api stable
    */
   removeFeatures(features) {
-    this.features_ = this.features_.filter(f => !(features.includes(f)));
+    this.features_ = this.features_.filter((f) => !(features.includes(f)));
     const style = this.facadeVector_.getStyle();
     if (style instanceof StyleCluster) {
       style.getImpl().deactivateTemporarilyChangeEvent(this.redraw.bind(this));
@@ -306,17 +306,17 @@ class Vector extends Layer {
         if (isFunction(clickFn)) {
           clickFn(evt, feature);
         } else {
-          const popup_template = !isNullOrEmpty(this.template) ? this.template : PopupTemplate;
+          const popupTemplate = !isNullOrEmpty(this.template) ? this.template : PopupTemplate;
 
-          let htmlAsText = compileTemplate(popup_template, {
+          let htmlAsText = compileTemplate(popupTemplate, {
             vars: this.parseFeaturesForTemplate_(features),
             parseToHtml: false,
           });
-          if (this.name){
-            const layerNameHTML = `<div>${this.name}</div>`
+          if (this.name) {
+            const layerNameHTML = `<div>${this.name}</div>`;
             htmlAsText = layerNameHTML + htmlAsText;
           }
-          
+
           const featureTabOpts = {
             icon: 'g-cartografia-pin',
             title: this.name,
@@ -345,6 +345,7 @@ class Vector extends Layer {
   unselectFeatures() {
     // this.map.removePopup();
   }
+
   /**
    * This function set facade class vector
    *
@@ -372,7 +373,7 @@ class Vector extends Layer {
         style.getImpl().deactivateChangeEvent();
       }
 
-      this.facadeVector_.getFeatures().forEach(feature => feature.getImpl()
+      this.facadeVector_.getFeatures().forEach((feature) => feature.getImpl()
         .getOLFeature().getGeometry().transform(srcProj, dstProj));
 
       if (style instanceof StyleCluster) {
@@ -493,12 +494,12 @@ class Vector extends Layer {
         resolve(extent);
       } else {
         this.requestFeatures_().then((features) => {
-          const features_arr = features.features
+          const featuresArr = features.features
             && !Array.isArray(features)
             && Array.isArray(features.features)
             ? features.features
             : features;
-          const extent = ImplUtils.getFeaturesExtent(features_arr, codeProj);
+          const extent = ImplUtils.getFeaturesExtent(featuresArr, codeProj);
           resolve(extent);
         });
       }

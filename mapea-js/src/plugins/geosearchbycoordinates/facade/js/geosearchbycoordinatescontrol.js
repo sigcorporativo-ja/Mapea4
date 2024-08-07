@@ -24,7 +24,6 @@ export default class GeosearchByCoordinatesControl extends GeosearchControl {
     // calls super
     super(url, core, handler);
 
-
     // implementation of this control
     this.impl_ = new GeosearchByCoordinatesImpl(this.searchUrl_);
 
@@ -89,7 +88,6 @@ export default class GeosearchByCoordinatesControl extends GeosearchControl {
       M.Exception('La implementación usada no puede crear controles GeosearchByCoordinates');
     }
 
-
     // name for this control
     this.name = GeosearchByCoordinatesControl.NAME;
   }
@@ -140,8 +138,6 @@ export default class GeosearchByCoordinatesControl extends GeosearchControl {
       jsonp: true,
     });
 
-
-
     const btnShowList = template.querySelector('button#m-geosearchbycoordinates-button-list');
     btnShowList.onclick = this.showList_.bind(this);
     this.createImagesCache(template);
@@ -157,24 +153,24 @@ export default class GeosearchByCoordinatesControl extends GeosearchControl {
    * @api stabletrue
    */
   createImagesCache(html) {
-    const container = html.getElementsByClassName("img-cache-loader")[0];
+    const container = html.getElementsByClassName('img-cache-loader')[0];
 
     const urls = [
       '/img/m-pin-24.svg',
       '/img/m-pin-24-new.svg',
-      '/img/m-pin-24-sel.svg'
-    ]; 
+      '/img/m-pin-24-sel.svg',
+    ];
 
-    urls.forEach(url => {
-      let img = new Image();
+    urls.forEach((url) => {
+      const img = new Image();
       img.src = M.utils.concatUrlPaths([M.config.THEME_URL, url]);
       img.width = '24';
       img.height = '24';
       img.crossOrigin = 'anonymous';
-      container.append(img);    
+      container.append(img);
     });
   }
-  
+
   /**
    * This function returns the HTML control button
    *
@@ -225,7 +221,6 @@ export default class GeosearchByCoordinatesControl extends GeosearchControl {
   drawLocation_(coor) {
     this.getImpl().drawLocation(coor);
   }
-
 
   /**
    * This function performs search
@@ -319,7 +314,7 @@ export default class GeosearchByCoordinatesControl extends GeosearchControl {
           handle: '.m-geosearchbycoordinates-results-panel .title',
         });
         this.draggable_.enable();
-        html.style.position = 'absolute'
+        html.style.position = 'absolute';
 
         this.resultsContainer_ = html;
         this.resultsScrollContainer_ = this.resultsContainer_.querySelector('div#m-geosearchbycoordinates-results-scroll');

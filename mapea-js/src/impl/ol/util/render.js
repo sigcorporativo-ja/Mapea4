@@ -31,8 +31,8 @@ const postRender = function postRender(e = null) {
   ctx.save();
   ctx.scale(e.frameState.pixelRatio, e.frameState.pixelRatio);
 
-  const sourceWithoutFeatures = this.getSource() != null &&
-    this.getSource().getFeatures().length === 0;
+  const sourceWithoutFeatures = this.getSource() != null
+    && this.getSource().getFeatures().length === 0;
   if (!sourceWithoutFeatures) {
     // gets features in extent
     this.getSource().getFeaturesInExtent(extent).forEach((feature) => {
@@ -42,8 +42,8 @@ const postRender = function postRender(e = null) {
         styles = [styles];
       }
       styles.forEach((style) => {
-        let geom = (style instanceof Line ? style.getOptions().geometry :
-          style.getGeometry()) || feature.getGeometry();
+        let geom = (style instanceof Line ? style.getOptions().geometry
+          : style.getGeometry()) || feature.getGeometry();
         let coords;
         if (typeof geom === 'function') {
           geom = geom(feature);

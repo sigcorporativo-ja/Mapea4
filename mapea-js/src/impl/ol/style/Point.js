@@ -1,7 +1,9 @@
 /**
  * @module M/impl/style/Point
  */
-import { isNullOrEmpty, concatUrlPaths, addParameters, isDynamic, drawDynamicStyle } from 'M/util/Utils';
+import {
+  isNullOrEmpty, concatUrlPaths, addParameters, isDynamic, drawDynamicStyle,
+} from 'M/util/Utils';
 import chroma from 'chroma-js';
 import OLStyleImage from 'ol/style/Image';
 import OLFeature from 'ol/Feature';
@@ -163,8 +165,11 @@ class Point extends Simple {
       }
       let stroke;
       if (!isNullOrEmpty(options.stroke)) {
-        const strokeColorValue =
-          Simple.getValue(options.stroke.color, featureVariable, this.layer_);
+        const strokeColorValue = Simple.getValue(
+          options.stroke.color,
+          featureVariable,
+          this.layer_,
+        );
         if (!isNullOrEmpty(strokeColorValue)) {
           const { linedashoffset } = options.stroke;
           stroke = new OLStyleStroke({
@@ -186,10 +191,10 @@ class Point extends Simple {
           font: Simple.getValue(options.label.font, featureVariable, this.layer_),
           rotateWithView: Simple.getValue(options.label.rotate, featureVariable, this.layer_),
           scale: Simple.getValue(options.label.scale, featureVariable, this.layer_),
-          offsetX: Simple.getValue(options.label.offset ?
-            options.label.offset[0] : undefined, featureVariable, this.layer_),
-          offsetY: Simple.getValue(options.label.offset ?
-            options.label.offset[1] : undefined, featureVariable, this.layer_),
+          offsetX: Simple.getValue(options.label.offset
+            ? options.label.offset[0] : undefined, featureVariable, this.layer_),
+          offsetY: Simple.getValue(options.label.offset
+            ? options.label.offset[1] : undefined, featureVariable, this.layer_),
           fill: new OLStyleFill({
             color: Simple.getValue(options.label.color || '#000000', featureVariable, this.layer_),
           }),
@@ -246,10 +251,10 @@ class Point extends Simple {
             radius: Simple.getValue(options.icon.radius, featureVariable, this.layer_),
             rotation: Simple.getValue(options.icon.rotation, featureVariable, this.layer_),
             rotateWithView: Simple.getValue(options.icon.rotate, featureVariable, this.layer_),
-            offsetX: Simple.getValue(options.icon.offset ?
-              options.icon.offset[0] : undefined, featureVariable, this.layer_),
-            offsetY: Simple.getValue(options.icon.offset ?
-              options.icon.offset[1] : undefined, featureVariable, this.layer_),
+            offsetX: Simple.getValue(options.icon.offset
+              ? options.icon.offset[0] : undefined, featureVariable, this.layer_),
+            offsetY: Simple.getValue(options.icon.offset
+              ? options.icon.offset[1] : undefined, featureVariable, this.layer_),
             fill: new OLStyleFill({
               color: Simple.getValue(options.icon.fill !== undefined ? options.icon.fill : '#FFFFFF', featureVariable, this.layer_),
             }),
@@ -276,6 +281,7 @@ class Point extends Simple {
       return [style, styleIcon];
     };
   }
+
   /**
    * TODO
    *
@@ -312,8 +318,8 @@ class Point extends Simple {
       if (!isNullOrEmpty(applyStyle.getText())) {
         applyStyle.setText(null);
       }
-      if (!isNullOrEmpty(this.olStyleFn_()[1]) &&
-        this.olStyleFn_()[1].getImage() instanceof OLStyleFontsSymbol) {
+      if (!isNullOrEmpty(this.olStyleFn_()[1])
+        && this.olStyleFn_()[1].getImage() instanceof OLStyleFontsSymbol) {
         applyStyle = this.olStyleFn_()[1];
       }
       const stroke = applyStyle.getImage().getStroke();

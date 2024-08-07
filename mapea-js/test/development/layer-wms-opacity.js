@@ -5,7 +5,7 @@ const mapajs = map({
   wmcfiles: ['callejero'],
   controls: ['layerswitcher'],
   layers: [
-    'WMS*Redes*http://www.ideandalucia.es/wms/mta400v_2008?*Redes_energeticas*true',
+    'WMS*Redes*https://www.ideandalucia.es/wms/mta400v_2008?*Redes_energeticas*true',
   ],
 });
 

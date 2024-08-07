@@ -109,7 +109,7 @@ class Style {
    * @api stable
    */
   clone() {
-    return new Style(Object.assign({}, this.options_));
+    return new Style({ ...this.options_ });
   }
 }
 

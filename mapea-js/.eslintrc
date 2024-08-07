@@ -41,6 +41,17 @@
     "no-template-curly-in-string": "off",
     "import/no-duplicates": "off",
     "import/no-named-default": "off",
-    "import/extensions": "off"
+    "import/extensions": "off",
+    "import/no-cycle": "off",
+    "semi": 2
+  },
+  "env": {
+    "node": true,
+    "es6": true,
+    "browser": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module"
   }
 }

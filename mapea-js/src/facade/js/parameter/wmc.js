@@ -1,7 +1,9 @@
 /**
  * @module M/parameter/wmc
  */
-import { isNullOrEmpty, isString, normalize, isArray, isObject, isUrl } from '../util/Utils.js';
+import {
+  isNullOrEmpty, isString, normalize, isArray, isObject, isUrl,
+} from '../util/Utils.js';
 import Exception from '../exception/exception.js';
 import * as LayerType from '../layer/Type.js';
 import { getValue } from '../i18n/language.js';

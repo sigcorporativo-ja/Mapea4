@@ -70,5 +70,6 @@ class WMC extends XML {
  * @api
  */
 WMC.v110 = WMC110;
+WMC.DEFAULT_VERSION = '1.1.0';
 
 export default WMC;

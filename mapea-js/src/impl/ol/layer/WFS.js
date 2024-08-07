@@ -31,7 +31,7 @@ class WFS extends Vector {
    * @param {Object} vendorOptions vendor options for the base library
    * @api stable
    */
-  constructor(options = {}, vendorOptions) {
+  constructor(options = {}, vendorOptions = {}) {
     // calls the super constructor
     super(options, vendorOptions);
     /**
@@ -215,8 +215,8 @@ class WFS extends Vector {
    */
   getDescribeFeatureType() {
     if (isNullOrEmpty(this.describeFeatureType_)) {
-      this.describeFeatureType_ =
-        this.service_.getDescribeFeatureType().then((describeFeatureType) => {
+      this.describeFeatureType_ = this.service_.getDescribeFeatureType()
+        .then((describeFeatureType) => {
           if (!isNullOrEmpty(describeFeatureType)) {
             this.formater_ = new FormatImplGeoJSON({
               geometryName: describeFeatureType.geometryName,

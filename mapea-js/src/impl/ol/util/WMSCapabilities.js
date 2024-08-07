@@ -1,7 +1,9 @@
 /**
  * @module M/impl/GetCapabilities
  */
-import { isNullOrEmpty, isArray, isObject, isUndefined, isString } from 'M/util/Utils';
+import {
+  isNullOrEmpty, isArray, isObject, isUndefined, isString,
+} from 'M/util/Utils';
 import WMS from 'M/layer/WMS';
 import { get as getProjection } from 'ol/proj';
 import ImplUtils from './Utils';
@@ -116,7 +118,7 @@ class GetCapabilities {
         if (isNullOrEmpty(layerName) || (layer.Name === layerName)) {
           const projection = tgtProjection || this.projection_.code;
           if (!isNullOrEmpty(layer.BoundingBox)) {
-            const bboxSameProj = layer.BoundingBox.find(bbox => bbox.crs === projection);
+            const bboxSameProj = layer.BoundingBox.find((bbox) => bbox.crs === projection);
             if (!isNullOrEmpty(bboxSameProj)) {
               this.capabilitiesProj = bboxSameProj.crs;
               extent = bboxSameProj.extent;

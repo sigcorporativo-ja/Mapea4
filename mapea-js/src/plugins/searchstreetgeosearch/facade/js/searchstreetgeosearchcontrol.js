@@ -126,7 +126,6 @@ export default class SearchstreetGeosearchControl extends M.Control {
     this.facadeMap_ = null;
   }
 
-
   /**
    * This function adds the control to the specified map
    *
@@ -190,7 +189,6 @@ export default class SearchstreetGeosearchControl extends M.Control {
     });
   }
 
-
   /**
    * This function creates the view to the specified map
    *
@@ -241,21 +239,21 @@ export default class SearchstreetGeosearchControl extends M.Control {
    * @api stabletrue
    */
   createImagesCache(html) {
-    const container = html.getElementsByClassName("img-cache-loader")[0];
+    const container = html.getElementsByClassName('img-cache-loader')[0];
 
     const urls = [
       '/img/m-pin-24.svg',
       '/img/m-pin-24-new.svg',
-      '/img/m-pin-24-sel.svg'
-    ]; 
+      '/img/m-pin-24-sel.svg',
+    ];
 
-    urls.forEach(url => {
-      let img = new Image();
+    urls.forEach((url) => {
+      const img = new Image();
       img.src = M.utils.concatUrlPaths([M.config.THEME_URL, url]);
       img.width = '24';
       img.height = '24';
       img.crossOrigin = 'anonymous';
-      container.append(img);    
+      container.append(img);
     });
   }
 
@@ -270,7 +268,6 @@ export default class SearchstreetGeosearchControl extends M.Control {
   getInput() {
     return this.input_;
   }
-
 
   /**
    * This function checks if an object is equals to this control
@@ -287,7 +284,6 @@ export default class SearchstreetGeosearchControl extends M.Control {
     }
     return equals;
   }
-
 
   /**
    * This function return HTML template

@@ -17,7 +17,7 @@ const wfs = new WFS({
 });
 
 mapjs.addLayers([wfs]);
-const stylechoropleth = new StyleChoropleth('id_dera', ['#ff0aee', '#040fef'], StyleQuantification.JENKS(3));
+const stylechoropleth = new StyleChoropleth('id_dera', ['#ff0000', '#0000ff'], StyleQuantification.JENKS(3));
 wfs.setStyle(stylechoropleth);
 
 window.mapjs = mapjs;

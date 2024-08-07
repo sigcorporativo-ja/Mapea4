@@ -17,7 +17,6 @@ import Layer from './Layer';
 import FormatGeoJSON from '../format/GeoJSON';
 import Map from '../Map';
 
-
 /**
  * @classdesc
  * @api
@@ -230,6 +229,7 @@ class Draw extends Layer {
       const olSource = this.ol3Layer.getSource();
 
       features.forEach((feature) => {
+        // eslint-disable-next-line no-useless-catch
         try {
           olSource.removeFeature(feature);
         } catch (err) {

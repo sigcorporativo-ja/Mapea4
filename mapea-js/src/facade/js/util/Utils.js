@@ -89,7 +89,7 @@ export const isNullOrEmpty = (obj) => {
   } else if (isArray(obj)) {
     nullOrEmpty = true;
     if (obj.length > 0) {
-      nullOrEmpty = !obj.some(objElem => !isNullOrEmpty(objElem));
+      nullOrEmpty = !obj.some((objElem) => !isNullOrEmpty(objElem));
     }
   } else if (typeof obj === 'string' && obj.trim()
     .length === 0) {
@@ -176,9 +176,9 @@ export const normalize = (stringToNormalize, upperCase) => {
   let normalizedString = stringToNormalize;
   if (!isNullOrEmpty(normalizedString) && isString(normalizedString)) {
     normalizedString = normalizedString.trim();
-    normalizedString = upperCase ?
-      normalizedString.toUpperCase() :
-      normalizedString.toLowerCase();
+    normalizedString = upperCase
+      ? normalizedString.toUpperCase()
+      : normalizedString.toLowerCase();
   }
   return normalizedString;
 };
@@ -371,9 +371,9 @@ export const getResolutionFromScale = (scale, unitsParam) => {
       units = 'degrees';
     }
     // normalize scale
-    const normScale = (scale > 1.0) ?
-      (1.0 / scale) :
-      scale;
+    const normScale = (scale > 1.0)
+      ? (1.0 / scale)
+      : scale;
     resolution = 1 / (normScale * INCHES_PER_UNIT[units] * DOTS_PER_INCH);
   }
   return resolution;
@@ -726,6 +726,7 @@ export const enableTouchScroll = (elem) => {
  */
 export const rgbToHex = (rgbColor) => {
   let hexColor;
+  // eslint-disable-next-line no-useless-catch
   try {
     hexColor = chroma(rgbColor)
       .hex();
@@ -743,6 +744,7 @@ export const rgbToHex = (rgbColor) => {
  */
 export const rgbaToHex = (rgbaColor) => {
   let hexColor;
+  // eslint-disable-next-line no-useless-catch
   try {
     hexColor = chroma(rgbaColor)
       .hex();
@@ -764,6 +766,7 @@ export const getOpacityFromRgba = (rgbaColor) => {
   const rgbaRegExp = /^rgba\s*\((\s*\d+\s*,){3}\s*([\d.]+)\s*\)$/;
   if (rgbaRegExp.test(rgbaColor)) {
     opacity = rgbaColor.replace(rgbaRegExp, '$2');
+    // eslint-disable-next-line no-useless-catch
     try {
       opacity = parseFloat(opacity);
     } catch (err) {
@@ -928,7 +931,7 @@ export const getRgba = (color, opacity) => {
 export const setEquals = (array, array2) => {
   let equals = false;
   if (array.length === array2.length) {
-    equals = array.every(e => array2.some(e2 => e2.equals(e)));
+    equals = array.every((e) => array2.some((e2) => e2.equals(e)));
   }
   return equals;
 };
@@ -1119,7 +1122,7 @@ export const removeHTML = (element) => {
 export const isDynamic = (obj) => {
   let flag = false;
   if (!Array.isArray(obj) && typeof obj === 'object' && !isNullOrEmpty(obj)) {
-    flag = Object.values(obj).some(val => isDynamic(val));
+    flag = Object.values(obj).some((val) => isDynamic(val));
   } else if (typeof obj === 'function' || (typeof obj === 'string' && /\{\{.*\}\}/.test(obj))) {
     flag = true;
   }
@@ -1186,7 +1189,6 @@ export const getEnvolvedExtent = (extents) => {
 
   return envolvedExtent;
 };
-
 
 /**
  * Determine the mobile operating system.

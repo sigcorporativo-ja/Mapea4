@@ -2,7 +2,9 @@
  * @module M/remote
  */
 
-import { addParameters, generateRandom, isNullOrEmpty, isObject } from './Utils.js';
+import {
+  addParameters, generateRandom, isNullOrEmpty, isObject,
+} from './Utils.js';
 import { useproxy, proxyExceptions } from '../mapea.js';
 import Response from './Response.js';
 
@@ -157,8 +159,8 @@ const ajax = (urlVar, dataVar, methodType, useProxy) => {
 export const get = (url, data, options) => {
   let req;
 
-  let useProxy = ((isNullOrEmpty(options) || (options.jsonp !== false)) &&
-    useproxy !== false);
+  let useProxy = ((isNullOrEmpty(options) || (options.jsonp !== false))
+    && useproxy !== false);
 
   const urlOrigin = new URL(url).origin;
   useProxy = useProxy && proxyExceptions.indexOf(urlOrigin) === -1;

@@ -140,14 +140,14 @@ class MVT extends Vector {
   }
 
   /**
-   * This function sets 
+   * This function sets
    * the tileLoadFunction
    *
    * @public
    * @function
    * @api stable
    */
-  setTileLoadFunction(func){
+  setTileLoadFunction(func) {
     this.getOLLayer().getSource().setTileLoadFunction(func);
   }
 
@@ -198,8 +198,8 @@ class MVT extends Vector {
     this.visibility = visibility;
     if ((visibility === true) && (this.transparent !== true)) {
       this.map.getBaseLayers()
-        .filter(layer => !layer.equals(this) && layer.isVisible())
-        .forEach(layer => layer.setVisible(false));
+        .filter((layer) => !layer.equals(this) && layer.isVisible())
+        .forEach((layer) => layer.setVisible(false));
       this.ol3Layer.setVisible(visibility);
       // updates resolutions and keep the zoom
       const oldZoom = this.map.getZoom();

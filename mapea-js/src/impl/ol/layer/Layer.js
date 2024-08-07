@@ -1,7 +1,9 @@
 /**
  * @module M/impl/Layer
  */
-import { isNullOrEmpty, concatUrlPaths, getResolutionFromScale, getScaleFromResolution } from 'M/util/Utils';
+import {
+  isNullOrEmpty, concatUrlPaths, getResolutionFromScale, getScaleFromResolution,
+} from 'M/util/Utils';
 import MObject from 'M/Object';
 import FacadeLayer from 'M/layer/Layer';
 /**
@@ -228,11 +230,12 @@ class LayerBase extends MObject {
     this.minScale_ = minScale;
     const units = this.map.getProjection().units;
     const minResolution = getResolutionFromScale(minScale, units);
-    if (!isNullOrEmpty(this.getOLLayer()) && !isNullOrEmpty(minResolution) &&
-      !isNullOrEmpty(units)) {
+    if (!isNullOrEmpty(this.getOLLayer()) && !isNullOrEmpty(minResolution)
+      && !isNullOrEmpty(units)) {
       this.getOLLayer().setMinResolution(minResolution);
     }
   }
+
   /**
    * This function gets the max-scale for this layer
    *
@@ -257,8 +260,8 @@ class LayerBase extends MObject {
     this.maxScale_ = maxScale;
     const units = this.map.getProjection().units;
     const maxResolution = getResolutionFromScale(maxScale, units);
-    if (!isNullOrEmpty(this.getOLLayer()) && !isNullOrEmpty(maxResolution) &&
-      !isNullOrEmpty(units)) {
+    if (!isNullOrEmpty(this.getOLLayer()) && !isNullOrEmpty(maxResolution)
+      && !isNullOrEmpty(units)) {
       this.getOLLayer().setMaxResolution(maxResolution);
     }
   }

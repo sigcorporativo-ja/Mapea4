@@ -18,8 +18,8 @@ import OLGeomLineString from 'ol/geom/LineString';
 OLGeomGeometry.prototype.cspline = function cspline(options) {
   let geometry;
   if (this.calcCSpline) {
-    if (this.csplineGeometryRevision !== this.getRevision() ||
-      this.csplineOption !== JSON.stringify(options)) {
+    if (this.csplineGeometryRevision !== this.getRevision()
+      || this.csplineOption !== JSON.stringify(options)) {
       this.csplineGeometry_ = this.calcCSpline(options);
       this.csplineGeometryRevision = this.getRevision();
       this.csplineOption = JSON.stringify(options);
@@ -38,7 +38,7 @@ OLGeomGeometry.prototype.cspline = function cspline(options) {
 OLGeomGeometryCollection.prototype.calcCSpline = function calcCSpline(options) {
   const splineGeom = [];
   const geometries = this.getGeometries();
-  geometries.forEach(geometry => splineGeom.push(geometry.cspline()));
+  geometries.forEach((geometry) => splineGeom.push(geometry.cspline()));
   const geom = new OLGeomGeometryCollection(splineGeom);
   return geom;
 };
@@ -49,7 +49,7 @@ OLGeomGeometryCollection.prototype.calcCSpline = function calcCSpline(options) {
 OLGeomMultiLineString.prototype.calcCSpline = function calcCSpline(options) {
   const splineGeom = [];
   const geometries = this.getLineStrings();
-  geometries.forEach(geometry => splineGeom.push(geometry.cspline().getCoordinates()));
+  geometries.forEach((geometry) => splineGeom.push(geometry.cspline().getCoordinates()));
   const geom = new OLGeomMultiLineString(splineGeom);
   return geom;
 };
@@ -60,7 +60,7 @@ OLGeomMultiLineString.prototype.calcCSpline = function calcCSpline(options) {
 OLGeomPolygon.prototype.calcCSpline = function calcCSpline(options) {
   const splineGeom = [];
   const geometries = this.getLineStrings();
-  geometries.forEach(geometry => splineGeom.push(geometry.cspline().getCoordinates()));
+  geometries.forEach((geometry) => splineGeom.push(geometry.cspline().getCoordinates()));
   const geom = new OLGeomPolygon(splineGeom);
   return geom;
 };
@@ -71,7 +71,7 @@ OLGeomPolygon.prototype.calcCSpline = function calcCSpline(options) {
 OLGeomMultiPolygon.prototype.calcCSpline = function calcCSpline(options) {
   const splineGeom = [];
   const geometries = this.getLineStrings();
-  geometries.forEach(geometry => splineGeom.push(geometry.cspline().getCoordinates()));
+  geometries.forEach((geometry) => splineGeom.push(geometry.cspline().getCoordinates()));
   const geom = new OLGeomMultiPolygon(splineGeom);
   return geom;
 };
@@ -91,8 +91,8 @@ const dist2d = (x1, y1, x2, y2) => {
 OLGeomLineString.prototype.calcCSpline = function calcCSpline(options = {}) {
   const line = this.getCoordinates();
   const tension = typeof options.tension === 'number' ? options.tension : 0.5;
-  const resolution = options.resolution ||
-    (this.getLength() / line.length / (options.pointsPerSeg || 10));
+  const resolution = options.resolution
+    || (this.getLength() / line.length / (options.pointsPerSeg || 10));
 
   const res = []; // clone array
   let x;
@@ -117,15 +117,14 @@ OLGeomLineString.prototype.calcCSpline = function calcCSpline(options = {}) {
   // Check if we will draw closed or open curve.
   // If closed, copy end points to beginning and first points to end
   // If open, duplicate first points to befinning, end points to end
-  if (line.length > 2 &&
-    line[0][0] === line[line.length - 1][0] && line[0][1] === line[line.length - 1][1]) {
+  if (line.length > 2
+    && line[0][0] === line[line.length - 1][0] && line[0][1] === line[line.length - 1][1]) {
     pts.unshift(line[line.length - 2]);
     pts.push(line[1]);
   } else {
     pts.unshift(line[0]);
     pts.push(line[line.length - 1]);
   }
-
 
   // 1. loop goes through point array
   // 2. loop goes through each segment between the 2 pts + 1e point before and after

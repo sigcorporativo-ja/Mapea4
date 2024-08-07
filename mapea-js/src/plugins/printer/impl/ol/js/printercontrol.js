@@ -101,8 +101,8 @@ export default class PrinterControl extends M.impl.Control {
       const regExpImgDefault = new RegExp(`.*${M.Layer.LEGEND_DEFAULT}$`);
       const regExpImgError = new RegExp(`.*${M.Layer.LEGEND_ERROR}$`);
       const legendURL = layer.getLegendURL();
-      if (!M.utils.isNullOrEmpty(legendURL) && !regExpImgDefault.test(legendURL) &&
-        !regExpImgError.test(legendURL)) {
+      if (!M.utils.isNullOrEmpty(legendURL) && !regExpImgDefault.test(legendURL)
+        && !regExpImgError.test(legendURL)) {
         encodedLegend.classes[0] = {
           name: '',
           icons: [layer.getLegendURL()],
@@ -169,9 +169,9 @@ export default class PrinterControl extends M.impl.Control {
           if (!M.utils.isNullOrEmpty(text)) {
             style = Object.assign(style, {
               label: M.utils.isNullOrEmpty(text.getText()) ? feature.get('name') : text.getText(),
-              fontColor: M.utils.isNullOrEmpty(text.getFill()) ? '' : M.utils.rgbToHex(M.utils.isArray(text.getFill().getColor()) ?
-                `rgba(${text.getFill().getColor().toString()})` :
-                text.getFill().getColor()),
+              fontColor: M.utils.isNullOrEmpty(text.getFill()) ? '' : M.utils.rgbToHex(M.utils.isArray(text.getFill().getColor())
+                ? `rgba(${text.getFill().getColor().toString()})`
+                : text.getFill().getColor()),
               // text.getFont() -->"bold 13px Helvetica, sans-serif"
               fontSize: '11px',
               fontFamily: 'Helvetica, sans-serif',
@@ -181,13 +181,12 @@ export default class PrinterControl extends M.impl.Control {
               labelXOffset: text.getOffsetX(),
               labelYOffset: text.getOffsetY(),
               // no pinta la línea
-              labelOutlineColor: M.utils.isNullOrEmpty(text.getStroke()) ? '' : M.utils.rgbToHex(M.utils.isArray(text.getStroke().getColor()) ?
-                `rgba(${text.getStroke().getColor().toString()})` :
-                text.getStroke().getColor()),
+              labelOutlineColor: M.utils.isNullOrEmpty(text.getStroke()) ? '' : M.utils.rgbToHex(M.utils.isArray(text.getStroke().getColor())
+                ? `rgba(${text.getStroke().getColor().toString()})`
+                : text.getStroke().getColor()),
               labelOutlineWidth: M.utils.isNullOrEmpty(text.getStroke()) ? '' : text.getStroke().getWidth(),
             });
           }
-
 
           if (!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox)) {
             const styleStr = JSON.stringify(style);

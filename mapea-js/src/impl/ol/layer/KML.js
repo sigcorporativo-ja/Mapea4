@@ -141,9 +141,9 @@ class KML extends Vector {
       const featureDesc = feature.getAttribute('description');
       const featureCoord = feature.getImpl().getOLFeature().getGeometry().getFirstCoordinate();
 
-      const popup_template = !isNullOrEmpty(this.template) ? this.template : popupKMLTemplate;
+      const popupTemplate = !isNullOrEmpty(this.template) ? this.template : popupKMLTemplate;
 
-      const htmlAsText = compileTemplate(popup_template, {
+      const htmlAsText = compileTemplate(popupTemplate, {
         vars: {
           name: featureName,
           desc: featureDesc,
@@ -319,7 +319,6 @@ class KML extends Vector {
     }
     return this.loadFeaturesPromise_;
   }
-
 
   /**
    * This function checks if an object is equals

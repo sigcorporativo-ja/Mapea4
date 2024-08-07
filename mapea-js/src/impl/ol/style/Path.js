@@ -41,6 +41,7 @@ class Path extends OLStyleText {
      */
     this.minWidth_ = options.minWidth || 0;
   }
+
   /**
    * TextOverflow property getter
    * @public

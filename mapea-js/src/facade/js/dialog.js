@@ -57,7 +57,7 @@ export const show = (message, title, severity) => {
 
   // adds listener to close the dialog
   const okButton = html.querySelector('div.m-button > button');
-  okButton.addEventListener('click', evt => removeElement(html));
+  okButton.addEventListener('click', (evt) => removeElement(html));
   mapeaContainer.appendChild(html);
 };
 

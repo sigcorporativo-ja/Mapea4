@@ -107,11 +107,11 @@ const getMatrices = (data, numberClasses) => {
           // will increase its variance beyond the limit, break
           // the class at this point, setting the lowerClassLimit
           // at this point.
-          if (varianceCombinations[l][j] >=
-            (variance + varianceCombinations[i4][j - 1])) {
+          if (varianceCombinations[l][j]
+            >= (variance + varianceCombinations[i4][j - 1])) {
             lowerClassLimits[l][j] = lowerClassLimit;
-            varianceCombinations[l][j] = variance +
-              varianceCombinations[i4][j - 1];
+            varianceCombinations[l][j] = variance
+              + varianceCombinations[i4][j - 1];
           }
         }
       }
@@ -149,7 +149,7 @@ const jenksBreaks = (data, lowerClassLimits, nClasses) => {
   // the lowerClassLimits matrix is used as indexes into itself
   // here: the `k` variable is reused in each iteration.
   while (countNum > 1) {
-    kclass[countNum - 1] = data[lowerClassLimits[k][countNum] - 2];
+    kclass[countNum - 1] = data[Math.max(0, lowerClassLimits[k][countNum] - 2)];
     k = lowerClassLimits[k][countNum] - 1;
     countNum -= 1;
   }
@@ -186,6 +186,7 @@ export const JENKS = (numberClassesParam) => {
     const breaks = jenksBreaks(data, lowerClassLimits, nclasses);
     // No cogemos el minimo
     const breakPoints = breaks.slice(1, breaks.length);
+    console.log(breakPoints);
     return breakPoints;
   };
 

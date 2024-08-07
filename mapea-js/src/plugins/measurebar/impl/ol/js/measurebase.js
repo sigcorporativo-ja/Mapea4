@@ -324,7 +324,6 @@ export default class Measure extends M.impl.Control {
     this.overlays_.length = 0;
   }
 
-
   /**
    * This function destroys this control and cleaning the HTML
    *

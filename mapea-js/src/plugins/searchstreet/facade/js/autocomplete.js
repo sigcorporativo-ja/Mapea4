@@ -218,7 +218,6 @@ export default class Autocomplete extends M.Plugin {
     }
   }
 
-
   /**
    * Read events keystrokes
    *
@@ -383,6 +382,7 @@ export default class Autocomplete extends M.Plugin {
       });
     })(this.searchTime_);
   }
+
   /**
    * This function adds the click event to each result with municipality
    *

@@ -9,10 +9,10 @@
 
   // OPCION 2: Con el metodo addLayers
   /*var layer = new M.layer.WMTS({
-    url: "https://www.ideandalucia.es/geowebcache/service/wmts",
-    name: "toporaster",
-    matrixSet: "EPSG:25830",
-    legend: "Toporaster"
+    url: 'http://www.ign.es/wmts/pnoa-ma?',
+    name: 'OI.OrthoimageCoverage',
+    legend: 'Imagen (PNOA)',
+    matrixSet: 'GoogleMapsCompatible',
   });
 
   mapajs.addWMTS(layer);*/

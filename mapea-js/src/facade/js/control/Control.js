@@ -234,7 +234,6 @@ class Control extends Base {
     return this.getImpl().getElement();
   }
 
-
   /**
    * Sets the panel of the control
    *

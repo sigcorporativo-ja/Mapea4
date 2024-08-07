@@ -22,7 +22,7 @@ export const parseParamToGeometries = (paramParameter) => {
   let param = paramParameter;
   let geometries = [];
   if (param instanceof Vector) {
-    geometries = [...param.getFeatures().map(feature => feature.getGeometry())];
+    geometries = [...param.getFeatures().map((feature) => feature.getGeometry())];
   } else {
     if (!isArray(param)) {
       param = [param];

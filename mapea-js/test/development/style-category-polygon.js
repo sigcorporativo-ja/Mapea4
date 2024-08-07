@@ -18,25 +18,15 @@ const wfs = new WFS({
 
 mapjs.addLayers([wfs]);
 const stylecategory = new StyleCategory('nombre', {
-  ALMERÍA: new StylePolygon({
-    fill: {
-      color: 'red',
-    },
+  Almería: new StylePolygon({
+    fill: { color: 'red' },
   }),
-  CÓRDOBA: new StylePolygon({
-    stroke: {
-      color: 'blue',
-      width: 5,
-    },
+  Córdoba: new StylePolygon({
+    stroke: { color: 'blue', width: 5 },
   }),
   other: new StylePolygon({
-    stroke: {
-      color: 'white',
-      width: 5,
-    },
-    fill: {
-      color: 'black',
-    },
+    stroke: { color: 'white', width: 3 },
+    fill: { color: 'black' },
   }),
 });
 wfs.setStyle(stylecategory);

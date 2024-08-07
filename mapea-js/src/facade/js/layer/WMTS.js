@@ -25,7 +25,7 @@ class WMTS extends LayerBase {
    * @param {Object} vendorOptions vendor options for the base library
    * @api
    */
-  constructor(userParameters, options = {}, vendorOptions) {
+  constructor(userParameters, options = {}, vendorOptions = undefined) {
     /**
      * Implementation of this layer
      * @public
@@ -69,12 +69,14 @@ class WMTS extends LayerBase {
   get type() {
     return LayerType.WMTS;
   }
+
   set type(newType) {
-    if (!isUndefined(newType) &&
-      !isNullOrEmpty(newType) && (newType !== LayerType.WMTS)) {
+    if (!isUndefined(newType)
+      && !isNullOrEmpty(newType) && (newType !== LayerType.WMTS)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.WMTS).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
     }
   }
+
   /**
    * 'matrixSet' the layer matrix set
    */
@@ -113,7 +115,7 @@ class WMTS extends LayerBase {
   }
 
   /**
-   * This function sets 
+   * This function sets
    * the tileLoadFunction
    * On the implementation
    *
@@ -122,7 +124,7 @@ class WMTS extends LayerBase {
    * @param {Function} func Function to override
    * @api
    */
-  setTileLoadFunction(func){
+  setTileLoadFunction(func) {
     this.getImpl().setTileLoadFunction(func);
   }
 

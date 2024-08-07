@@ -2,7 +2,6 @@ import SearchstreetImpl from '../../impl/ol/js/searchstreetcontrol.js';
 import SearchstreetTemplate from '../../templates/searchstreet.html';
 import SearchstreetResultsTemplate from '../../templates/searchstreetresults.html';
 
-
 export default class SearchstreetControl extends M.Control {
   /**
    * @classdesc
@@ -363,8 +362,8 @@ export default class SearchstreetControl extends M.Control {
         });
         this.searchTime_ = Date.now();
         this.querySearch_(searchUrl, this.provincia_, processor);
-      } else if (M.utils.isNullOrEmpty(this.provincia_) &&
-        !M.utils.isNullOrEmpty(this.municipio_)) {
+      } else if (M.utils.isNullOrEmpty(this.provincia_)
+        && !M.utils.isNullOrEmpty(this.municipio_)) {
         this.searchTime_ = Date.now();
         this.respuestasProvincias_ = [];
         this.contadorProvincias = 0;
@@ -507,7 +506,7 @@ export default class SearchstreetControl extends M.Control {
     this.facadeMap_.removePopup();
     if (this.getImpl().listPoints.length > 0) {
       const layers = this.facadeMap_.getLayers();
-      const layerDraw = layers.filter(layer => layer.name === '__draw__')[0];
+      const layerDraw = layers.filter((layer) => layer.name === '__draw__')[0];
       layerDraw.removeFeatures(layerDraw.getFeatures());
     }
     if (!M.utils.isUndefined(resultsTemplateVars.docs[0])) {
@@ -548,10 +547,12 @@ export default class SearchstreetControl extends M.Control {
             docs.geocoderMunProvSrsReturn[i].localityName = this.municipio_;
             // eslint-disable-next-line max-len
             docs.geocoderMunProvSrsReturn[i].cityName = this.getNameProvince(docs.geocoderMunProvSrsReturn[i].locality);
-            docs.geocoderMunProvSrsReturn[i].streetType =
-              M.utils.beautifyString(docs.geocoderMunProvSrsReturn[i].streetType);
-            docs.geocoderMunProvSrsReturn[i].streetName =
-              M.utils.beautifyString(docs.geocoderMunProvSrsReturn[i].streetName);
+            docs.geocoderMunProvSrsReturn[i].streetType = M.utils.beautifyString(
+              docs.geocoderMunProvSrsReturn[i].streetType,
+            );
+            docs.geocoderMunProvSrsReturn[i].streetName = M.utils.beautifyString(
+              docs.geocoderMunProvSrsReturn[i].streetName,
+            );
           }
           resultsTemplateVar = {
             docs: docs.geocoderMunProvSrsReturn,
@@ -581,10 +582,12 @@ export default class SearchstreetControl extends M.Control {
         docs.geocoderMunProvSrsReturn.localityName = this.municipio_;
         // eslint-disable-next-line max-len
         docs.geocoderMunProvSrsReturn.cityName = this.getNameProvince(docs.geocoderMunProvSrsReturn.locality);
-        docs.geocoderMunProvSrsReturn.streetType =
-          M.utils.beautifyString(docs.geocoderMunProvSrsReturn.streetType);
-        docs.geocoderMunProvSrsReturn.streetName =
-          M.utils.beautifyString(docs.geocoderMunProvSrsReturn.streetName);
+        docs.geocoderMunProvSrsReturn.streetType = M.utils.beautifyString(
+          docs.geocoderMunProvSrsReturn.streetType,
+        );
+        docs.geocoderMunProvSrsReturn.streetName = M.utils.beautifyString(
+          docs.geocoderMunProvSrsReturn.streetName,
+        );
         resultsTemplateVar = {
           docs: [docs.geocoderMunProvSrsReturn],
           containtResult,
@@ -614,10 +617,9 @@ export default class SearchstreetControl extends M.Control {
       codLocalityCadena = `0${codLocalityCadena}`;
     }
     const codProvincia = codLocalityCadena.substr(0, 2);
-    const provincia = this.provincias_.filter(l => (l.codigoINE === codProvincia));
+    const provincia = this.provincias_.filter((l) => (l.codigoINE === codProvincia));
     return provincia[0].nombre;
   }
-
 
   /**
    * This function adds a click event to the elements of the list
@@ -701,7 +703,7 @@ export default class SearchstreetControl extends M.Control {
     this.element_.classList.remove('shown');
     this.facadeMap_.removePopup();
     const layers = this.facadeMap_.getLayers();
-    const layerDraw = layers.filter(layer => layer.name === '__draw__')[0];
+    const layerDraw = layers.filter((layer) => layer.name === '__draw__')[0];
     layerDraw.removeFeatures(layerDraw.getFeatures());
     this.input_.value = '';
     this.resultsContainer_.innerHTML = '';

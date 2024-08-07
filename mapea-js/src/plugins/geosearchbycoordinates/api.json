@@ -8,10 +8,10 @@
   "files": {
     "ol": {
       "scripts": [
-        "geosearchbycoordinates-1.0.4.ol.min.js"
+        "geosearchbycoordinates-1.0.5.ol.min.js"
       ],
       "styles": [
-        "geosearchbycoordinates-1.0.4.min.css"
+        "geosearchbycoordinates-1.0.5.min.css"
       ]
     }
   },
@@ -22,8 +22,8 @@
     "name": "GeosearchByCoordinates",
     "description": "Search for locations within a given radius from a click on a point on the map.",
     "text": "",
-    "version": "1.0.4",
-    "date": "11/10/2019",
+    "version": "1.0.5",
+    "date": "04/06/2024",
     "author": "Junta de Andalucía",
     "org": "Junta de Andalucía",
     "tags": "mapea,plugin",

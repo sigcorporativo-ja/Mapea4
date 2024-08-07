@@ -165,8 +165,7 @@ class WMC110 extends XML {
    */
   readolgroupDisplayLayerSwitcher(layerInfoVar, node) {
     const layerInfo = layerInfoVar;
-    layerInfo.options.groupDisplayLayerSwitcher =
-      (XML.getChildValue(node));
+    layerInfo.options.groupDisplayLayerSwitcher = (XML.getChildValue(node));
   }
 
   /**
@@ -176,8 +175,7 @@ class WMC110 extends XML {
    */
   readolorderInsideGroupDisplayLayerSwitcher(layerInfoVar, node) {
     const layerInfo = layerInfoVar;
-    layerInfo.options.orderInsideGroupDisplayLayerSwitcher =
-      XML.getChildValue(node);
+    layerInfo.options.orderInsideGroupDisplayLayerSwitcher = XML.getChildValue(node);
   }
 
   /**

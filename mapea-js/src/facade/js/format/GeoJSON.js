@@ -3,7 +3,9 @@
  */
 import GeoJSONImpl from 'impl/format/GeoJSON.js';
 import Base from '../Base.js';
-import { isUndefined, isArray, isNullOrEmpty, isString } from '../util/Utils.js';
+import {
+  isUndefined, isArray, isNullOrEmpty, isString,
+} from '../util/Utils.js';
 import Exception from '../exception/exception.js';
 import { getValue } from '../i18n/language.js';
 

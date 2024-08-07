@@ -1,5 +1,5 @@
 import Handlebars from 'handlebars';
-import { getTextFromHtml } from '../util/Utils.js';
+import { getTextFromHtml } from './Utils.js';
 
 const helpers = () => {
   /**

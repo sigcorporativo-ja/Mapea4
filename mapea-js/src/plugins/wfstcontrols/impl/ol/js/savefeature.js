@@ -65,7 +65,7 @@ export default class SaveFeature extends M.impl.Control {
       const drawfeatureCtrl = this.facadeMap_.getControls(FDrawFeature.NAME)[0];
       if (!M.utils.isNullOrEmpty(drawfeatureCtrl)) {
         saveFeaturesDraw = drawfeatureCtrl.getImpl().modifiedFeatures;
-        saveFeaturesDraw = saveFeaturesDraw.filter(featureAux => !featureAux.toDelete);
+        saveFeaturesDraw = saveFeaturesDraw.filter((featureAux) => !featureAux.toDelete);
         SaveFeature.applyDescribeFeatureType.bind(this)(saveFeaturesDraw, describeFeatureType);
       }
       const modifyfeatureCtrl = this.facadeMap_.getControls(FModifyFeature.NAME)[0];
@@ -181,7 +181,6 @@ export default class SaveFeature extends M.impl.Control {
     this.facadeMap_.getMapImpl().removeControl(this);
   }
 
-
   /**
    * TODO
    *
@@ -203,8 +202,8 @@ export default class SaveFeature extends M.impl.Control {
         feature.unset(editFeatureGeomName);
       }
       // sets default values
-      if (!M.utils.isNullOrEmpty(describeFeatureType) &&
-        M.utils.isArray(describeFeatureType.properties)) {
+      if (!M.utils.isNullOrEmpty(describeFeatureType)
+        && M.utils.isArray(describeFeatureType.properties)) {
         describeFeatureType.properties.forEach((property) => {
           if (!M.utils.isGeometryType(property.localType)) {
             const valueToAdd = feature

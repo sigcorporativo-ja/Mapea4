@@ -4,7 +4,9 @@
 import 'assets/css/panel.css';
 import panelTemplate from 'templates/panel.html';
 import * as Position from './position.js';
-import { isNullOrEmpty, isArray, isString, includes } from '../util/Utils.js';
+import {
+  isNullOrEmpty, isArray, isString, includes,
+} from '../util/Utils.js';
 import MObject from '../Object.js';
 import * as EventType from '../event/eventtype.js';
 import ControlBase from '../control/Control.js';
@@ -338,7 +340,7 @@ class Panel extends MObject {
     let hasControl = false;
     if (!isNullOrEmpty(controlParam)) {
       if (isString(controlParam)) {
-        hasControl = this._controls.filter(control => control.name === controlParam)[0] != null;
+        hasControl = this._controls.filter((control) => control.name === controlParam)[0] != null;
       } else if (controlParam instanceof ControlBase) {
         hasControl = includes(this._controls, controlParam);
       }
@@ -363,7 +365,7 @@ class Panel extends MObject {
       controls.forEach((controlParam) => {
         const control = controlParam;
         if ((control instanceof ControlBase) && this.hasControl(control)) {
-          this._controls = this._controls.filter(control2 => !control.equals(control2));
+          this._controls = this._controls.filter((control2) => !control.equals(control2));
           if (control.destroy) {
             control.destroy();
           }

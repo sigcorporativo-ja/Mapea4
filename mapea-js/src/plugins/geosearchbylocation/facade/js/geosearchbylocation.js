@@ -232,7 +232,6 @@ export default class Geosearchbylocation extends M.Plugin {
   }
 }
 
-
 /**
  * Name of this control
  * @const

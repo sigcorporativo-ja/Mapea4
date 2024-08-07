@@ -79,8 +79,8 @@ class WFS extends Vector {
   }
 
   set type(newType) {
-    if (!isUndefined(newType) && !isNullOrEmpty(newType) &&
-      (newType !== LayerType.WFS)) {
+    if (!isUndefined(newType) && !isNullOrEmpty(newType)
+      && (newType !== LayerType.WFS)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.WFS).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
     }
   }
@@ -95,6 +95,7 @@ class WFS extends Vector {
   set namespace(newNamespace) {
     this.getImpl().namespace = newNamespace;
   }
+
   /**
    * 'legend' the layer name
    */
@@ -249,7 +250,6 @@ class WFS extends Vector {
   setStyle(styleParam, applyToFeature = false, defaultStyle = WFS.DEFAULT_OPTIONS_STYLE) {
     super.setStyle(styleParam, applyToFeature, defaultStyle);
   }
-
 
   /**
    * Checks if an object is equal to this layer. Two WFS layers are equal if both of them are

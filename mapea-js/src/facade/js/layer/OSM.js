@@ -91,14 +91,14 @@ class OSM extends LayerBase {
   }
 
   set type(newType) {
-    if (!isUndefined(newType) &&
-      !isNullOrEmpty(newType) && (newType !== LayerType.OSM)) {
+    if (!isUndefined(newType)
+      && !isNullOrEmpty(newType) && (newType !== LayerType.OSM)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.OSM).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
     }
   }
 
   /**
-   * This function sets 
+   * This function sets
    * the tileLoadFunction
    * On the implementation
    *
@@ -107,10 +107,10 @@ class OSM extends LayerBase {
    * @param {Function} func Function to override
    * @api
    */
-    setTileLoadFunction(func){
-      this.getImpl().setTileLoadFunction(func);
-    }
-  
+  setTileLoadFunction(func) {
+    this.getImpl().setTileLoadFunction(func);
+  }
+
   /**
    * This function checks if an object is equals
    * to this layer

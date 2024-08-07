@@ -54,7 +54,6 @@ class XML {
     this.options = options;
   }
 
-
   /**
    * @public
    * @function

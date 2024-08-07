@@ -17,7 +17,7 @@ const wfs = new WFS({
 });
 
 mapjs.addLayers([wfs]);
-const stylechoropleth = new StyleChoropleth('u_cod_prov', ['#ff0aee', '#040fef'], StyleQuantification.QUANTILE());
+const stylechoropleth = new StyleChoropleth('u_cod_prov', ['#ff0000', '#0000ff'], StyleQuantification.QUANTILE());
 wfs.setStyle(stylechoropleth);
 
 window.mapjs = mapjs;

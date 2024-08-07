@@ -4,7 +4,9 @@
 import ClusterImpl from 'impl/style/Cluster.js';
 import Style from './Style.js';
 import Composite from './Composite.js';
-import { extendsObj, isNullOrEmpty, stringifyFunctions, defineFunctionFromString } from '../util/Utils.js';
+import {
+  extendsObj, isNullOrEmpty, stringifyFunctions, defineFunctionFromString,
+} from '../util/Utils.js';
 
 /**
  * @classdesc
@@ -144,7 +146,7 @@ class Cluster extends Composite {
    * @api
    */
   getRange(min, max) {
-    return this.options_.ranges.find(el => (el.min === min && el.max === max));
+    return this.options_.ranges.find((el) => (el.min === min && el.max === max));
   }
 
   /**
@@ -315,7 +317,7 @@ class Cluster extends Composite {
     options = stringifyFunctions(options);
     let optsVendor = extendsObj({}, this.optsVendor_);
     optsVendor = stringifyFunctions(optsVendor);
-    const compStyles = this.getStyles().map(style => style.serialize());
+    const compStyles = this.getStyles().map((style) => style.serialize());
 
     const parameters = [options, optsVendor, compStyles];
     const deserializedMethod = 'M.style.Cluster.deserialize';
@@ -343,8 +345,9 @@ class Cluster extends Composite {
     /* eslint-enable */
     const deserializedStyle = styleFn(options, vendors);
 
-    const compStyles = serializedCompStyles.map(serializedStyle =>
-      Style.deserialize(serializedStyle));
+    const compStyles = serializedCompStyles.map(
+      (serializedStyle) => Style.deserialize(serializedStyle),
+    );
     deserializedStyle.add(compStyles);
 
     return deserializedStyle;

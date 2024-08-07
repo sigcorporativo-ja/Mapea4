@@ -3,7 +3,9 @@
  */
 import WMSImpl from 'impl/layer/WMS.js';
 
-import { isNullOrEmpty, isUndefined, sameUrl, isString, normalize, isFunction } from '../util/Utils.js';
+import {
+  isNullOrEmpty, isUndefined, sameUrl, isString, normalize, isFunction,
+} from '../util/Utils.js';
 import Exception from '../exception/exception.js';
 import LayerBase from './Layer.js';
 import * as parameter from '../parameter/parameter.js';
@@ -25,7 +27,7 @@ class WMS extends LayerBase {
    * @param {Object} vendorOptions vendor options for the base library
    * @api
    */
-  constructor(userParameters, options = {}, vendorOptions) {
+  constructor(userParameters, options = {}, vendorOptions = undefined) {
     // checks if the implementation can create WMC layers
     if (isUndefined(WMSImpl)) {
       Exception(getValue('exception').wms_method);
@@ -93,8 +95,8 @@ class WMS extends LayerBase {
   }
 
   set type(newType) {
-    if (!isUndefined(newType) &&
-      !isNullOrEmpty(newType) && (newType !== LayerType.WMS)) {
+    if (!isUndefined(newType)
+      && !isNullOrEmpty(newType) && (newType !== LayerType.WMS)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.WMS).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
     }
   }
@@ -184,7 +186,7 @@ class WMS extends LayerBase {
   }
 
   /**
-   * This function sets 
+   * This function sets
    * the tileLoadFunction
    * On the implementation
    *
@@ -193,7 +195,7 @@ class WMS extends LayerBase {
    * @param {Function} func Function to override
    * @api
    */
-  setTileLoadFunction(func){
+  setTileLoadFunction(func) {
     this.getImpl().setTileLoadFunction(func);
   }
 
@@ -240,7 +242,7 @@ class WMS extends LayerBase {
     if (isNullOrEmpty(this.userMaxExtent)) { // 1
       if (isNullOrEmpty(this.options.wmcMaxExtent)) { // 2
         if (isNullOrEmpty(this.map_.userMaxExtent)) { // 3
-          const selectedWMC = this.map_.getWMC().find(wmc => wmc.selected);
+          const selectedWMC = this.map_.getWMC().find((wmc) => wmc.selected);
           // if (isNullOrEmpty(this.options.wmcGlobalMaxExtent)) {
           if (isNullOrEmpty(selectedWMC)) { // 4
             // maxExtent provided by the service
@@ -300,7 +302,7 @@ class WMS extends LayerBase {
    * @api
    */
   calculateMaxExtent() {
-    return new Promise(resolve => this.getMaxExtent(resolve));
+    return new Promise((resolve) => { this.getMaxExtent(resolve); });
   }
 
   /**

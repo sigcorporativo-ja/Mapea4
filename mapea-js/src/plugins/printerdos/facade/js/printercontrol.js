@@ -142,7 +142,6 @@ export default class PrinterControl extends M.Control {
      */
     this.connectionTimeout_ = options.connectionTimeout || DEFAULT_CONNECTION_TIMEOUT;
 
-
     /**
      * Flag loading service
      * @private
@@ -162,9 +161,8 @@ export default class PrinterControl extends M.Control {
      * @private
      * @type {array<string>}
      */
-    this.outputFormats_ = Array.isArray(options.outputFormats) ?
-      options.outputFormats : ['pdf', 'png', 'jpg'];
-
+    this.outputFormats_ = Array.isArray(options.outputFormats)
+      ? options.outputFormats : ['pdf', 'png', 'jpg'];
 
     /**
      * Facade of the map
@@ -442,7 +440,6 @@ export default class PrinterControl extends M.Control {
       checkboxForceScale.dispatchEvent(clickEvent);
       inputTextWrap.dispatchEvent(changeEvent);
 
-
       // clean queue
       Array.prototype.forEach.apply(this.queueContainer_.children, [(child) => {
         // unlisten events
@@ -456,7 +453,6 @@ export default class PrinterControl extends M.Control {
     this.queueContainer_ = this.element_.querySelector('.queue > ul.queue-container');
     M.utils.enableTouchScroll(this.queueContainer_);
   }
-
 
   /**
    * This function checks if an object is equals
@@ -672,13 +668,13 @@ export default class PrinterControl extends M.Control {
         };
       }
 
-      if (projection !== 'EPSG:3857' && this.map_.getLayers().some(layer => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
+      if (projection !== 'EPSG:3857' && this.map_.getLayers().some((layer) => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
         printData.attributes.map.projection = 'EPSG:3857';
       }
       if (this.forceScale_ === false) {
         const bbox = this.map_.getBbox();
         printData.attributes.map.bbox = [bbox.x.min, bbox.y.min, bbox.x.max, bbox.y.max];
-        if (projection !== 'EPSG:3857' && this.map_.getLayers().some(layer => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
+        if (projection !== 'EPSG:3857' && this.map_.getLayers().some((layer) => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
           printData.attributes.map.bbox = this.getImpl().transformExt(printData.attributes.map.bbox, projection, 'EPSG:3857');
         }
       } else if (this.forceScale_ === true) {
@@ -698,38 +694,39 @@ export default class PrinterControl extends M.Control {
    */
   encodeLayers() {
     const layers = this.map_.getLayers().filter((layer) => {
-      return ((layer.isVisible() === true) && (layer.inRange() === true) &&
-        M.utils.isString(layer.name) && !layer.name.startsWith('cluster_cover'));
+      return ((layer.isVisible() === true) && (layer.inRange() === true)
+        && M.utils.isString(layer.name) && !layer.name.startsWith('cluster_cover'));
     });
-    let numLayersToProc = layers.length;
 
     return (new Promise((success, fail) => {
-      let encodedLayers = [];
-      const encodedLayersVector = [];
-      layers.forEach((layer) => {
-        this.getImpl().encodeLayer(layer).then((encodedLayer) => {
+      const encodedLayers = [];
+      const promises = layers.map((layer, index) => {
+        return this.getImpl().encodeLayer(layer).then((encodedLayer) => {
           // añade la capa y comprueba si es vector. Las capas que sean vector
           // tienen que quedar en último lugar para que no sean tapadas
           if (!M.utils.isNullOrEmpty(encodedLayer) && encodedLayer.type !== 'Vector') {
-            encodedLayers.push(encodedLayer);
+            encodedLayers[index] = encodedLayer;
           } else {
             // Se comprueba que las capas vectoriales estén en el rango del mapa.
             const resolution = this.map_.getMapImpl().getView().getResolution();
             const maxResolution = layer.getImpl().getOL3Layer().getMaxResolution();
             const minResolution = layer.getImpl().getOL3Layer().getMinResolution();
             if (((resolution >= minResolution) && (resolution <= maxResolution))) {
-              encodedLayersVector.push(encodedLayer);
+              encodedLayers[index] = encodedLayer;
             }
-          }
-          numLayersToProc -= 1;
-          if (numLayersToProc === 0) {
-            encodedLayers = encodedLayers.concat(encodedLayersVector);
-            // se usa reverse() para invertir el orden de las capas, así la capa base queda abajo
-            // y se visualiza el mapa correctamente.
-            success(encodedLayers.reverse());
           }
         });
       });
+      // Use Promise.all to wait for all the promises to resolve
+      Promise.all(promises)
+        .then(() => {
+        // Once all promises are resolved, reverse the order and resolve the main promise
+
+          // se usa reverse() para invertir el orden de las capas, así la capa base queda abajo
+          // y se visualiza el mapa correctamente.
+          success(encodedLayers.filter((layer) => layer !== undefined).reverse());
+        })
+        .catch(fail); // Handle any errors that occur during the encoding process
     }));
   }
 

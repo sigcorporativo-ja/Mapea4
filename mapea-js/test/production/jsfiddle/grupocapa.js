@@ -17,7 +17,7 @@ let provincias = new M.layer.GeoJSON({
 
 let campamentos = new M.layer.GeoJSON({
   name: "Campamentos",
-  url: "http://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=sepim:campamentos&outputFormat=application/json&",
+  url: "https://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=sepim:campamentos&outputFormat=application/json&",
   extract: true
 });
 

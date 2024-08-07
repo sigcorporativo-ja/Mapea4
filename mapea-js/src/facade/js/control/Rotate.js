@@ -20,8 +20,8 @@ const rotateListener = (e, html, map) => {
   let x = 0;
   let y = 0;
 
-  while (sliderContainer && !Number.isNaN(sliderContainer.offsetLeft) &&
-    !Number.isNaN(sliderContainer.offsetTop)) {
+  while (sliderContainer && !Number.isNaN(sliderContainer.offsetLeft)
+    && !Number.isNaN(sliderContainer.offsetTop)) {
     x += sliderContainer.offsetLeft - sliderContainer.scrollLeft;
     y += sliderContainer.offsetTop - sliderContainer.scrollTop;
     sliderContainer = sliderContainer.offsetParent;

@@ -97,7 +97,8 @@ class WMC extends Layer {
   select() {
     if (this.selected === false) {
       // unselect layers
-      this.map.getWMC().forEach(wmcLayer => wmcLayer.unselect());
+      this.map.getWMC().forEach((wmcLayer) => wmcLayer.unselect());
+      this.map.getImpl().setCalculatedResolutions(false);
 
       this.selected = true;
 
@@ -172,7 +173,7 @@ class WMC extends Layer {
     } else {
       this.groups = [];
     }
-    this.layers.forEach(wms => wms.setWMCParent(this.facadeLayer_));
+    this.layers.forEach((wms) => wms.setWMCParent(this.facadeLayer_));
     this.map.addWMS(this.layers, true);
     this.map.addLayerGroup(this.groups);
 
@@ -233,7 +234,7 @@ class WMC extends Layer {
    * @api stable
    */
   calculateMaxExtent() {
-    return new Promise(resolve => this.getMaxExtent(resolve));
+    return new Promise((resolve) => { this.getMaxExtent(resolve); });
   }
 
   /**

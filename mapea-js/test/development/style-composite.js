@@ -9,7 +9,7 @@ const mapjs = map({
 });
 
 const wfs = new WFS({
-  url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows',
+  url: 'https://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows',
   name: 'sepim:campamentos',
   legend: 'Campamentos',
   geometry: 'POINT',
@@ -18,13 +18,8 @@ const wfs = new WFS({
 
 const styleBase = new StylePoint({
   radius: 5,
-  fill: {
-    color: 'yellow',
-    opacity: 0.3,
-  },
-  stroke: {
-    color: 'green',
-  },
+  fill: { color: 'yellow', opacity: 0.3 },
+  stroke: { color: 'green' },
 });
 
 const styleCluster = new StyleCluster();

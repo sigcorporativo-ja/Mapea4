@@ -80,9 +80,9 @@ export default class SearchstreetControl extends M.impl.Control {
           }),
         }),
       }));
-      positionFeature.setGeometry(results[i].coordinateX !== null &&
-        results[i].coordinateY !== null ?
-        new ol.geom.Point([results[i].coordinateX, results[i].coordinateY]) : null);
+      positionFeature.setGeometry(results[i].coordinateX !== null
+        && results[i].coordinateY !== null
+        ? new ol.geom.Point([results[i].coordinateX, results[i].coordinateY]) : null);
       const feature = results[i];
       this.addEventClickFeature(feature, positionFeature);
 
@@ -113,7 +113,6 @@ export default class SearchstreetControl extends M.impl.Control {
       }));
     this.facadeMap_.setBbox(bbox);
   }
-
 
   /**
    * This function calls the show popup function to display information

@@ -26,7 +26,7 @@ const PROPAGATED_ELEMENTS = [
  */
 const hasChild = (node, childName) => {
   const childNodes = Array.prototype.filter
-    .call(node.children, element => element.tagName === childName);
+    .call(node.children, (element) => element.tagName === childName);
   return childNodes.length > 0;
 };
 
@@ -42,7 +42,7 @@ const propagateNodeLayer = (parentNode, nodeChild) => {
     PROPAGATED_ELEMENTS.forEach((elementName) => {
       if (!hasChild(nodeChild, elementName)) {
         const nodes = Array.prototype.filter
-          .call(parentNode.children, element => element.tagName === elementName);
+          .call(parentNode.children, (element) => element.tagName === elementName);
         nodes.forEach((node) => {
           const cloneNode = node.cloneNode(true);
           nodeChild.appendChild(cloneNode);
@@ -98,7 +98,7 @@ const parseSRS = (objLayer, parsedLayerNodes) => {
       objLayerParam.SRS = [innerHTML];
     }
   } else if (isArray(objLayerParam.Layer)) {
-    objLayerParam.Layer.forEach(objLayerChild => parseSRS(objLayerChild, parsedLayerNodes));
+    objLayerParam.Layer.forEach((objLayerChild) => parseSRS(objLayerChild, parsedLayerNodes));
   }
 };
 
@@ -112,12 +112,12 @@ const parseBoundingBox = (objLayer, parsedLayerNodes) => {
   const nodeLayer = parsedLayerNodes[objLayer.Name];
   if (!isNullOrEmpty(nodeLayer)) {
     if (isArray(objLayer.BoundingBox)) {
-      const childLayers = Array.prototype.filter.call(nodeLayer.children, e => e.tagName === 'Layer');
-      let bboxChilds = Array.prototype.map.call(nodeLayer.children, element => element);
-      bboxChilds = bboxChilds.filter(element => ['BoundingBox'].includes(element.tagName));
+      const childLayers = Array.prototype.filter.call(nodeLayer.children, (e) => e.tagName === 'Layer');
+      let bboxChilds = Array.prototype.map.call(nodeLayer.children, (element) => element);
+      bboxChilds = bboxChilds.filter((element) => ['BoundingBox'].includes(element.tagName));
 
       if (bboxChilds.length === 0 && childLayers.length > 0) {
-        childLayers.forEach(child => parseBoundingBox(objLayer, {
+        childLayers.forEach((child) => parseBoundingBox(objLayer, {
           [objLayer.Name]: child,
         }));
       } else {
@@ -136,7 +136,7 @@ const parseBoundingBox = (objLayer, parsedLayerNodes) => {
       }
     }
   } else if (isArray(objLayer.Layer)) {
-    objLayer.Layer.forEach(objLayerChild => parseBoundingBox(objLayerChild, parsedLayerNodes));
+    objLayer.Layer.forEach((objLayerChild) => parseBoundingBox(objLayerChild, parsedLayerNodes));
   }
 };
 
@@ -151,8 +151,8 @@ const parseScaleHint = (objLayer, parsedLayerNodes) => {
   const nodeLayer = parsedLayerNodes[objLayer.Name];
   if (!isNullOrEmpty(nodeLayer)) {
     objLayerParam.ScaleHint = [];
-    let scaleHints = Array.prototype.map.call(nodeLayer.children, element => element);
-    scaleHints = scaleHints.filter(element => element.tagName === 'ScaleHint');
+    let scaleHints = Array.prototype.map.call(nodeLayer.children, (element) => element);
+    scaleHints = scaleHints.filter((element) => element.tagName === 'ScaleHint');
     scaleHints.forEach((scaleHint) => {
       const minScale = parseFloat(scaleHint.getAttribute('min'));
       const maxScale = parseFloat(scaleHint.getAttribute('max'));
@@ -163,7 +163,7 @@ const parseScaleHint = (objLayer, parsedLayerNodes) => {
       objLayerParam.ScaleHint.push(obj);
     });
   } else if (isArray(objLayer.Layer)) {
-    objLayer.Layer.forEach(objLayerChild => parseScaleHint(objLayerChild, parsedLayerNodes));
+    objLayer.Layer.forEach((objLayerChild) => parseScaleHint(objLayerChild, parsedLayerNodes));
   }
 };
 
@@ -178,8 +178,8 @@ const parseLatLonBoundingBox = (objLayer, parsedLayerNodes) => {
   const nodeLayer = parsedLayerNodes[objLayer.Name];
   if (!isNullOrEmpty(nodeLayer)) {
     objLayerParam.LatLonBoundingBox = [];
-    let latLonBboxes = Array.prototype.map.call(nodeLayer.children, element => element);
-    latLonBboxes = latLonBboxes.filter(element => element.tagName === 'LatLonBoundingBox');
+    let latLonBboxes = Array.prototype.map.call(nodeLayer.children, (element) => element);
+    latLonBboxes = latLonBboxes.filter((element) => element.tagName === 'LatLonBoundingBox');
     latLonBboxes.forEach((latlonBbox) => {
       const extent = [
         parseFloat(latlonBbox.getAttribute('minx')),
@@ -195,7 +195,7 @@ const parseLatLonBoundingBox = (objLayer, parsedLayerNodes) => {
     });
   } else if (isArray(objLayerParam.Layer)) {
     objLayerParam.Layer
-      .forEach(objLayerChild => parseLatLonBoundingBox(objLayerChild, parsedLayerNodes));
+      .forEach((objLayerChild) => parseLatLonBoundingBox(objLayerChild, parsedLayerNodes));
   }
 };
 
@@ -211,8 +211,8 @@ const replaceBoundingBox = (objLayer, parsedLayerNodes) => {
   // replaces the BoundingBox by LatLonBoundinBox
   const latLonBoundingBoxProp = 'LatLonBoundingBox';
   const boundingBoxProp = 'BoundingBox';
-  if (isNullOrEmpty(objLayerParam[boundingBoxProp]) &&
-    !isNullOrEmpty(objLayerParam[latLonBoundingBoxProp])) {
+  if (isNullOrEmpty(objLayerParam[boundingBoxProp])
+    && !isNullOrEmpty(objLayerParam[latLonBoundingBoxProp])) {
     objLayerParam[boundingBoxProp] = objLayerParam[latLonBoundingBoxProp];
   }
 };
@@ -227,8 +227,8 @@ const replaceBoundingBox = (objLayer, parsedLayerNodes) => {
 const replaceMaxScaleDenominator = (objLayer, parsedLayerNodes) => {
   const objLayerParam = objLayer;
   const maxScaleDenominatorProp = 'MaxScaleDenominator';
-  if (isNullOrEmpty(objLayerParam[maxScaleDenominatorProp]) &&
-    !isNullOrEmpty(objLayerParam.ScaleHint)) {
+  if (isNullOrEmpty(objLayerParam[maxScaleDenominatorProp])
+    && !isNullOrEmpty(objLayerParam.ScaleHint)) {
     objLayerParam[maxScaleDenominatorProp] = objLayerParam.ScaleHint[0].maxScale;
   }
 };
@@ -243,8 +243,8 @@ const replaceMaxScaleDenominator = (objLayer, parsedLayerNodes) => {
 const replaceMinScaleDenominator = (objLayer, parsedLayerNodes) => {
   const objLayerParam = objLayer;
   const minScaleDenominatorProp = 'MinScaleDenominator';
-  if (isNullOrEmpty(objLayerParam[minScaleDenominatorProp]) &&
-    !isNullOrEmpty(objLayerParam.ScaleHint)) {
+  if (isNullOrEmpty(objLayerParam[minScaleDenominatorProp])
+    && !isNullOrEmpty(objLayerParam.ScaleHint)) {
     objLayerParam[minScaleDenominatorProp] = objLayerParam.ScaleHint[0].minScale;
   }
 };
@@ -292,7 +292,6 @@ const parseLayersProps = (objLayer, parsedLayerNodes) => {
     parseLayersProps(objLayer.Layer, parsedLayerNodes);
   }
 };
-
 
 /**
  * @classdesc

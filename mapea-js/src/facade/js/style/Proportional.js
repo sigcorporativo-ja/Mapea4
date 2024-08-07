@@ -6,7 +6,9 @@ import StyleComposite from './Composite.js';
 import StylePoint from './Point.js';
 import StyleSimple from './Simple.js';
 import StyleGeneric from './Generic.js';
-import { isNullOrEmpty, stringifyFunctions, extendsObj, defineFunctionFromString } from '../util/Utils.js';
+import {
+  isNullOrEmpty, stringifyFunctions, extendsObj, defineFunctionFromString,
+} from '../util/Utils.js';
 import Exception from '../exception/exception.js';
 import { getValue } from '../i18n/language.js';
 
@@ -22,7 +24,7 @@ export const getMinMaxValues = (features, attributeName) => {
   let [minValue, maxValue] = [undefined, undefined];
   const filteredFeatures = features.filter((feature) => {
     return ![NaN, undefined, null].includes(feature.getAttribute(attributeName));
-  }).map(f => parseInt(f.getAttribute(attributeName), 10));
+  }).map((f) => parseInt(f.getAttribute(attributeName), 10));
   let index = 1;
   if (!isNullOrEmpty(filteredFeatures)) {
     minValue = filteredFeatures[0];
@@ -42,8 +44,8 @@ export const getMinMaxValues = (features, attributeName) => {
  * @private
  * @api
  */
-const defaultProportionalFunction = ((value, minValue, maxValue, minRadius, maxRadius) =>
-  (((value - minValue) * (maxRadius - minRadius)) / (maxValue - minValue)) + minRadius);
+const defaultProportionalFunction = ((value, minValue, maxValue, minRadius, maxRadius) => (
+  ((value - minValue) * (maxRadius - minRadius)) / (maxValue - minValue)) + minRadius);
 
 /**
  * @classdesc
@@ -124,6 +126,7 @@ class Proportional extends StyleComposite {
       this.styles_.push(this.style_);
     }
   }
+
   /**
    * This function apply the style to specified layer
    * @function
@@ -181,10 +184,10 @@ class Proportional extends StyleComposite {
         .getOldStyle() : this.layer_.getStyle();
       const minMaxValues = getMinMaxValues(this.layer_.getFeatures(), this.attributeName_);
       [this.minValue_, this.maxValue_] = minMaxValues;
-      this.layer_.getFeatures().forEach(feature => this.applyToFeature(feature, 1));
+      this.layer_.getFeatures().forEach((feature) => this.applyToFeature(feature, 1));
       const newStyle = this.oldStyle_.clone();
       if (newStyle instanceof StyleSimple) {
-        newStyle.set('zindex', feature => (this.maxValue_ - parseFloat(feature.getAttribute(this.attributeName_))));
+        newStyle.set('zindex', (feature) => (this.maxValue_ - parseFloat(feature.getAttribute(this.attributeName_))));
         newStyle.set(Proportional.getSizeAttribute(newStyle), (feature) => {
           const weigh = Proportional.SCALE_PROPORTION;
           const value = feature.getAttribute(this.attributeName_);
@@ -344,7 +347,7 @@ class Proportional extends StyleComposite {
   updateCanvas() {
     this.updateCanvasPromise_ = new Promise((success, fail) => {
       if (!isNullOrEmpty(this.layer_)) {
-        const styleSimple = this.styles_.filter(style => style instanceof StyleSimple)[0];
+        const styleSimple = this.styles_.filter((style) => style instanceof StyleSimple)[0];
         let style = !isNullOrEmpty(styleSimple) ? styleSimple : this.layer_.getStyle();
         style = !isNullOrEmpty(style) ? style : this.style_;
 
@@ -529,7 +532,7 @@ class Proportional extends StyleComposite {
     const attributeName = this.getAttributeName();
     const minRadius = this.getMinRadius();
     const maxRadius = this.getMaxRadius();
-    const styles = this.getStyles().map(style => style.serialize());
+    const styles = this.getStyles().map((style) => style.serialize());
     const proportionalFunction = stringifyFunctions(this.getProportionalFunction());
     let options = extendsObj({}, this.getOptions());
     options = stringifyFunctions(options);
@@ -563,7 +566,9 @@ class Proportional extends StyleComposite {
     const deserializedStyle = styleFn(attributeName, minRadius, maxRadius, undefined, proportionalFunction, options);
     /* eslint-enable */
 
-    const styles = serializedStyles.map(serializedStyle => StyleBase.deserialize(serializedStyle));
+    const styles = serializedStyles.map(
+      (serializedStyle) => StyleBase.deserialize(serializedStyle),
+    );
     deserializedStyle.add(styles);
 
     return deserializedStyle;

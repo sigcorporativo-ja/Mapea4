@@ -28,7 +28,7 @@ export default class GeoSearchStyle {
       GeoSearchStyle.DEFAULT[M.geom.wkt.type.POINT] = new ol.style.Style({
         image: new ol.style.Icon({
           img: imgIconDefault,
-          //imgSize: [24, 24],
+          // imgSize: [24, 24],
         }),
       });
 
@@ -47,29 +47,29 @@ export default class GeoSearchStyle {
       GeoSearchStyle.DEFAULT[M.geom.wkt.type.POLYGON] = new ol.style.Style({
         image: new ol.style.Icon({
           img: imgIconDefault,
-          //imgSize: [24, 24],
+          // imgSize: [24, 24],
         }),
       });
       // Creates default geometries style
-      GeoSearchStyle.DEFAULT[M.geom.wkt.type.MULTI_POINT] =
-        GeoSearchStyle.DEFAULT[M.geom.wkt.type.POINT];
-      GeoSearchStyle.DEFAULT[M.geom.wkt.type.LINEAR_RING] =
-        GeoSearchStyle.DEFAULT[M.geom.wkt.type.LINE_STRING];
-      GeoSearchStyle.DEFAULT[M.geom.wkt.type.MULTI_LINE_STRING] =
-        GeoSearchStyle.DEFAULT[M.geom.wkt.type.LINE_STRING];
-      GeoSearchStyle.DEFAULT[M.geom.wkt.type.MULTI_POLYGON] =
-        GeoSearchStyle.DEFAULT[M.geom.wkt.type.POLYGON];
-      GeoSearchStyle.DEFAULT[M.geom.wkt.type.CIRCLE] =
-        GeoSearchStyle.DEFAULT[M.geom.wkt.type.POLYGON];
-      GeoSearchStyle.DEFAULT[M.geom.wkt.type.GEOMETRY_COLLECTION] =
-        GeoSearchStyle.DEFAULT[M.geom.wkt.type.POLYGON];
+      GeoSearchStyle.DEFAULT[M.geom.wkt.type.MULTI_POINT] = GeoSearchStyle.DEFAULT[
+        M.geom.wkt.type.POINT];
+      GeoSearchStyle.DEFAULT[M.geom.wkt.type.LINEAR_RING] = GeoSearchStyle.DEFAULT[
+        M.geom.wkt.type.LINE_STRING];
+      GeoSearchStyle.DEFAULT[M.geom.wkt.type.MULTI_LINE_STRING] = GeoSearchStyle.DEFAULT[
+        M.geom.wkt.type.LINE_STRING];
+      GeoSearchStyle.DEFAULT[M.geom.wkt.type.MULTI_POLYGON] = GeoSearchStyle.DEFAULT[
+        M.geom.wkt.type.POLYGON];
+      GeoSearchStyle.DEFAULT[M.geom.wkt.type.CIRCLE] = GeoSearchStyle.DEFAULT[
+        M.geom.wkt.type.POLYGON];
+      GeoSearchStyle.DEFAULT[M.geom.wkt.type.GEOMETRY_COLLECTION] = GeoSearchStyle.DEFAULT[
+        M.geom.wkt.type.POLYGON];
       // ----
 
       // Create Default Style Point
       GeoSearchStyle.NEW[M.geom.wkt.type.POINT] = new ol.style.Style({
         image: new ol.style.Icon({
           img: imgIconNew,
-          //imgSize: [24, 24],
+          // imgSize: [24, 24],
         }),
       });
 
@@ -88,28 +88,28 @@ export default class GeoSearchStyle {
       GeoSearchStyle.NEW[M.geom.wkt.type.POLYGON] = new ol.style.Style({
         image: new ol.style.Icon({
           img: imgIconNew,
-          //imgSize: [24, 24],
+          // imgSize: [24, 24],
         }),
       });
-      GeoSearchStyle.NEW[M.geom.wkt.type.MULTI_POINT] =
-        GeoSearchStyle.NEW[M.geom.wkt.type.POINT];
-      GeoSearchStyle.NEW[M.geom.wkt.type.LINEAR_RING] =
-        GeoSearchStyle.NEW[M.geom.wkt.type.LINE_STRING];
-      GeoSearchStyle.NEW[M.geom.wkt.type.MULTI_LINE_STRING] =
-        GeoSearchStyle.NEW[M.geom.wkt.type.LINE_STRING];
-      GeoSearchStyle.NEW[M.geom.wkt.type.MULTI_POLYGON] =
-        GeoSearchStyle.NEW[M.geom.wkt.type.POLYGON];
-      GeoSearchStyle.NEW[M.geom.wkt.type.CIRCLE] =
-        GeoSearchStyle.NEW[M.geom.wkt.type.POLYGON];
-      GeoSearchStyle.NEW[M.geom.wkt.type.GEOMETRY_COLLECTION] =
-        GeoSearchStyle.NEW[M.geom.wkt.type.POLYGON];
+      GeoSearchStyle.NEW[M.geom.wkt.type.MULTI_POINT] = GeoSearchStyle.NEW[
+        M.geom.wkt.type.POINT];
+      GeoSearchStyle.NEW[M.geom.wkt.type.LINEAR_RING] = GeoSearchStyle.NEW[
+        M.geom.wkt.type.LINE_STRING];
+      GeoSearchStyle.NEW[M.geom.wkt.type.MULTI_LINE_STRING] = GeoSearchStyle.NEW[
+        M.geom.wkt.type.LINE_STRING];
+      GeoSearchStyle.NEW[M.geom.wkt.type.MULTI_POLYGON] = GeoSearchStyle.NEW[
+        M.geom.wkt.type.POLYGON];
+      GeoSearchStyle.NEW[M.geom.wkt.type.CIRCLE] = GeoSearchStyle.NEW[
+        M.geom.wkt.type.POLYGON];
+      GeoSearchStyle.NEW[M.geom.wkt.type.GEOMETRY_COLLECTION] = GeoSearchStyle.NEW[
+        M.geom.wkt.type.POLYGON];
       // ----
 
       // Create Default Style Point
       GeoSearchStyle.SELECTED[M.geom.wkt.type.POINT] = new ol.style.Style({
         image: new ol.style.Icon({
           img: imgIconSelected,
-          //imgSize: [24, 24],
+          // imgSize: [24, 24],
         }),
       });
       // Create Default Style Line
@@ -132,18 +132,18 @@ export default class GeoSearchStyle {
           width: 2,
         }),
       });
-      GeoSearchStyle.SELECTED[M.geom.wkt.type.MULTI_POINT] =
-        GeoSearchStyle.SELECTED[M.geom.wkt.type.POINT];
-      GeoSearchStyle.SELECTED[M.geom.wkt.type.LINEAR_RING] =
-        GeoSearchStyle.SELECTED[M.geom.wkt.type.LINE_STRING];
-      GeoSearchStyle.SELECTED[M.geom.wkt.type.MULTI_LINE_STRING] =
-        GeoSearchStyle.SELECTED[M.geom.wkt.type.LINE_STRING];
-      GeoSearchStyle.SELECTED[M.geom.wkt.type.MULTI_POLYGON] =
-        GeoSearchStyle.SELECTED[M.geom.wkt.type.POLYGON];
-      GeoSearchStyle.SELECTED[M.geom.wkt.type.CIRCLE] =
-        GeoSearchStyle.SELECTED[M.geom.wkt.type.POLYGON];
-      GeoSearchStyle.SELECTED[M.geom.wkt.type.GEOMETRY_COLLECTION] =
-        GeoSearchStyle.SELECTED[M.geom.wkt.type.POLYGON];
+      GeoSearchStyle.SELECTED[M.geom.wkt.type.MULTI_POINT] = GeoSearchStyle.SELECTED[
+        M.geom.wkt.type.POINT];
+      GeoSearchStyle.SELECTED[M.geom.wkt.type.LINEAR_RING] = GeoSearchStyle.SELECTED[
+        M.geom.wkt.type.LINE_STRING];
+      GeoSearchStyle.SELECTED[M.geom.wkt.type.MULTI_LINE_STRING] = GeoSearchStyle.SELECTED[
+        M.geom.wkt.type.LINE_STRING];
+      GeoSearchStyle.SELECTED[M.geom.wkt.type.MULTI_POLYGON] = GeoSearchStyle.SELECTED[
+        M.geom.wkt.type.POLYGON];
+      GeoSearchStyle.SELECTED[M.geom.wkt.type.CIRCLE] = GeoSearchStyle.SELECTED[
+        M.geom.wkt.type.POLYGON];
+      GeoSearchStyle.SELECTED[M.geom.wkt.type.GEOMETRY_COLLECTION] = GeoSearchStyle.SELECTED[
+        M.geom.wkt.type.POLYGON];
     }
   }
 }

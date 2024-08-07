@@ -1,5 +1,5 @@
 import { map } from 'M/mapea';
-import WMS from 'M/layer/WMS';
+// import WMS from 'M/layer/WMS';
 import LayerGroup from 'M/layer/LayerGroup';
 // import * as EventType from 'M/event/eventtype';
 // import GeoJSON from 'M/layer/GeoJSON';
@@ -16,9 +16,10 @@ const mapa = map({ container: 'map', controls: ['layerswitcher'] });
 
 // layers
 const centrosMedicos = new WFS({
-  url: 'https://herramienta-centralizada-sigc.desarrollo.guadaltel.es/geoserver/Global/wfs?*',
-  name: 'centros_medicos_2da3a991_a621_4a01_b4c0_a9c7f90d1f00',
-  legend: 'Centros Medicos',
+  url: 'https://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows',
+  name: 'campamentos',
+  namespace: 'sepim',
+  legend: 'sepim:campamentos',
   tiled: true,
 });
 
@@ -30,12 +31,12 @@ const nucleo = new WFS({
 });
 
 const provinciasWMS = new WFS({
-  url: 'https://herramienta-centralizada-sigc.desarrollo.guadaltel.es/geoserver/guadaltel_prod/wfs?*',
-  name: 'u2_red_nacional_de_p_1ac4a9b2_dde9_4a83_9569_93ef5cfb1f60',
-  legend: 'provinciasWMS',
+  url: 'https://geostematicos-sigc.juntadeandalucia.es/geoserver/tematicos/ows?*',
+  name: 'Provincias',
+  legend: 'Provincias',
+  namespace: 'tematicos',
   tiled: true,
 });
-
 
 // const wms = new WMS({
 //   url: 'http://www.callejerodeandalucia.es/servicios/base/wms?',
@@ -75,7 +76,7 @@ btn.addEventListener('click', () => {
 
 const btn2 = document.getElementById('btnAddLayer1');
 btn2.addEventListener('click', () => {
-  const lgToDelete = mapa.getLayerGroup().find(lg => lg.title === 'Grupo1');
+  const lgToDelete = mapa.getLayerGroup().find((lg) => lg.title === 'Grupo1');
   mapa.removeLayerGroup(lgToDelete);
   const nLayerGroup = new LayerGroup();
   nLayerGroup.title = lgToDelete.title;
@@ -86,7 +87,7 @@ btn2.addEventListener('click', () => {
 
 const btn3 = document.getElementById('btnAddLayer2');
 btn3.addEventListener('click', () => {
-  const lgToDelete = mapa.getLayerGroup().find(lg => lg.title === 'Grupo1');
+  const lgToDelete = mapa.getLayerGroup().find((lg) => lg.title === 'Grupo1');
   mapa.removeLayerGroup(lgToDelete);
   const nLayerGroup = new LayerGroup();
   nLayerGroup.title = lgToDelete.title;
@@ -98,9 +99,8 @@ btn3.addEventListener('click', () => {
 
 const btn4 = document.getElementById('btnAddLayer3');
 btn4.addEventListener('click', () => {
-  const lgToDelete = mapa.getLayerGroup().find(lg => lg.title === 'Grupo1');
+  const lgToDelete = mapa.getLayerGroup().find((lg) => lg.title === 'Grupo1');
   mapa.removeLayerGroup(lgToDelete);
 });
-
 
 window.map = mapa;

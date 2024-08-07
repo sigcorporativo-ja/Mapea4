@@ -5,7 +5,7 @@ import OverviewMap from 'M/control/OverviewMap';
 import Panzoom from 'M/control/Panzoom';
 import Panzoombar from 'M/control/Panzoombar';
 import ScaleLine from 'M/control/ScaleLine';
-import Feature from 'M/feature/Feature';
+// import Feature from 'M/feature/Feature';
 import GeoJSON from 'M/layer/GeoJSON';
 import KML from 'M/layer/KML';
 import Mapbox from 'M/layer/Mapbox';
@@ -14,7 +14,7 @@ import Vector from 'M/layer/Vector';
 import WFS from 'M/layer/WFS';
 import WMS from 'M/layer/WMS';
 import WMTS from 'M/layer/WMTS';
-import Popup from 'M/Popup';
+// import Popup from 'M/Popup';
 // import View from 'M/impl/View';
 
 import Panel from 'M/ui/Panel';
@@ -29,8 +29,8 @@ let mapboxLayer;
 const mapjs = Mmap({
   container: 'map',
   layers: [osmLayer],
-  controls: ["layerswitcher"],
-  projection: 'EPSG:3857*m'
+  controls: ['layerswitcher'],
+  projection: 'EPSG:3857*m',
 });
 
 window.vendorLocation = (evt) => {
@@ -49,7 +49,7 @@ window.vendorLocation = (evt) => {
       trackingOptions: {
         enableHighAccuracy: true,
         timeout: 100,
-        maximumAge: 15
+        maximumAge: 15,
       },
     });
     const locationPanel = new Panel(Location.NAME, {
@@ -73,13 +73,13 @@ window.vendorGeoJSON = (evt) => {
       }
   `)) {
     const geoJSON = new GeoJSON({
-      name: "Ayuntamientos",
-      url: "https://clientes.guadaltel.es/desarrollo/geossigc/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=mapea:assda_sv10_ayuntamiento_point_indicadores&outputFormat=application/json"
+      name: 'Ayuntamientos',
+      url: 'https://clientes.guadaltel.es/desarrollo/geossigc/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=mapea:assda_sv10_ayuntamiento_point_indicadores&outputFormat=application/json',
     }, undefined, {
       opacity: 0.1,
       source: new OLSourceVector({
         attributions: 'geojson de mapea',
-      })
+      }),
     });
     mapjs.addLayers(geoJSON);
   }
@@ -103,15 +103,16 @@ window.vendorKML = (evt) => {
     const kml = new KML({
       name: 'arbda_sing_se',
       url: 'http://mapea4-sigc.juntadeandalucia.es/files/kml/arbda_sing_se.kml',
-      extract: false
+      extract: false,
     }, undefined, {
       opacity: 0.3,
       source: new OLSourceVector({
         loader: (bbox, resolution, projection) => {
+          // eslint-disable-next-line no-alert, no-undef
           alert(`cargar datos en la resolución ${resolution}`);
           return (data) => console.log(data);
-        }
-      })
+        },
+      }),
     });
     mapjs.addLayers(kml);
   }
@@ -159,7 +160,7 @@ window.vendorOSM = (evt) => {
       source: new OLSourceXYZ({
         attributions: 'osm de mapea',
         url: 'https://b.tile.openstreetmap.org/11/989/794.png',
-      })
+      }),
     });
     if (mapboxLayer) mapjs.removeLayers([mapboxLayer]);
     mapjs.addLayers(osmLayer);
@@ -179,8 +180,8 @@ window.vendorVector = (evt) => {
     const vector = new Vector({}, undefined, undefined, {
       opacity: 0.8,
       source: new OLSourceVector({
-        attributions: 'capa vector'
-      })
+        attributions: 'capa vector',
+      }),
     });
     mapjs.addLayers(vector);
   }
@@ -195,14 +196,14 @@ window.vendorWFS = (evt) => {
     }
   `)) {
     const wfs = new WFS({
-      url: "http://clientes.guadaltel.es/desarrollo/geossigc/wfs?",
-      namespace: "callejero",
-      name: "prueba_pol_wfst",
-      legend: "Edicion",
-      geometry: 'MPOLYGON'
+      url: 'http://clientes.guadaltel.es/desarrollo/geossigc/wfs?',
+      namespace: 'callejero',
+      name: 'prueba_pol_wfst',
+      legend: 'Edicion',
+      geometry: 'MPOLYGON',
     }, undefined, {
       updateWhileAnimating: true,
-      updateWhileInteracting: true
+      updateWhileInteracting: true,
     });
     mapjs.addLayers(wfs);
   }
@@ -216,9 +217,9 @@ window.vendorWMS = (evt) => {
         opacity: 0.3
       }
   `)) {
-    const wms = new WMS("WMS*Redes*http://www.ideandalucia.es/wms/mta400v_2008?*Redes_energeticas*true", undefined, {
+    const wms = new WMS('WMS*Redes*https://www.ideandalucia.es/wms/mta400v_2008?*Redes_energeticas*true', undefined, {
       visible: true,
-      opacity: 0.5
+      opacity: 0.5,
     });
     mapjs.addLayers(wms);
   }
@@ -231,7 +232,7 @@ window.vendorWMTS = (evt) => {
         visible: false,
       }
   `)) {
-    const wmts = new WMTS("WMTS*http://www.ideandalucia.es/geowebcache/service/wmts?*toporaster", undefined, {
+    const wmts = new WMTS('WMTS*http://www.ideandalucia.es/geowebcache/service/wmts?*toporaster', undefined, {
       visible: false,
     });
     mapjs.addLayers(wmts);
@@ -250,7 +251,7 @@ window.vendorMouse = (evt) => {
     const mouse = new Mouse({
       projection: getProj('EPSG:4326'),
       placeholder: 'sin valor',
-      coordinateFormat: (coord) => `x: ${coord[0]} | y: ${coord[1]}`
+      coordinateFormat: (coord) => `x: ${coord[0]} | y: ${coord[1]}`,
     });
     let panel = mapjs.getPanels('map-info')[0];
     if (!panel) {
@@ -262,8 +263,7 @@ window.vendorMouse = (evt) => {
       });
       panel.addControls(mouse);
       mapjs.addPanels(panel);
-    }
-    else {
+    } else {
       panel.addControls(mouse);
     }
     panel.addClassName('m-with-mouse');
@@ -284,7 +284,7 @@ window.vendorOverviewMap = (evt) => {
       collapsed: false,
       tipLabel: 'prueba de tip label',
       label: 'prueba de label',
-      collapseLabel: 'esto es el label de colapsar'
+      collapseLabel: 'esto es el label de colapsar',
     });
     let panel = mapjs.getPanels('map-info')[0];
     if (!panel) {
@@ -295,8 +295,7 @@ window.vendorOverviewMap = (evt) => {
       });
       panel.addControls(overviewmap);
       mapjs.addPanels(panel);
-    }
-    else {
+    } else {
       panel.addControls(overviewmap);
     }
     panel.addClassName('m-with-overviewmap');
@@ -319,7 +318,7 @@ window.vendorPanzoom = (evt) => {
       zoomInLabel: '*',
       zoomOutLabel: ':',
       zoomInTipLabel: 'aumenta zoom prueba',
-      zoomOutTipLabel: 'disminuye zoom prueba'
+      zoomOutTipLabel: 'disminuye zoom prueba',
     });
     const panel = new Panel('map-zoom', {
       collapsible: false,
@@ -338,18 +337,18 @@ window.vendorPanzoombar = (evt) => {
         duration: 1000
       }
   `)) {
-      const panzoombar = new Panzoombar({
-        duration: 1000
-      });
-      const panel = new Panel('map-panzoombar', {
-        collapsible: false,
-        className: 'm-panzoombar',
-        position: Position.TL,
-        tooltip: 'Nivel de zoom',
-      });
-      panel.addControls(panzoombar);
-      mapjs.addPanels(panel);
-    }
+    const panzoombar = new Panzoombar({
+      duration: 1000,
+    });
+    const panel = new Panel('map-panzoombar', {
+      collapsible: false,
+      className: 'm-panzoombar',
+      position: Position.TL,
+      tooltip: 'Nivel de zoom',
+    });
+    panel.addControls(panzoombar);
+    mapjs.addPanels(panel);
+  }
 };
 
 window.vendorScaleLine = (evt) => {
@@ -359,19 +358,16 @@ window.vendorScaleLine = (evt) => {
         minWidth: 640,
       }
   `)) {
-      const scaleline = new ScaleLine({
-        minWidth: 640,
-      });
-      const panel = new Panel('map-scaleline', {
-        collapsible: false,
-        className: 'm-scaleline',
-        position: Position.BL,
-        tooltip: 'Línea de escala',
-      });
-      panel.addControls(scaleline);
-      mapjs.addPanels(panel);
-    }
+    const scaleline = new ScaleLine({
+      minWidth: 640,
+    });
+    const panel = new Panel('map-scaleline', {
+      collapsible: false,
+      className: 'm-scaleline',
+      position: Position.BL,
+      tooltip: 'Línea de escala',
+    });
+    panel.addControls(scaleline);
+    mapjs.addPanels(panel);
+  }
 };
-
-
-

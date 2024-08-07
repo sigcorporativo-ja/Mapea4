@@ -186,10 +186,10 @@ export default class WFSTControls extends M.Plugin {
       let geomChanged = false;
 
       const tryParseGeometry = () => {
-        if (!M.utils.isNullOrEmpty(wfslayer) &&
-          !wfslayer.geometry &&
-          wfslayer.getFeatures &&
-          wfslayer.getFeatures().length > 0) {
+        if (!M.utils.isNullOrEmpty(wfslayer)
+          && !wfslayer.geometry
+          && wfslayer.getFeatures
+          && wfslayer.getFeatures().length > 0) {
           const reemplazos = {
             MultiPolygon: 'MPOLYGON',
             MultiPPoint: 'MPOINT',
@@ -370,7 +370,7 @@ export default class WFSTControls extends M.Plugin {
       // let ctrlActivo = null;
       // objControls.forEach(function (ctrl){if (ctrl.activated) ctrlActivo = ctrl});
       this.clearfeature_.getImpl().clear();
-      objControls.forEach(ctrl => ctrl.setLayer(wfslayer));
+      objControls.forEach((ctrl) => ctrl.setLayer(wfslayer));
       // if(ctrl===ctrlActivo){ ctrl.activate();} //JGL: TODO no funciona
     }
   }
@@ -390,7 +390,6 @@ export default class WFSTControls extends M.Plugin {
     }
     return false;
   }
-
 
   /**
    * Gets the parameter api rest of the plugin

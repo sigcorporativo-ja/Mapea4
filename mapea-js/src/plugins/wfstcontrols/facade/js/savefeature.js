@@ -100,7 +100,6 @@ export default class SaveFeature extends M.Control {
   }
 }
 
-
 /**
  * Template for this controls - button
  * @const

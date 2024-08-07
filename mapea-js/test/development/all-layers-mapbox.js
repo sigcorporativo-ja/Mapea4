@@ -4,7 +4,6 @@ import WFS from 'M/layer/WFS';
 import KML from 'M/layer/KML';
 import GeoJSON from 'M/layer/GeoJSON';
 
-
 window.mapjs = map({
   container: 'map',
   layers: ['OSM'],
@@ -14,16 +13,14 @@ window.mapjs = map({
 const wms = new WMS({
   url: 'http://www.juntadeandalucia.es/institutodeestadisticaycartografia/geoserver-ieca/grid/wms?',
   name: 'gridp_250',
-  namespace: "grid",
+  namespace: 'grid',
 }, {}, {
   // cql: `cmun LIKE '%18%'`,
-},);
+});
 
 const wfs = new WFS({
-  namespace: 'ggis',
-  name: 'Colegios',
-  url: 'http://clientes.guadaltel.es/desarrollo/geossigc/ows?',
-  legend: 'Prestaciones - Ámbito municipal',
+  url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/tematicos/wfs?',
+  name: 'tematicos:Provincias',
 });
 
 const kml = new KML({
@@ -34,7 +31,8 @@ const geojson = new GeoJSON({
   name: 'geojson',
   source: {
     type: 'FeatureCollection',
-    features: [{
+    features: [
+      {
         type: 'Feature',
         properties: {},
         geometry: {
@@ -126,4 +124,4 @@ const geojson = new GeoJSON({
   },
 });
 
-mapjs.addLayers([wms, wfs, kml, geojson]);
+window.mapjs.addLayers([wms, wfs, kml, geojson]);

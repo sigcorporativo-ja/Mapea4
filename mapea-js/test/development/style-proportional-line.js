@@ -18,15 +18,10 @@ const wfs = new WFS({
 
 mapjs.addLayers([wfs]);
 const styleline = new StyleLine({
-  fill: {
-    color: 'red',
-  },
-  stroke: {
-    color: 'black',
-    width: 3,
-  },
+  fill: { color: 'red' },
+  stroke: { color: 'black', width: 3 },
 });
-const styleproportional = new StyleProportional('id', 15, 30);
+const styleproportional = new StyleProportional('id_dera', 15, 30);
 styleproportional.add(styleline);
 wfs.setStyle(styleproportional);
 

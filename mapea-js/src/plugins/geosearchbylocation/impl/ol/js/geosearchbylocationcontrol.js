@@ -18,7 +18,6 @@ export default class GeosearchbylocationControl extends GeosearchControlImpl {
       layerName: GeosearchbylocationControl.NAME,
     });
 
-
     /**
      * Popup showed
      * @private
@@ -114,7 +113,6 @@ export default class GeosearchbylocationControl extends GeosearchControlImpl {
    * @function
    * @api stable
    */
-
 
   removeLocate() {
     this.facadeMap_.removeFeatures([this.positionFeature_]);

@@ -70,7 +70,6 @@ export default class SearchstreetIntegrated extends SearchstreetControl {
     this.input_.addEventListener('keyup', this.searchClick.bind(this));
     this.clear_.addEventListener('click', this.clearSearchs_.bind(this));
 
-
     // results container
     this.resultsContainer_ = this.element_.getElementsByTagName('div')['m-searchstreet-results'];
     this.resultsAutocomplete_ = this.element_.getElementsByTagName('div')['m-autocomplete-results'];
@@ -120,7 +119,7 @@ export default class SearchstreetIntegrated extends SearchstreetControl {
       }
     }
     const layers = this.facadeMap_.getLayers();
-    const layerDraw = layers.filter(layer => layer.name === '__draw__')[0];
+    const layerDraw = layers.filter((layer) => layer.name === '__draw__')[0];
     layerDraw.removeFeatures(layerDraw.getFeatures());
     this.facadeMap_.removePopup();
     this.input_.value = '';
