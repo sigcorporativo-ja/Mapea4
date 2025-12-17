@@ -55,11 +55,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Enumeration;
+import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.servlet.ServletConfig;
@@ -90,7 +91,6 @@ import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.protocol.HTTP;
 import org.apache.log4j.Logger;
 
 import es.guadaltel.framework.ticket.Ticket;
@@ -110,6 +110,7 @@ public class ProxyRedirect extends HttpServlet {
 			Pattern.CASE_INSENSITIVE);
 	private static final String WWW_AUTHENTICATE = "WWW-Authenticate"; // PATH
 	private static final String AUTHORIZATION = "Authorization"; // PATH
+	private static ResourceBundle configProperties = ResourceBundle.getBundle("configuration");
 	public ServletContext context_ = null;
 	private String errorType = "";
 	private Integer numMaxRedirects = 5;
@@ -491,84 +492,107 @@ public class ProxyRedirect extends HttpServlet {
 	 **************************************************************************/
 	private String checkTypeRequest(String serverUrl) {
 		String serverUrlChecked = "ERROR";
-		if (serverUrl.contains("&mapeaop=wmc")) {
-			serverUrlChecked = serverUrl.replaceAll("&mapeaop=wmc", "");
-			// Check if the beginning is http(s)
-			String protocol = serverUrlChecked.toUpperCase().substring(0, 4);
-			if (!protocol.equalsIgnoreCase("HTTP") && !protocol.equalsIgnoreCase("HTTPS")) {
-				log.debug("ProxyRedirect (mapeaop=wmc) - Protocol=" + protocol);
-				serverUrlChecked = "ERROR";
-			}
-		} else if (serverUrl.contains("&mapeaop=kml")) {
-			serverUrlChecked = serverUrl.replaceAll("&mapeaop=kml", "");
-			// Check if the beginning is http
-			String protocol = serverUrlChecked.toUpperCase().substring(0, 4);
-			if (!protocol.equalsIgnoreCase("HTTP") && !protocol.equalsIgnoreCase("HTTPS")) {
-				log.debug("ProxyRedirect (mapeaop=kml) - Protocol=" + protocol);
-				serverUrlChecked = "ERROR";
-			}
-		} else if (serverUrl.contains("&mapeaop=wmsfull")) {
-			serverUrlChecked = serverUrl.replaceAll("&mapeaop=wmsfull", "");
-			String[] tokens = serverUrlChecked.split("\\&");
-			int numTokens = tokens.length;
-			if (numTokens == 3) {
+		if (!checkDangerous(serverUrl)){
+			if (serverUrl.contains("&mapeaop=wmc")) {
+				serverUrlChecked = serverUrl.replaceAll("&mapeaop=wmc", "");
+				// Check if the beginning is http(s)
+				String protocol = serverUrlChecked.toUpperCase().substring(0, 4);
+				if (!protocol.equalsIgnoreCase("HTTP") && !protocol.equalsIgnoreCase("HTTPS")) {
+					log.debug("ProxyRedirect (mapeaop=wmc) - Protocol=" + protocol);
+					serverUrlChecked = "ERROR";
+				}
+			} else if (serverUrl.contains("&mapeaop=kml")) {
+				serverUrlChecked = serverUrl.replaceAll("&mapeaop=kml", "");
 				// Check if the beginning is http
-				String protocol = tokens[0].toUpperCase().substring(0, 4);
-				if (!protocol.equals("HTTP")) {
+				String protocol = serverUrlChecked.toUpperCase().substring(0, 4);
+				if (!protocol.equalsIgnoreCase("HTTP") && !protocol.equalsIgnoreCase("HTTPS")) {
+					log.debug("ProxyRedirect (mapeaop=kml) - Protocol=" + protocol);
 					serverUrlChecked = "ERROR";
-					log.debug("ProxyRedirect (mapeaop=wmsfull) - Protocol=" + protocol);
 				}
-				if (!tokens[1].equals("service=WMS") || !tokens[2].equals("request=GetCapabilities")) {
-					serverUrlChecked = "ERROR";
-					log.debug("ProxyRedirect (mapeaop=wmsfull) - service=" + tokens[1] + " request=" + tokens[2]);
+			} else if (serverUrl.contains("&mapeaop=wmsfull")) {
+				serverUrlChecked = serverUrl.replaceAll("&mapeaop=wmsfull", "");
+				String[] tokens = serverUrlChecked.split("\\&");
+				int numTokens = tokens.length;
+				if (numTokens == 3) {
+					// Check if the beginning is http
+					String protocol = tokens[0].toUpperCase().substring(0, 4);
+					if (!protocol.equals("HTTP")) {
+						serverUrlChecked = "ERROR";
+						log.debug("ProxyRedirect (mapeaop=wmsfull) - Protocol=" + protocol);
+					}
+					if (!tokens[1].equals("service=WMS") || !tokens[2].equals("request=GetCapabilities")) {
+						serverUrlChecked = "ERROR";
+						log.debug("ProxyRedirect (mapeaop=wmsfull) - service=" + tokens[1] + " request=" + tokens[2]);
+					} else {
+						serverUrlChecked = tokens[0] + "&service=WMS&request=GetCapabilities";
+					}
 				} else {
-					serverUrlChecked = tokens[0] + "&service=WMS&request=GetCapabilities";
+					log.debug("ProxyRedirect (mapeaop=wmsfull) - Error en el número de parámetros");
+					serverUrlChecked = "ERROR";
 				}
-			} else {
-				log.debug("ProxyRedirect (mapeaop=wmsfull) - Error en el número de parámetros");
-				serverUrlChecked = "ERROR";
-			}
-		} else if (serverUrl.contains("mapeaop=wmsinfo")) { // GET
-			serverUrlChecked = serverUrl.replaceAll("&mapeaop=wmsinfo", "");
-			serverUrlChecked = serverUrlChecked.replaceAll("mapeaop=wmsinfo", "");
-			String[] tokens = serverUrlChecked.split("\\&");
-			int numTokens = tokens.length;
-			if (numTokens == 3) { // GetCapabilities
+			} else if (serverUrl.contains("mapeaop=wmsinfo")) { // GET
+				serverUrlChecked = serverUrl.replaceAll("&mapeaop=wmsinfo", "");
+				serverUrlChecked = serverUrlChecked.replaceAll("mapeaop=wmsinfo", "");
+				String[] tokens = serverUrlChecked.split("\\&");
+				int numTokens = tokens.length;
+				if (numTokens == 3) { // GetCapabilities
+					// Check if the beginning is http
+					String protocol = tokens[0].toUpperCase().substring(0, 4);
+					if (!protocol.equals("HTTP")) {
+						serverUrlChecked = "ERROR";
+						log.debug("ProxyRedirect (mapeaop=wmsinfo) - Protocol=" + protocol);
+					}
+					if (!tokens[1].equals("service=WMS") || !tokens[2].equals("request=GetCapabilities")) {
+						serverUrlChecked = "ERROR";
+						log.debug("ProxyRedirect (mapeaop=wmsinfo) - service=" + tokens[1] + " request=" + tokens[2]);
+					} else {
+						serverUrlChecked = tokens[0] + "service=WMS&request=GetCapabilities";
+					}
+				}
+			} else if (serverUrl.contains("mapeaop=geosearch")) {
+				serverUrlChecked = serverUrl.replaceAll("&mapeaop=geosearch", "");
 				// Check if the beginning is http
-				String protocol = tokens[0].toUpperCase().substring(0, 4);
-				if (!protocol.equals("HTTP")) {
+				String protocol = serverUrlChecked.toUpperCase().substring(0, 4);
+				if (!protocol.equalsIgnoreCase("HTTP")) {
+					log.debug("ProxyRedirect (mapeaop=geosearch) - Protocol=" + protocol);
 					serverUrlChecked = "ERROR";
-					log.debug("ProxyRedirect (mapeaop=wmsinfo) - Protocol=" + protocol);
 				}
-				if (!tokens[1].equals("service=WMS") || !tokens[2].equals("request=GetCapabilities")) {
-					serverUrlChecked = "ERROR";
-					log.debug("ProxyRedirect (mapeaop=wmsinfo) - service=" + tokens[1] + " request=" + tokens[2]);
-				} else {
-					serverUrlChecked = tokens[0] + "service=WMS&request=GetCapabilities";
-				}
-			}
-		} else if (serverUrl.contains("mapeaop=geosearch")) {
-			serverUrlChecked = serverUrl.replaceAll("&mapeaop=geosearch", "");
-			// Check if the beginning is http
-			String protocol = serverUrlChecked.toUpperCase().substring(0, 4);
-			if (!protocol.equalsIgnoreCase("HTTP")) {
-				log.debug("ProxyRedirect (mapeaop=geosearch) - Protocol=" + protocol);
-				serverUrlChecked = "ERROR";
-			}
-		} else if (serverUrl.toLowerCase().contains("legendgraphic")) {
-			serverUrlChecked = serverUrl;
-		} else if ((serverUrl.toLowerCase().contains("wfst")) || (serverUrl.toLowerCase().contains("wfs"))
-				|| (serverUrl.toLowerCase().contains("ows"))) {
-			serverUrlChecked = serverUrl;
-		} else if (serverUrl.toLowerCase().contains("getcapabilities")) {
-			serverUrlChecked = serverUrl;
-		} else if (serverUrl.toLowerCase().contains("wsdl")) {
-			soap = true;
-			serverUrl = serverUrl.replace("?wsdl", "");
-			serverUrlChecked = serverUrl;
-		} else if (serverUrl.toLowerCase().contains("mapeaop=geoprint")) {
-			serverUrlChecked = serverUrl.replaceAll("\\&?\\??mapeaop=geoprint", "");
+			} else if (serverUrl.toLowerCase().contains("legendgraphic")) {
+				serverUrlChecked = serverUrl;
+			} else if ((serverUrl.toLowerCase().contains("wfst")) || (serverUrl.toLowerCase().contains("wfs"))
+					|| (serverUrl.toLowerCase().contains("ows"))) {
+				serverUrlChecked = serverUrl;
+			} else if (serverUrl.toLowerCase().contains("getcapabilities")) {
+				serverUrlChecked = serverUrl;
+			} else if (serverUrl.toLowerCase().contains("wsdl")) {
+				soap = true;
+				serverUrl = serverUrl.replace("?wsdl", "");
+				serverUrlChecked = serverUrl;
+			} else if (serverUrl.toLowerCase().contains("mapeaop=geoprint")) {
+				serverUrlChecked = serverUrl.replaceAll("\\&?\\??mapeaop=geoprint", "");
+			}	
 		}
 		return serverUrlChecked;
 	}
+
+	private boolean checkDangerous (String serverUrl) {
+	    Pattern ipPattern = Pattern.compile("(?i)(//|%2[Ff])(?:\\d{1,3}\\.){3}\\d{1,3}");
+    	Matcher matcher = ipPattern.matcher(serverUrl);
+    	if (matcher.find()) {
+	       	return true;
+    	}
+	   
+		// Obtener las palabras clave peligrosas de la configuración
+		String dangerousKeywordsStr = configProperties.getString("dangerous.keywords");
+		List<String> dangerousKeywords = Arrays.asList(dangerousKeywordsStr.split(","));
+
+		for (String keyword : dangerousKeywords) {
+        	if (serverUrl.toLowerCase().contains(keyword.toLowerCase())) {
+            	return true;
+        	}
+    	}
+
+	    return false;
+    }
+
 }

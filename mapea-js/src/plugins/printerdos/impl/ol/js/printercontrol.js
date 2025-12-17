@@ -391,6 +391,11 @@ export default class PrinterControl extends M.impl.Control {
 
     /** *********************************  */
 
+    /** Ticket */
+    if (M.config.ticket != null && encodedLayer.baseURL.indexOf('&ticket') === -1) {
+      encodedLayer.baseURL = M.utils.addParameters(encodedLayer.baseURL, `ticket=${M.config.ticket}`);
+    }
+
     // defaults
     encodedLayer.customParams = {
       // service: 'WMS',
@@ -436,7 +441,10 @@ export default class PrinterControl extends M.impl.Control {
       if (layer.type === M.layer.type.MVT) {
         features = layer.getFeatures();
       } else {
-        features = olLayer.getSource().getFeatures();
+        features = [];
+        if (olLayer.getSource() != null) {
+          features = olLayer.getSource().getFeatures();
+        }
       }
       const layerName = layer.name;
       const layerOpacity = olLayer.getOpacity();
@@ -1064,7 +1072,7 @@ export default class PrinterControl extends M.impl.Control {
     const tileGrid = layerSource.getTileGrid();
     const style = !M.utils.isNullOrEmpty(layerSource.getStyle) ? layerSource.getStyle() : 'default';
 
-    const layerUrl = layer.url;
+    let layerUrl = layer.url;
     const layerName = layer.name;
     const layerOpacity = olLayer.getOpacity();
     const layerReqEncoding = layerSource.getRequestEncoding();
@@ -1074,6 +1082,11 @@ export default class PrinterControl extends M.impl.Control {
     const matrixSet = layerSource.getMatrixSet();
     const tileSize = tileGrid.getTileSize(zoom);
     const resolutions = tileGrid.getResolutions();
+
+    /** Ticket */
+    if (M.config.ticket != null && layerUrl.indexOf('&ticket') === -1) {
+      layerUrl = M.utils.addParameters(layerUrl, `ticket=${M.config.ticket}`);
+    }
 
     /**
      * @see http: //www.mapfish.org/doc/print/protocol.html#layers-params

@@ -3,8 +3,11 @@ package es.juntadeandalucia.mapea.api;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
@@ -70,15 +73,18 @@ public class Proxy {
 		String response;
 		ProxyResponse proxyResponse;
 		try {
-			this.checkRequest(url);
-			if (method.equalsIgnoreCase("GET")) {
-				proxyResponse = this.get(url, ticket);
-			} else if (method.equalsIgnoreCase("POST")) {
-				proxyResponse = this.post(url);
+			if (this.checkRequest(url)) {
+				if (method.equalsIgnoreCase("GET")) {
+					proxyResponse = this.get(url, ticket);
+				} else if (method.equalsIgnoreCase("POST")) {
+					proxyResponse = this.post(url);
+				} else {
+					proxyResponse = this.error(url, "Method ".concat(method).concat(" not supported"));
+				}
+				this.checkResponse(proxyResponse, url);
 			} else {
-				proxyResponse = this.error(url, "Method ".concat(method).concat(" not supported"));
+				proxyResponse = this.error(url, new IOException("Not allowed proxy request"));
 			}
-			this.checkResponse(proxyResponse, url);
 		} catch (HttpException e) {
 			// TODO Auto-generated catch block
 			proxyResponse = this.error(url, e);
@@ -109,20 +115,23 @@ public class Proxy {
 		ProxyResponse proxyResponse;
 
 		try {
-			this.checkRequest(url);
-			proxyResponse = this.get(url, null);
-			this.checkResponseImage(proxyResponse);
-			data = proxyResponse.getData();
-			Header[] headers = proxyResponse.getHeaders();
-			String contentType = null;
-			for (Header header : headers) {
-				String headerName = header.getName();
-				if (headerName.equalsIgnoreCase("content-type")) {
-					contentType = header.getValue().toLowerCase();
-					break;
+			if(this.checkRequest(url)) {
+				proxyResponse = this.get(url, null);
+				this.checkResponseImage(proxyResponse);
+				data = proxyResponse.getData();
+				Header[] headers = proxyResponse.getHeaders();
+				String contentType = null;
+				for (Header header : headers) {
+					String headerName = header.getName();
+					if (headerName.equalsIgnoreCase("content-type")) {
+						contentType = header.getValue().toLowerCase();
+						break;
+					}
 				}
+				response = Response.ok(new ByteArrayInputStream(data), contentType).build();
+			} else {
+				response = Response.status(Status.BAD_REQUEST).entity("Not allowed proxy request").build();
 			}
-			response = Response.ok(new ByteArrayInputStream(data), contentType).build();
 		} catch (HttpException e) {
 			response = Response.status(Status.BAD_REQUEST).build();
 		} catch (IOException e) {
@@ -226,8 +235,24 @@ public class Proxy {
 	 * @param url URL of the request
 	 * @param op  type of mapea operation
 	 */
-	private void checkRequest(String url) {
-		// TODO comprobar
+	private boolean checkRequest(String url) {
+		Pattern ipPattern = Pattern.compile("(?i)(//|%2[Ff])(?:\\d{1,3}\\.){3}\\d{1,3}");
+		Matcher matcher = ipPattern.matcher(url);
+		if (matcher.find()) {
+			return false;
+		}
+	
+		// Obtener las palabras clave peligrosas de la configuración
+		String dangerousKeywordsStr = configProperties.getString("dangerous.keywords");
+		List<String> dangerousKeywords = Arrays.asList(dangerousKeywordsStr.split(","));
+
+		for (String keyword : dangerousKeywords) {
+			if (url.toLowerCase().contains(keyword.toLowerCase())) {
+				return false;
+			}
+		}
+
+	    return true;
 	}
 
 	/**

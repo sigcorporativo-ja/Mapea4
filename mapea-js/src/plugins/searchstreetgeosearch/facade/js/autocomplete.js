@@ -519,7 +519,8 @@ export default class Autocomplete extends M.Plugin {
    * @returns {string} Format content
    */
   formatContent_(str, find, replace) {
-    return str.replace(new RegExp(find, 'g'), replace);
+    const strFormat = str.split(',').slice(0, 2).join(',');
+    return strFormat.replace(new RegExp(find, 'g'), replace);
   }
 
   /**
