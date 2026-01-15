@@ -298,6 +298,7 @@ public class ProxyRedirect extends HttpServlet {
 					String body = inputStreamAsString(request.getInputStream());
 					HttpEntity bodyEntity = new ByteArrayEntity(body.getBytes("UTF-8"));
 					httppost.setEntity(bodyEntity); // PATCH
+					httppost.setHeader("Content-Type", "application/json; charset=UTF-8");
 
 					if (!legend)
 						request.setCharacterEncoding("UTF-8");
