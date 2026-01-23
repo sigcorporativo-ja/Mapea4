@@ -4,6 +4,7 @@
 *.classpath
 *.externalToolBuilders
 .atomignore
+*package-lock.json
 node
 node_modules
 target

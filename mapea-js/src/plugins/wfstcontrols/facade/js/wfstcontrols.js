@@ -192,12 +192,20 @@ export default class WFSTControls extends M.Plugin {
           && wfslayer.getFeatures().length > 0) {
           const reemplazos = {
             MultiPolygon: 'MPOLYGON',
-            MultiPPoint: 'MPOINT',
+            MultiPoint: 'MPOINT',
+            Polygon: 'POLYGON',
+            Point: 'POINT',
+            LineString: 'LINESTRING',
+            MultiLineString: 'MLINESTRING',
           };
 
           try {
             const geom = wfslayer.getGeometryType();
-            wfslayer.geometry = geom.replace(geom, reemplazos[geom]);
+            if (geom) {
+              wfslayer.geometry = reemplazos[geom] || geom;
+            } else {
+              throw new Error('getGeometryType returned no value');
+            }
           } catch (error) {
             M.dialog.error('Ha ocurrido un error al cargar el plugin: No se ha podido asignar la geometría de la capa de forma automática, debe hacerlo de forma manual usando el parámetro geometry.');
           }

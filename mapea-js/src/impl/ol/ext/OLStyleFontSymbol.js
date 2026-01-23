@@ -33,6 +33,7 @@ export default class OLStyleFontSymbol extends OLStyleRegularShape {
     if (typeof options.opacity === 'number') this.setOpacity(options.opacity);
     this.color_ = options.color;
     this.fontSize_ = options.fontSize || 1;
+    this.fontStyle_ = options.fontStyle || '';
     this.stroke_ = options.stroke;
     this.fill_ = options.fill;
     this.radius_ = options.radius - strokeWidth;
@@ -205,6 +206,46 @@ export default class OLStyleFontSymbol extends OLStyleRegularShape {
   }
 
   /**
+   * Get the image icon.
+   * @param {number} pixelRatio Pixel ratio.
+   * @return {HTMLCanvasElement} Image or Canvas element.
+   * @api
+   */
+  getImage(pixelratio = 1) {
+    // get canvas
+    const canvas = super.getImage(pixelratio);
+
+    let strokeStyle;
+    let strokeWidth = 0;
+
+    if (this.stroke_) {
+      strokeStyle = colorAsString(this.stroke_.getColor());
+      strokeWidth = this.stroke_.getWidth();
+    }
+
+    /** @type {OLStyleFontSymbol.RenderOptions} */
+    const renderOptions = {
+      strokeStyle,
+      strokeWidth,
+      size: canvas.width / pixelratio,
+    };
+
+    // draw the circle on the canvas
+    const context = (canvas.getContext('2d'));
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    this.drawMarker_(renderOptions, context, 0, 0, pixelratio);
+
+    // Set anchor / displacement
+    if (!this.getDisplacement) {
+      const a = this.getAnchor();
+      a[0] = canvas.width / 2 - this.offset_[0];
+      a[1] = canvas.width / 2 - this.offset_[1];
+    }
+
+    return canvas;
+  }
+
+  /**
    * @private
    * @param {ol.style.FontSymbol.RenderOptions} renderOptions
    * @param {CanvasRenderingContext2D} context
@@ -334,8 +375,7 @@ export default class OLStyleFontSymbol extends OLStyleRegularShape {
    * @param {number} x The origin for the symbol (x).
    * @param {number} y The origin for the symbol (y).
    */
-  drawMarker_(renderOptions, contextParam, x, y) {
-    const context = contextParam;
+  drawMarker_(renderOptions, context, x, y, pixelratio) {
     let fcolor = this.fill_ ? this.fill_.getColor() : '#000';
     let scolor = this.stroke_ ? this.stroke_.getColor() : '#000';
     if (this.form_ === 'none' && this.stroke_ && this.fill_) {
@@ -343,12 +383,12 @@ export default class OLStyleFontSymbol extends OLStyleRegularShape {
       fcolor = this.stroke_.getColor();
     }
     // reset transform
-    context.setTransform(1, 0, 0, 1, 0, 0);
+    context.setTransform(pixelratio, 0, 0, pixelratio, 0, 0);
 
     // then move to (x, y)
     context.translate(x, y);
 
-    const tr = this.drawPath_(renderOptions, context);
+    const tr = this.drawPath_(renderOptions, context, pixelratio);
 
     if (this.fill_) {
       if (this.gradient_ && this.form_ !== 'none') {

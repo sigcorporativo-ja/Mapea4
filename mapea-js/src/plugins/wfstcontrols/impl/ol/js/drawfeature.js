@@ -31,8 +31,14 @@ export default class DrawFeature extends WFSTBase {
       olStyle = olLayer.getStyle()(olLayer.getSource().getFeatures()[0])[0];
     }
     const [olFill, olStroke] = [olStyle.getFill(), olStyle.getStroke()];
+    let circleFill = olFill;
+    if (!circleFill && olStroke) {
+      circleFill = new ol.style.Fill({
+        color: olStroke.getColor(),
+      });
+    }
     let image = new ol.style.Circle({
-      fill: olFill || olStroke,
+      fill: circleFill,
       radius: 5,
       stroke: olStroke,
     });
@@ -71,22 +77,6 @@ export default class DrawFeature extends WFSTBase {
    */
   updateLayerFeatures_() {
     this.facadeMap_.getMapImpl().removeInteraction(this.interaction_);
-    this.interaction_ = null;
-  }
-
-  /**
-   * This function deactivate control
-   *
-   * @public
-   * @function
-   * @api stable
-   */
-  deactivate() {
-    if (M.utils.isNullOrEmpty(this.interaction_)) {
-      this.createInteraction_();
-    }
-    const olMap = this.facadeMap_.getMapImpl();
-    olMap.removeInteraction(this.interaction_);
     this.interaction_ = null;
   }
 

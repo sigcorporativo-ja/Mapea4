@@ -181,6 +181,7 @@ class Generic extends Simple {
               });
             } else {
               img.src = this.options_.point.icon.src;
+              img.onload = () => resolve(img);
             }
           } else if (this.options_.point.icon.form) { // es un FORM
             img.onload = () => resolve(img);

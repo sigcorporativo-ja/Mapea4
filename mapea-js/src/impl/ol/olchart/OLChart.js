@@ -102,6 +102,14 @@ export default class OLChart extends OLStyleRegularShape {
     };
 
     /**
+     * Drawing status. Default: Not yet drawn
+     * [WARN] NOT IMPLEMENTED YET
+     * @private
+     * @type {boolean}
+     */
+    this.done_ = false;
+
+    /**
      * chart data
      * @private
      * @type {Array<number>}
@@ -171,6 +179,7 @@ export default class OLChart extends OLStyleRegularShape {
 
   set data(data) {
     this.data_ = data;
+    this.done_ = false;
     this.renderChart_();
   }
 
@@ -195,6 +204,7 @@ export default class OLChart extends OLStyleRegularShape {
   setRadius(radius, ratio) {
     this.donutRatio_ = ratio || this.donutRatio_;
     this.radius = radius;
+    this.done_ = false;
   }
 
   /**
@@ -215,6 +225,7 @@ export default class OLChart extends OLStyleRegularShape {
       this.animation_.animate = true;
       this.animation_.step = step;
     }
+    this.done_ = false;
     this.renderChart_();
   }
 
@@ -409,5 +420,120 @@ export default class OLChart extends OLStyleRegularShape {
       angle0 = angle;
     });
     return angle0;
+  }
+
+  getImage(pixelratio = 1) {
+    // Obtener el canvas
+    const canvas = super.getImage(pixelratio);
+
+    if (this.done_ === pixelratio) return canvas;
+    this.done_ = pixelratio;
+
+    let strokeStyle;
+    let strokeWidth = 0;
+
+    if (this.stroke_) {
+      strokeStyle = colorAsString(this.stroke_.getColor());
+      strokeWidth = this.stroke_.getWidth();
+    }
+
+    const context = canvas.getContext('2d');
+    context.save();
+    context.setTransform(pixelratio, 0, 0, pixelratio, 0, 0);
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.lineJoin = 'round';
+
+    const sum = this.data_.reduce((acc, val) => acc + val, 0);
+    context.translate(0, 0);
+
+    const step = this.animation_.animate ? this.animation_.step : 1;
+
+    switch (this.type_) {
+      case 'donut':
+      case 'pie3D':
+      case 'pie': {
+        let a;
+        let a0 = Math.PI * (step - 1.5);
+        const c = canvas.width / (2 * pixelratio);
+        context.strokeStyle = strokeStyle;
+        context.lineWidth = strokeWidth;
+        context.save();
+
+        if (this.type_ === 'pie3D') {
+          context.translate(0, c * 0.3);
+          context.scale(1, 0.7);
+          context.beginPath();
+          context.fillStyle = '#369';
+          context.arc(c, c * 1.4, this.radius_ * step, 0, 2 * Math.PI);
+          context.fill();
+          context.stroke();
+        }
+
+        if (this.type_ === 'donut') {
+          context.save();
+          context.beginPath();
+          context.rect(0, 0, 2 * c, 2 * c);
+          context.arc(c, c, this.radius_ * step * this.donutRatio_, 0, 2 * Math.PI);
+          context.clip('evenodd');
+        }
+
+        this.data_.forEach((value, i) => {
+          context.beginPath();
+          context.moveTo(c, c);
+          context.fillStyle = this.colors_[i % this.colors_.length];
+          a = a0 + ((2 * Math.PI * value) / sum) * step;
+          context.arc(c, c, this.radius_ * step, a0, a);
+          context.closePath();
+          context.fill();
+          context.stroke();
+          a0 = a;
+        });
+
+        if (this.type_ === 'donut') {
+          context.restore();
+          context.beginPath();
+          context.strokeStyle = strokeStyle;
+          context.lineWidth = strokeWidth;
+          context.arc(c, c, this.radius_ * step * this.donutRatio_, Math.PI * (step - 1.5), a0);
+          context.stroke();
+        }
+        context.restore();
+        break;
+      }
+      case 'bar':
+      default: {
+        const max = this.max_ || Math.max(...this.data_);
+        const s = Math.min(5, (2 * this.radius_) / this.data_.length);
+        const c = canvas.width / (2 * pixelratio);
+        const b = canvas.width / pixelratio - strokeWidth;
+        let x0 = c - (this.data_.length * s) / 2;
+        context.strokeStyle = strokeStyle;
+        context.lineWidth = strokeWidth;
+
+        this.data_.forEach((value, i) => {
+          context.beginPath();
+          context.fillStyle = this.colors_[i % this.colors_.length];
+          const x = x0 + s;
+          const h = (value / max) * 2 * this.radius_ * step;
+          context.rect(x0, b - h, s, h);
+          context.closePath();
+          context.fill();
+          context.stroke();
+          x0 = x;
+        });
+        break;
+      }
+    }
+
+    context.restore();
+
+    if (!this.setDisplacement) {
+      const anchor = this.getAnchor();
+      const c = canvas.width / (2 * pixelratio);
+      anchor[0] = c - this.offset_[0];
+      anchor[1] = c - this.offset_[1];
+    }
+
+    return canvas;
   }
 }

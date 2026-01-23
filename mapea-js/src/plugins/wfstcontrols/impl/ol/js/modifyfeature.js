@@ -65,12 +65,9 @@ export default class ModifyFeature extends M.impl.Control {
    * @api stable
    */
   deactivate() {
-    if (M.utils.isNullOrEmpty(this.modify)) {
-      this.createInteractionModify_();
+    if (!M.utils.isNullOrEmpty(this.modify)) {
+      this.modify.setActive(false);
     }
-    const olMap = this.facadeMap_.getMapImpl();
-    olMap.removeInteraction(this.modify);
-    this.modify = null;
   }
 
   /**
@@ -112,8 +109,14 @@ export default class ModifyFeature extends M.impl.Control {
       olStrokeClone.setColor(M.utils.getRgba(olStroke.getColor()));
     }
     if (styleImage == null) {
+      let circleFill = olFill;
+      if (!circleFill && olStrokeClone) {
+        circleFill = new ol.style.Fill({
+          color: olStrokeClone.getColor(),
+        });
+      }
       styleImage = new ol.style.Circle({
-        fill: olFill || olStrokeClone,
+        fill: circleFill,
         radius: 5,
         stroke: olStroke,
       });
